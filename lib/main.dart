@@ -19,7 +19,7 @@ class _MyAppState extends State<MyApp> {
     super.initState();
 
     LinkTokenConfiguration linkTokenConfiguration = LinkTokenConfiguration(
-      token: 'link-sandbox-d4d046c7-9741-4c23-9fa8-4cb125146268',
+      token: '',
     );
 
     _plaidLinkToken = PlaidLink(
