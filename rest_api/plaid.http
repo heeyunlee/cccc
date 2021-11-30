@@ -1,0 +1,2 @@
+POST {{host}}/link/token/create
+Authorization: Basic {{secretKey}}
