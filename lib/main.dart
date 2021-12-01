@@ -1,75 +1,39 @@
+import 'package:cccc/my_app.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:plaid_flutter/plaid_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
 
-void main() => runApp(MyApp());
-
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(App());
 }
 
-class _MyAppState extends State<MyApp> {
-  late PlaidLink _plaidLinkToken;
-
-  // Get token using Plaid Link
-
+class App extends StatefulWidget {
   @override
-  void initState() {
-    super.initState();
+  _AppState createState() => _AppState();
+}
 
-    LinkTokenConfiguration linkTokenConfiguration = LinkTokenConfiguration(
-      token: '',
-    );
-
-    _plaidLinkToken = PlaidLink(
-      configuration: linkTokenConfiguration,
-      onSuccess: _onSuccessCallback,
-      onEvent: _onEventCallback,
-      onExit: _onExitCallback,
-    );
-  }
-
-  void _onSuccessCallback(String publicToken, LinkSuccessMetadata metadata) {
-    print("onSuccess: $publicToken, metadata: ${metadata.description()}");
-  }
-
-  void _onEventCallback(String event, LinkEventMetadata metadata) {
-    print("onEvent: $event, metadata: ${metadata.description()}");
-  }
-
-  void _onExitCallback(LinkError? error, LinkExitMetadata metadata) {
-    print("onExit metadata: ${metadata.description()}");
-
-    if (error != null) {
-      print("onExit error: ${error.description()}");
-    }
-  }
+class _AppState extends State<App> {
+  final Future<FirebaseApp> _initialization = Firebase.initializeApp();
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.transparent,
-          systemOverlayStyle: SystemUiOverlayStyle.light,
-        ),
-        body: Container(
-          width: double.infinity,
-          color: Colors.grey[800],
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ElevatedButton(
-                onPressed: () => _plaidLinkToken.open(),
-                child: Text("Open Plaid Link (Link Token)"),
-              ),
-            ],
-          ),
-        ),
-      ),
+    return FutureBuilder(
+      // Initialize FlutterFire:
+      future: _initialization,
+      builder: (context, snapshot) {
+        // Check for errors
+        if (snapshot.hasError) {
+          return Container();
+        }
+
+        // Once complete, show your application
+        if (snapshot.connectionState == ConnectionState.done) {
+          return MyApp();
+        }
+
+        // Otherwise, show something whilst waiting for initialization to complete
+        return Container();
+      },
     );
   }
 }

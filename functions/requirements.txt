@@ -1,0 +1,1 @@
+plaid-python==8.6.0

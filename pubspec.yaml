@@ -1,9 +1,11 @@
-name: plaid_flutter_example
+name: cccc
 description: Demonstrates how to use the plaid_flutter plugin.
 publish_to: "none"
 
+version: 0.1.0
+
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=2.14.4 <3.0.0"
 
 dependencies:
   flutter:
@@ -13,8 +15,10 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
   plaid_flutter: ^2.1.4
+  googleapis: ^7.0.0
+  firebase_core: ^1.10.0
+  cloud_functions: ^3.1.1
 
 flutter:
   uses-material-design: true
