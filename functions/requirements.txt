@@ -1,1 +1,2 @@
 plaid-python==8.6.0
+flask==2.0.2

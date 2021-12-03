@@ -29,6 +29,7 @@
 
 # Web related
 **/lib/generated_plugin_registrant.dart
+**/lib/private_keys.dart
 
 # Android related
 **/android/**/gradle-wrapper.jar

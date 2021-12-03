@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
+import 'package:http/http.dart' as http;
+
+import 'private_keys.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -10,25 +15,21 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late PlaidLink _plaidLinkToken;
+  PlaidLink? _plaidLinkToken;
+  String? _accessToken;
+  String? _publicToken;
+  String? _stringResponse;
 
   @override
   void initState() {
     super.initState();
-
-    LinkTokenConfiguration linkTokenConfiguration = LinkTokenConfiguration(
-      token: '',
-    );
-
-    _plaidLinkToken = PlaidLink(
-      configuration: linkTokenConfiguration,
-      onSuccess: _onSuccessCallback,
-      onEvent: _onEventCallback,
-      onExit: _onExitCallback,
-    );
   }
 
   void _onSuccessCallback(String publicToken, LinkSuccessMetadata metadata) {
+    _publicToken = publicToken;
+
+    setState(() {});
+
     print("onSuccess: $publicToken, metadata: ${metadata.description()}");
   }
 
@@ -41,6 +42,81 @@ class _MyAppState extends State<MyApp> {
 
     if (error != null) {
       print("onExit error: ${error.description()}");
+    }
+  }
+
+  Future<dynamic> getAccessToken() async {
+    // FirebaseFunctions functions = FirebaseFunctions.instance;
+
+    // final callable = functions.httpsCallable(
+    //   'get_link_token',
+    //   options: HttpsCallableOptions(
+    //     timeout: const Duration(seconds: 5),
+    //   ),
+    // );
+
+    // print('a');
+    // try {
+    //   final a = await callable.call(<String, dynamic>{
+    //     'a': 12,
+    //   });
+    //   print('b ${a}');
+    // } catch (e) {
+    //   print('Error is ${e.toString()}');
+    // }
+
+    // final result = await callable.call();
+    // final a = result.data();
+
+    // return a;
+
+    final uri = Uri(
+      scheme: 'https',
+      host: host,
+      path: 'get_link_token',
+    );
+
+    final a = await http.post(uri);
+    _accessToken = a.body;
+
+    LinkTokenConfiguration linkTokenConfiguration = LinkTokenConfiguration(
+      token: _accessToken ?? '',
+    );
+
+    _plaidLinkToken = PlaidLink(
+      configuration: linkTokenConfiguration,
+      onSuccess: _onSuccessCallback,
+      onEvent: _onEventCallback,
+      onExit: _onExitCallback,
+    );
+
+    setState(() {});
+  }
+
+  Future<String> fetchTransactionData() async {
+    try {
+      final uri = Uri(
+        scheme: 'https',
+        host: host,
+        path: 'fetch_transaction_data',
+      );
+
+      final response = await http.post(
+        uri,
+        body: _publicToken,
+      );
+      _stringResponse = response.body;
+
+      final List<dynamic> transactions = jsonDecode(_stringResponse!);
+      print('type of transactions is ${transactions.runtimeType}');
+
+      final a = transactions.length;
+
+      print('response is $a');
+
+      return response.body;
+    } catch (e) {
+      return e.toString();
     }
   }
 
@@ -61,8 +137,16 @@ class _MyAppState extends State<MyApp> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               ElevatedButton(
-                onPressed: () => _plaidLinkToken.open(),
-                child: Text("Open Plaid Link (Link Token)"),
+                onPressed: () => getAccessToken(),
+                child: Text('Get Access Token: $_accessToken'),
+              ),
+              ElevatedButton(
+                onPressed: () => _plaidLinkToken!.open(),
+                child: Text('Public Token: $_publicToken'),
+              ),
+              ElevatedButton(
+                onPressed: () => fetchTransactionData(),
+                child: Text('Fetch Transactions:'),
               ),
             ],
           ),
