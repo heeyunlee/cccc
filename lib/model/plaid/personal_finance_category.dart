@@ -36,9 +36,12 @@ class PersonalFinanceCategory {
   }
 
   factory PersonalFinanceCategory.fromMap(Map<String, dynamic> map) {
+    final String primary = map['primary'];
+    final String detailed = map['detailed'];
+
     return PersonalFinanceCategory(
-      primary: map['primary'],
-      detailed: map['detailed'],
+      primary: primary,
+      detailed: detailed,
     );
   }
 

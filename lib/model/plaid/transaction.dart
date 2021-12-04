@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-import 'location.dart';
+import 'plaid_location.dart';
 import 'payment_meta.dart';
 import 'personal_finance_category.dart';
 
@@ -308,43 +308,57 @@ class Transaction {
   }
 
   factory Transaction.fromMap(Map<String, dynamic> map) {
+    final String? pendingTransactionId = map['pending_transaction_id'];
+    final String? categoryId = map['category_id'];
+    final List<String>? category = List<String>.from(map['category']);
+    final PlaidLocation plaidLocation = PlaidLocation.fromMap(map['location']);
+    final PaymentMeta paymentMeta = PaymentMeta.fromMap(map['payment_meta']);
+    final String? accountOwner = map['account_owner'];
+    final String name = map['name'];
+    final String? originalDescription = map['original_description'];
+    final String accountId = map['account_id'];
+    final num amount = map['amount'];
+    final String? isoCurrencyCode = map['iso_currency_code'];
+    final String? unofficialCurrencyCode = map['unofficial_currency_code'];
+    final String date = map['date'];
+    final bool pending = map['pending'];
+    final String transactionId = map['transaction_id'];
+    final String? merchantName = map['merchant_name'];
+    final String? checkNumber = map['check_number'];
+    final String paymentChannel = map['payment_channel'];
+    final String? authorizedDate = map['authorized_date'];
+    final String? authorizedDatetime = map['authorized_datetime'];
+    final String? datetime = map['datetime'];
+    final String? transactionCode = map['transaction_code'];
+    final PersonalFinanceCategory? personalFinanceCategory =
+        (map['personal_finance_category'] != null)
+            ? PersonalFinanceCategory.fromMap(map['personal_finance_category'])
+            : null;
+
     return Transaction(
-      pendingTransactionId: map['pendingTransactionId'] != null
-          ? map['pendingTransactionId']
-          : null,
-      categoryId: map['categoryId'] != null ? map['categoryId'] : null,
-      category:
-          map['category'] != null ? List<String>.from(map['category']) : null,
-      location: PlaidLocation.fromMap(map['location']),
-      paymentMeta: PaymentMeta.fromMap(map['paymentMeta']),
-      accountOwner: map['accountOwner'] != null ? map['accountOwner'] : null,
-      name: map['name'],
-      originalDescription: map['originalDescription'] != null
-          ? map['originalDescription']
-          : null,
-      accountId: map['accountId'],
-      amount: map['amount'],
-      isoCurrencyCode:
-          map['isoCurrencyCode'] != null ? map['isoCurrencyCode'] : null,
-      unofficialCurrencyCode: map['unofficialCurrencyCode'] != null
-          ? map['unofficialCurrencyCode']
-          : null,
-      date: map['date'],
-      pending: map['pending'],
-      transactionId: map['transactionId'],
-      merchantName: map['merchantName'] != null ? map['merchantName'] : null,
-      checkNumber: map['checkNumber'] != null ? map['checkNumber'] : null,
-      paymentChannel: map['paymentChannel'],
-      authorizedDate:
-          map['authorizedDate'] != null ? map['authorizedDate'] : null,
-      authorizedDatetime:
-          map['authorizedDatetime'] != null ? map['authorizedDatetime'] : null,
-      datetime: map['datetime'] != null ? map['datetime'] : null,
-      transactionCode:
-          map['transactionCode'] != null ? map['transactionCode'] : null,
-      personalFinanceCategory: map['personalFinanceCategory'] != null
-          ? PersonalFinanceCategory.fromMap(map['personalFinanceCategory'])
-          : null,
+      pendingTransactionId: pendingTransactionId,
+      categoryId: categoryId,
+      category: category,
+      location: plaidLocation,
+      paymentMeta: paymentMeta,
+      accountOwner: accountOwner,
+      name: name,
+      originalDescription: originalDescription,
+      accountId: accountId,
+      amount: amount,
+      isoCurrencyCode: isoCurrencyCode,
+      unofficialCurrencyCode: unofficialCurrencyCode,
+      date: date,
+      pending: pending,
+      transactionId: transactionId,
+      merchantName: merchantName,
+      checkNumber: checkNumber,
+      paymentChannel: paymentChannel,
+      authorizedDate: authorizedDate,
+      authorizedDatetime: authorizedDatetime,
+      datetime: datetime,
+      transactionCode: transactionCode,
+      personalFinanceCategory: personalFinanceCategory,
     );
   }
 

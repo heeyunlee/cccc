@@ -75,15 +75,24 @@ class PlaidLocation {
   }
 
   factory PlaidLocation.fromMap(Map<String, dynamic> map) {
+    final String? address = map['address'];
+    final String? city = map['city'];
+    final String? region = map['region'];
+    final String? postalCode = map['postal_code'];
+    final String? country = map['country'];
+    final double? lat = map['lat'];
+    final double? lon = map['lon'];
+    final String? storeNumber = map['store_number'];
+
     return PlaidLocation(
-      address: map['address'] != null ? map['address'] : null,
-      city: map['city'] != null ? map['city'] : null,
-      region: map['region'] != null ? map['region'] : null,
-      postalCode: map['postalCode'] != null ? map['postalCode'] : null,
-      country: map['country'] != null ? map['country'] : null,
-      lat: map['lat'] != null ? map['lat'] : null,
-      lon: map['lon'] != null ? map['lon'] : null,
-      storeNumber: map['storeNumber'] != null ? map['storeNumber'] : null,
+      address: address,
+      city: city,
+      region: region,
+      postalCode: postalCode,
+      country: country,
+      lat: lat,
+      lon: lon,
+      storeNumber: storeNumber,
     );
   }
 

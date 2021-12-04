@@ -81,17 +81,24 @@ class PaymentMeta {
   }
 
   factory PaymentMeta.fromMap(Map<String, dynamic> map) {
+    final String? referenceNumber = map['reference_number'];
+    final String? ppdId = map['ppd_id'];
+    final String? payee = map['payee'];
+    final String? byOrderOf = map['by_order_of'];
+    final String? payer = map['payer'];
+    final String? paymentMethod = map['payment_method'];
+    final String? paymentProcessor = map['payment_processor'];
+    final String? reason = map['reason'];
+
     return PaymentMeta(
-      referenceNumber:
-          map['referenceNumber'] != null ? map['referenceNumber'] : null,
-      ppdId: map['ppdId'] != null ? map['ppdId'] : null,
-      payee: map['payee'] != null ? map['payee'] : null,
-      byOrderOf: map['byOrderOf'] != null ? map['byOrderOf'] : null,
-      payer: map['payer'] != null ? map['payer'] : null,
-      paymentMethod: map['paymentMethod'] != null ? map['paymentMethod'] : null,
-      paymentProcessor:
-          map['paymentProcessor'] != null ? map['paymentProcessor'] : null,
-      reason: map['reason'] != null ? map['reason'] : null,
+      referenceNumber: referenceNumber,
+      ppdId: ppdId,
+      payee: payee,
+      byOrderOf: byOrderOf,
+      payer: payer,
+      paymentMethod: paymentMethod,
+      paymentProcessor: paymentProcessor,
+      reason: reason,
     );
   }
 

@@ -6,8 +6,8 @@ import 'package:cccc/model/plaid/account.dart';
 import 'package:cccc/model/plaid/plaid_item.dart';
 import 'package:cccc/model/plaid/transaction.dart';
 
-class PlaidResponse {
-  PlaidResponse({
+class PlaidTransactionResponse {
+  PlaidTransactionResponse({
     required this.accounts,
     required this.transactions,
     required this.totalTransactions,
@@ -21,14 +21,14 @@ class PlaidResponse {
   final PlaidItem item;
   final String requestId;
 
-  PlaidResponse copyWith({
+  PlaidTransactionResponse copyWith({
     List<Account>? accounts,
     List<Transaction>? transactions,
     int? totalTransactions,
     PlaidItem? item,
     String? requestId,
   }) {
-    return PlaidResponse(
+    return PlaidTransactionResponse(
       accounts: accounts ?? this.accounts,
       transactions: transactions ?? this.transactions,
       totalTransactions: totalTransactions ?? this.totalTransactions,
@@ -47,22 +47,31 @@ class PlaidResponse {
     };
   }
 
-  factory PlaidResponse.fromMap(Map<String, dynamic> map) {
-    return PlaidResponse(
-      accounts:
-          List<Account>.from(map['accounts']?.map((x) => Account.fromMap(x))),
-      transactions: List<Transaction>.from(
-          map['transactions']?.map((x) => Transaction.fromMap(x))),
-      totalTransactions: map['totalTransactions'],
-      item: PlaidItem.fromMap(map['item']),
-      requestId: map['requestId'],
+  factory PlaidTransactionResponse.fromMap(Map<String, dynamic> map) {
+    final List<Account> accounts = List<Account>.from(
+      map['accounts'].map((e) => Account.fromMap(e)),
+    );
+    final List<Transaction> transactions = List<Transaction>.from(
+      map['transactions'].map((e) => Transaction.fromMap(e)),
+    );
+    final int totalTransactions = map['total_transactions'];
+    final PlaidItem item = PlaidItem.fromMap(map['item']);
+    final String requestId = map['request_id'];
+
+    return PlaidTransactionResponse(
+      accounts: accounts,
+      transactions: transactions,
+      totalTransactions: totalTransactions,
+      item: item,
+      requestId: requestId,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory PlaidResponse.fromJson(String source) =>
-      PlaidResponse.fromMap(json.decode(source));
+  factory PlaidTransactionResponse.fromJson(String source) {
+    return PlaidTransactionResponse.fromMap(json.decode(source));
+  }
 
   @override
   String toString() {
@@ -73,7 +82,7 @@ class PlaidResponse {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is PlaidResponse &&
+    return other is PlaidTransactionResponse &&
         listEquals(other.accounts, accounts) &&
         listEquals(other.transactions, transactions) &&
         other.totalTransactions == totalTransactions &&

@@ -127,18 +127,31 @@ class PlaidItem {
   }
 
   factory PlaidItem.fromMap(Map<String, dynamic> map) {
+    print('plaid item = $map');
+
+    final String itemId = map['item_id'];
+    final String? institutionId = map['institution_id'];
+    final String? webhook = map['webhook'];
+    final PlaidError? error =
+        map['error'] != null ? PlaidError.fromMap(map['error']) : null;
+    final List<String> availableProducts =
+        List<String>.from(map['available_products']);
+    final List<String> billedProducts =
+        List<String>.from(map['billed_products']);
+    final List<String> products = List<String>.from(map['products']);
+    final String? consentExpirationTime = map['consent_expiration_time'];
+    final String updateType = map['update_type'];
+
     return PlaidItem(
-      itemId: map['itemId'],
-      institutionId: map['institutionId'] != null ? map['institutionId'] : null,
-      webhook: map['webhook'] != null ? map['webhook'] : null,
-      error: map['error'] != null ? PlaidError.fromMap(map['error']) : null,
-      availableProducts: List<String>.from(map['availableProducts']),
-      billedProducts: List<String>.from(map['billedProducts']),
-      products: List<String>.from(map['products']),
-      consentExpirationTime: map['consentExpirationTime'] != null
-          ? map['consentExpirationTime']
-          : null,
-      updateType: map['updateType'],
+      itemId: itemId,
+      institutionId: institutionId,
+      webhook: webhook,
+      error: error,
+      availableProducts: availableProducts,
+      billedProducts: billedProducts,
+      products: products,
+      consentExpirationTime: consentExpirationTime,
+      updateType: updateType,
     );
   }
 

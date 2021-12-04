@@ -14,7 +14,7 @@ class Account {
     this.officialName,
     required this.type,
     this.subtype,
-    required this.verificationStatus,
+    this.verificationStatus,
   });
 
   /// Plaid’s unique identifier for the account. This value will not change
@@ -119,7 +119,7 @@ class Account {
   /// Possible values: `automatically_verified`,
   /// `pending_automatic_verification`, `pending_manual_verification`,
   /// `manually_verified`, `verification_expired`, `verification_failed`
-  final String verificationStatus;
+  final String? verificationStatus;
 
   Account copyWith({
     String? accountId,
@@ -157,22 +157,34 @@ class Account {
   }
 
   factory Account.fromMap(Map<String, dynamic> map) {
+    final String accountId = map['account_id'];
+    final Balance balance = Balance.fromMap(map['balances']);
+    final String? mask = map['mask'];
+    final String name = map['name'];
+    final String? officialName = map['official_name'];
+    final String type = map['type'];
+    final String? subtype = map['subtype'];
+    final String? verificationStatus = map['verification_status'];
+
     return Account(
-      accountId: map['accountId'],
-      balance: Balance.fromMap(map['balance']),
-      mask: map['mask'] != null ? map['mask'] : null,
-      name: map['name'],
-      officialName: map['officialName'] != null ? map['officialName'] : null,
-      type: map['type'],
-      subtype: map['subtype'] != null ? map['subtype'] : null,
-      verificationStatus: map['verificationStatus'],
+      accountId: accountId,
+      balance: balance,
+      mask: mask,
+      name: name,
+      officialName: officialName,
+      type: type,
+      subtype: subtype,
+      verificationStatus: verificationStatus,
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory Account.fromJson(String source) =>
-      Account.fromMap(json.decode(source));
+  factory Account.fromJson(String source) {
+    print('source = $source');
+
+    return Account.fromMap(json.decode(source));
+  }
 
   @override
   String toString() {

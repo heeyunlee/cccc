@@ -129,18 +129,20 @@ class Balance {
   }
 
   factory Balance.fromMap(Map<String, dynamic> map) {
+    final num? available = map['available'];
+    final num? current = map['current'];
+    final num? limit = map['limit'];
+    final String? isoCurrenyCode = map['iso_currency_code'];
+    final String? unofficialCurrencyCode = map['unofficial_currency_codes'];
+    final String? lastUpdatedDatetime = map['last_updated_datetime'];
+
     return Balance(
-      available: map['available'] != null ? map['available'] : null,
-      current: map['current'] != null ? map['current'] : null,
-      limit: map['limit'] != null ? map['limit'] : null,
-      isoCurrencyCode:
-          map['isoCurrencyCode'] != null ? map['isoCurrencyCode'] : null,
-      unofficialCurrencyCode: map['unofficialCurrencyCode'] != null
-          ? map['unofficialCurrencyCode']
-          : null,
-      lastUpdatedDatetime: map['lastUpdatedDatetime'] != null
-          ? map['lastUpdatedDatetime']
-          : null,
+      available: available,
+      current: current,
+      limit: limit,
+      isoCurrencyCode: isoCurrenyCode,
+      unofficialCurrencyCode: unofficialCurrencyCode,
+      lastUpdatedDatetime: lastUpdatedDatetime,
     );
   }
 

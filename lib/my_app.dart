@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cccc/model/plaid/plaid_transactions_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
@@ -18,7 +19,6 @@ class _MyAppState extends State<MyApp> {
   PlaidLink? _plaidLinkToken;
   String? _accessToken;
   String? _publicToken;
-  String? _stringResponse;
 
   @override
   void initState() {
@@ -93,8 +93,10 @@ class _MyAppState extends State<MyApp> {
     setState(() {});
   }
 
-  Future<String> fetchTransactionData() async {
+  Future<dynamic> fetchTransactionData() async {
     try {
+      final now = DateTime.now();
+
       final uri = Uri(
         scheme: 'https',
         host: host,
@@ -103,19 +105,20 @@ class _MyAppState extends State<MyApp> {
 
       final response = await http.post(
         uri,
-        body: _publicToken,
+        body: json.encode({
+          'public_token': _publicToken,
+          'start_date': DateTime(2021, 12, 1).toString(),
+          'end_date': DateTime(now.year, now.month, now.day).toString(),
+        }),
       );
-      _stringResponse = response.body;
 
-      final List<dynamic> transactions = jsonDecode(_stringResponse!);
-      print('type of transactions is ${transactions.runtimeType}');
+      final transaction = PlaidTransactionResponse.fromJson(response.body);
 
-      final a = transactions.length;
-
-      print('response is $a');
-
-      return response.body;
+      return transaction;
     } catch (e) {
+      print(e.runtimeType);
+      print(e);
+
       return e.toString();
     }
   }

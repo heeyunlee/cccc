@@ -1,4 +1,5 @@
 import json
+import datetime
 from flask.json import jsonify
 import plaid
 import flask
@@ -7,6 +8,9 @@ from plaid.api import plaid_api
 from plaid.model.products import Products
 from plaid.model.country_code import CountryCode
 from plaid.model.transaction import Transaction
+from plaid.model.item import Item
+from plaid.model.item_public_token_exchange_response import ItemPublicTokenExchangeResponse
+from plaid.model.transactions_get_response import TransactionsGetResponse
 from plaid.model.link_token_create_request_user import LinkTokenCreateRequestUser
 from plaid.model.item_public_token_exchange_request import ItemPublicTokenExchangeRequest
 
@@ -51,40 +55,54 @@ def get_link_token(a: str) -> str:
 
 def fetch_transaction_data(request: flask.Request):
     try:
-        # print(f'request is {request}')
+        print(f'request: {request}')
 
         data = request.get_data()
-        # print(f'data is {data}')
+        data_decoded = data.decode('UTF-8')
+        data_dict = json.loads(data_decoded)
 
-        public_token = data.decode('UTF-8')
-        # print(f'public token = {public_token}')
+        print(f'decoded data {data_dict}')
 
-        request_public = ItemPublicTokenExchangeRequest(
+        public_token = data_dict['public_token']
+        print(f'public_token is {public_token}')
+
+        start_date = datetime.datetime.strptime(
+            data_dict['start_date'], '%Y-%m-%d %H:%M:%S.%f'
+        )
+        print(f'start_date is {start_date}')
+
+        end_date = datetime.datetime.strptime(
+            data_dict['end_date'], '%Y-%m-%d %H:%M:%S.%f'
+        )
+        print(f'end_date is {end_date}')
+
+        exchange_token_request = ItemPublicTokenExchangeRequest(
             public_token=public_token
         )
-
-        response_access_token = client.item_public_token_exchange(
-            request_public
+        exchange_token_response: ItemPublicTokenExchangeResponse = client.item_public_token_exchange(
+            exchange_token_request
         )
-        access_token = response_access_token['access_token']
+        access_token = exchange_token_response.access_token
 
-        print(f'Response to Public Token Exchange: {access_token}')
+        print(f'item_public_token_exchange response: {access_token}')
 
-        request_transactions = plaid_api.TransactionsGetRequest(
+        transactions_get_request = plaid_api.TransactionsGetRequest(
             access_token=access_token,
-            start_date=plaid_api.date(2021, 11, 29),
-            end_date=plaid_api.date(2021, 12, 1),
+            start_date=plaid_api.date(
+                start_date.year, start_date.month, start_date.day
+            ),
+            end_date=plaid_api.date(
+                end_date.year, end_date.month, end_date.day
+            ),
         )
-        response_transactions = client.transactions_get(request_transactions)
-        transactions: list[Transaction] = response_transactions['transactions']
+        transactions_get_response: TransactionsGetResponse = client.transactions_get(
+            transactions_get_request
+        )
 
-        print(f'type of transactions are {type(transactions)}')
+        print(f'response_transactions is: {transactions_get_response}')
 
-        transactions_dict = [x.to_dict() for x in transactions]
+        response_dict = transactions_get_response.to_dict()
 
-        print(f'transactions_dict is {transactions_dict}')
-
-        return make_response(jsonify(transactions_dict), 200)
-
+        return make_response(jsonify(response_dict), 200)
     except:
         return make_response(jsonify('An Error Occurred'), 404)

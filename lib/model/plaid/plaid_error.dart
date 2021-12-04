@@ -106,17 +106,26 @@ class PlaidError {
   }
 
   factory PlaidError.fromMap(Map<String, dynamic> map) {
+    final String errorType = map['error_type'];
+    final String errorCode = map['error_code'];
+    final String errorMessage = map['error_message'];
+    final String? displayMessage = map['display_message'];
+    final String requestId = map['request_id'];
+    final List<dynamic> causes = List.from(map['causes']);
+    final num? status = map['status'];
+    final String documentationUrl = map['documentation_url'];
+    final String suggestedAction = map['suggested_action'];
+
     return PlaidError(
-      errorType: map['errorType'],
-      errorCode: map['errorCode'],
-      errorMessage: map['errorMessage'],
-      displayMessage:
-          map['displayMessage'] != null ? map['displayMessage'] : null,
-      requestId: map['requestId'],
-      causes: List.from(map['causes']),
-      status: map['status'] != null ? map['status'] : null,
-      documentationUrl: map['documentationUrl'],
-      suggestedAction: map['suggestedAction'],
+      errorType: errorType,
+      errorCode: errorCode,
+      errorMessage: errorMessage,
+      displayMessage: displayMessage,
+      requestId: requestId,
+      causes: causes,
+      status: status,
+      documentationUrl: documentationUrl,
+      suggestedAction: suggestedAction,
     );
   }
 
