@@ -127,8 +127,6 @@ class PlaidItem {
   }
 
   factory PlaidItem.fromMap(Map<String, dynamic> map) {
-    print('plaid item = $map');
-
     final String itemId = map['item_id'];
     final String? institutionId = map['institution_id'];
     final String? webhook = map['webhook'];

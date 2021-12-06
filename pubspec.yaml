@@ -1,5 +1,5 @@
 name: cccc
-description: Demonstrates how to use the plaid_flutter plugin.
+description: This is a description
 publish_to: "none"
 
 version: 0.1.0
@@ -11,15 +11,50 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^0.1.2
+  logger: ^1.1.0
+  plaid_flutter: ^2.1.4
+  firebase_core: ^1.10.0
+  http: ^0.13.4
+  flutter_lints: ^1.0.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  plaid_flutter: ^2.1.4
-  googleapis: ^7.0.0
-  firebase_core: ^1.10.0
-  cloud_functions: ^3.1.1
-  http: ^0.13.4
 
 flutter:
   uses-material-design: true
+  fonts:
+    - family: RobotoMono
+      fonts:
+        - asset: assets/fonts/RobotoMono-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/RobotoMono-ThinItalic.ttf
+          weight: 100
+          style: italic
+        - asset: assets/fonts/RobotoMono-ExtraLight.ttf
+          weight: 200
+        - asset: assets/fonts/RobotoMono-ExtraLightItalic.ttf
+          weight: 200
+          style: italic
+        - asset: assets/fonts/RobotoMono-Light.ttf
+          weight: 300
+        - asset: assets/fonts/RobotoMono-LightItalic.ttf
+          weight: 300
+          style: italic
+        - asset: assets/fonts/RobotoMono-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/RobotoMono-Italic.ttf
+          weight: 400
+          style: italic
+        - asset: assets/fonts/RobotoMono-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/RobotoMono-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/RobotoMono-SemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/RobotoMono-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/RobotoMono-BoldItalic.ttf
+          weight: 700
+          style: italic

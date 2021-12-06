@@ -1,5 +1,6 @@
 import json
 import datetime
+from os import link
 from flask.json import jsonify
 import plaid
 import flask
@@ -31,11 +32,30 @@ api_client = plaid.ApiClient(configuration)
 client = plaid_api.PlaidApi(api_client)
 
 
-def get_link_token(a: str) -> str:
+def hello_world(request):
+    """Responds to any HTTP request.
+    Args:
+        request (flask.Request): HTTP request object.
+    Returns:
+        The response text or any set of values that can be turned into a
+        Response object using
+        `make_response <http://flask.pocoo.org/docs/1.0/api/#flask.Flask.make_response>`.
+    """
+    request_json = request.get_json()
+    if request.args and 'message' in request.args:
+        return request.args.get('message')
+    elif request_json and 'message' in request_json:
+        return request_json['message']
+    else:
+        return f'Hello World!'
 
-    # create link token
-    response = client.link_token_create(
-        plaid_api.LinkTokenCreateRequest(
+
+def get_link_token(request):
+    try:
+        print(f'request is {request}')
+
+        # Create Link Token Request
+        link_token_create_request = plaid_api.LinkTokenCreateRequest(
             products=[Products('auth'), Products('transactions')],
             client_name="CCCC",
             language='en',
@@ -44,13 +64,21 @@ def get_link_token(a: str) -> str:
                 client_user_id='123-test-user-id'
             )
         )
-    )
+        print(f'link_token_create_request {link_token_create_request}')
 
-    link_token: str = response['link_token']
+        # Create Link Token Response
+        response = client.link_token_create(link_token_create_request)
+        print(f'response= {response}')
 
-    print(f'get_link_token worked! The token = {link_token}')
+        link_token: str = response['link_token']
+        print(f'get_link_token worked! The token = {link_token}')
 
-    return link_token
+        jsonified_response = make_response(jsonify(link_token=link_token), 200)
+        print(f'jsonified_response {jsonified_response}')
+
+        return jsonified_response
+    except:
+        return make_response(jsonify('An error occurred'), 404)
 
 
 def fetch_transaction_data(request: flask.Request):

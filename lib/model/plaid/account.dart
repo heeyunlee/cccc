@@ -181,8 +181,6 @@ class Account {
   String toJson() => json.encode(toMap());
 
   factory Account.fromJson(String source) {
-    print('source = $source');
-
     return Account.fromMap(json.decode(source));
   }
 
