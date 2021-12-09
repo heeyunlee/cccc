@@ -1,13 +1,13 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:plaid_flutter/plaid_flutter.dart';
+
 import 'package:cccc/model/plaid/plaid_transactions_response.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/theme/custom_button_theme.dart';
 import 'package:cccc/utils/logger_init.dart';
-
-import 'package:flutter/material.dart';
-import 'package:plaid_flutter/plaid_flutter.dart';
-import 'package:http/http.dart' as http;
 
 import 'private_keys.dart';
 
@@ -26,6 +26,21 @@ class ConnectWithPlaidScreen extends StatefulWidget {
 
 class _ConnectWithPlaidScreenState extends State<ConnectWithPlaidScreen> {
   String? _publicToken;
+  bool _isLoading = false;
+
+  Future<String> _getLinkToken() async {
+    final uri = Uri(
+      scheme: 'https',
+      host: host,
+      path: 'get_link_token',
+    );
+
+    final response = await http.post(uri);
+    final jsonResponse = jsonDecode(response.body);
+    final linkToken = jsonResponse['link_token'];
+
+    return linkToken;
+  }
 
   void _onSuccessCallback(String publicToken, LinkSuccessMetadata metadata) {
     _publicToken = publicToken;
@@ -48,24 +63,10 @@ class _ConnectWithPlaidScreenState extends State<ConnectWithPlaidScreen> {
     }
   }
 
-  Future<String> _getLinkToken() async {
-    final uri = Uri(
-      scheme: 'https',
-      host: host,
-      path: 'get_link_token',
-    );
-
-    final response = await http.post(uri);
-    final jsonResponse = jsonDecode(response.body);
-    final linkToken = jsonResponse['link_token'];
-
-    return linkToken;
-  }
-
-  Future<void> _openLink() async {
+  Future<void> _openLink(String linkToken) async {
     try {
       LinkTokenConfiguration linkTokenConfiguration = LinkTokenConfiguration(
-        token: await _getLinkToken(),
+        token: linkToken,
       );
 
       final plaidLinkToken = PlaidLink(
@@ -119,10 +120,20 @@ class _ConnectWithPlaidScreenState extends State<ConnectWithPlaidScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
         title: const Text('Connect with Plaid'),
       ),
-      body: Column(
-        children: [],
+      body: Padding(
+        padding: const EdgeInsets.all(24.0),
+        child: Column(
+          children: const [
+            Text(
+                '''Lorem ipsum dolor sit amet, consectetur sadipiscing elit. Mauris in consectetur enim. Sed blandit lorem tempus lectus tincidunt, eget vestibulum nulla v
+                \niverra. Donec vel magna ac ante dignissim pulvinar. Morbi a auctor metus. 
+                \nNullam purus lacus, pharetra id metus interdum, sollicitudin tempus eros '''),
+          ],
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Row(
@@ -132,11 +143,26 @@ class _ConnectWithPlaidScreenState extends State<ConnectWithPlaidScreen> {
             height: 56,
             width: size.width - 48,
             child: OutlinedButton(
-              onPressed: () {
-                _openLink();
+              onPressed: () async {
+                setState(() {
+                  _isLoading = true;
+                });
+
+                final linkToken = await _getLinkToken();
+
+                _openLink(linkToken);
+
+                setState(() {
+                  _isLoading = false;
+                });
               },
               style: CustomButtonTheme.outline1,
-              child: const Text('Accept & Continue'),
+              child: _isLoading
+                  ? const CircularProgressIndicator(
+                      strokeWidth: 1.5,
+                      color: Colors.white,
+                    )
+                  : const Text('Accept & Continue'),
             ),
           ),
         ],

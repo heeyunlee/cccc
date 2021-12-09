@@ -10,11 +10,15 @@ class CustomRouter {
       case RouteNames.home:
         return adaptiveRoute(
           rootNavigator: true,
+          maintainState: true,
+          settings: settings,
           builder: (context) => const Home(),
         );
       case RouteNames.connectPlaid:
         return adaptiveRoute(
           rootNavigator: true,
+          maintainState: true,
+          settings: settings,
           builder: (context) => const ConnectWithPlaidScreen(),
         );
       default:

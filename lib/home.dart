@@ -1,4 +1,5 @@
 import 'package:cccc/connect_with_plaid_screen.dart';
+import 'package:cccc/theme/custom_button_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -40,13 +41,7 @@ class Home extends StatelessWidget {
               width: size.width - 48,
               height: 48,
               child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  primary: Colors.white,
-                  side: const BorderSide(color: Colors.white),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                ),
+                style: CustomButtonTheme.outline1,
                 onPressed: () => ConnectWithPlaidScreen.show(context),
                 child: Center(
                   child: Row(
