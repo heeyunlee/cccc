@@ -20,6 +20,7 @@ class CustomTheme {
       overline: TextStyles.overline,
     ),
     brightness: Brightness.dark,
+    scaffoldBackgroundColor: Colors.black,
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
       titleTextStyle: TextStyles.subtitle1,

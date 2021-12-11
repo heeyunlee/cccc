@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 
 class TextStyles {
@@ -77,11 +75,27 @@ class TextStyles {
     letterSpacing: 0.5,
   );
 
+  static const body1White24 = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 16,
+    color: Colors.white24,
+    letterSpacing: 0.5,
+  );
+
   static const body2 = TextStyle(
     fontFamily: defaultFont,
     fontWeight: FontWeight.w400,
     fontSize: 14,
     color: Colors.white,
+    letterSpacing: 0.25,
+  );
+
+  static const body2White24 = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+    color: Colors.white24,
     letterSpacing: 0.25,
   );
 
@@ -125,11 +139,51 @@ class TextStyles {
     letterSpacing: 0.4,
   );
 
+  static const captionGrey = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 12,
+    color: Colors.grey,
+    letterSpacing: 0.4,
+  );
+
+  static const captionGreyBold = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.bold,
+    fontSize: 12,
+    color: Colors.grey,
+    letterSpacing: 0.4,
+  );
+
+  static const captionBoldWhite12 = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.bold,
+    fontSize: 12,
+    color: Colors.white12,
+    letterSpacing: 0.4,
+  );
+
   static const overline = TextStyle(
     fontFamily: defaultFont,
     fontWeight: FontWeight.w400,
     fontSize: 10,
     color: Colors.white,
+    letterSpacing: 1.5,
+  );
+
+  static const overlineGrey = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 10,
+    color: Colors.grey,
+    letterSpacing: 1.5,
+  );
+
+  static const overlineWhite12 = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 10,
+    color: Colors.white12,
     letterSpacing: 1.5,
   );
 }

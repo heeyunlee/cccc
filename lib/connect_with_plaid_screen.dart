@@ -1,6 +1,8 @@
 import 'dart:convert';
 
+import 'package:cccc/home.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:plaid_flutter/plaid_flutter.dart';
 
@@ -11,7 +13,7 @@ import 'package:cccc/utils/logger_init.dart';
 
 import 'private_keys.dart';
 
-class ConnectWithPlaidScreen extends StatefulWidget {
+class ConnectWithPlaidScreen extends ConsumerStatefulWidget {
   const ConnectWithPlaidScreen({Key? key}) : super(key: key);
 
   static void show(BuildContext context) {
@@ -24,7 +26,8 @@ class ConnectWithPlaidScreen extends StatefulWidget {
   _ConnectWithPlaidScreenState createState() => _ConnectWithPlaidScreenState();
 }
 
-class _ConnectWithPlaidScreenState extends State<ConnectWithPlaidScreen> {
+class _ConnectWithPlaidScreenState
+    extends ConsumerState<ConnectWithPlaidScreen> {
   String? _publicToken;
   bool _isLoading = false;
 
@@ -52,14 +55,14 @@ class _ConnectWithPlaidScreenState extends State<ConnectWithPlaidScreen> {
   }
 
   void _onEventCallback(String event, LinkEventMetadata metadata) {
-    // print("onEvent: $event, metadata: ${metadata.description()}");
+    logger.d("onEvent: $event, metadata: ${metadata.description()}");
   }
 
   void _onExitCallback(LinkError? error, LinkExitMetadata metadata) {
-    // print("onExit metadata: ${metadata.description()}");
+    logger.d("onExit metadata: ${metadata.description()}");
 
     if (error != null) {
-      // print("onExit error: ${error.description()}");
+      logger.d("onExit error: ${error.description()}");
     }
   }
 
@@ -96,16 +99,21 @@ class _ConnectWithPlaidScreenState extends State<ConnectWithPlaidScreen> {
         uri,
         body: json.encode({
           'public_token': _publicToken,
-          'start_date': DateTime(2021, 12, 1).toString(),
+          'start_date': DateTime(2021, 11, 1).toString(),
           'end_date': DateTime(now.year, now.month, now.day).toString(),
         }),
       );
 
-      final transaction = PlaidTransactionResponse.fromJson(response.body);
+      final transactionResponse = PlaidTransactionResponse.fromJson(
+        response.body,
+      );
+      final transactions = transactionResponse.transactions;
 
-      // print('transaction: $transaction');
+      ref.read(transactionsListProvider.notifier).add(transactions);
 
-      return transaction;
+      logger.d('transaction: $transactions');
+
+      // return transactions;
     } catch (e) {
       // print(e.runtimeType);
       // print(e);
@@ -127,11 +135,15 @@ class _ConnectWithPlaidScreenState extends State<ConnectWithPlaidScreen> {
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
-          children: const [
-            Text(
+          children: [
+            const Text(
                 '''Lorem ipsum dolor sit amet, consectetur sadipiscing elit. Mauris in consectetur enim. Sed blandit lorem tempus lectus tincidunt, eget vestibulum nulla v
-                \niverra. Donec vel magna ac ante dignissim pulvinar. Morbi a auctor metus. 
-                \nNullam purus lacus, pharetra id metus interdum, sollicitudin tempus eros '''),
+                  \niverra. Donec vel magna ac ante dignissim pulvinar. Morbi a auctor metus. 
+                  \nNullam purus lacus, pharetra id metus interdum, sollicitudin tempus eros '''),
+            OutlinedButton(
+              onPressed: () => _fetchTransactionData(),
+              child: const Text('Fetch Transaction Data'),
+            ),
           ],
         ),
       ),

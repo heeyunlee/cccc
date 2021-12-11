@@ -1,19 +1,22 @@
 import json
 import datetime
-from os import link
-from flask.json import jsonify
-import plaid
+
 import flask
-from flask import make_response
+from flask import (
+    make_response,
+    jsonify,
+)
+
+import plaid
 from plaid.api import plaid_api
-from plaid.model.products import Products
-from plaid.model.country_code import CountryCode
-from plaid.model.transaction import Transaction
-from plaid.model.item import Item
-from plaid.model.item_public_token_exchange_response import ItemPublicTokenExchangeResponse
-from plaid.model.transactions_get_response import TransactionsGetResponse
-from plaid.model.link_token_create_request_user import LinkTokenCreateRequestUser
-from plaid.model.item_public_token_exchange_request import ItemPublicTokenExchangeRequest
+from plaid.model import (
+    products as Products,
+    country_code as CountryCode,
+    item_public_token_exchange_response as ItemPublicTokenExchangeResponse,
+    item_public_token_exchange_request as ItemPublicTokenExchangeRequest,
+    transactions_get_response as TransactionsGetResponse,
+    link_token_create_request_user as LinkTokenCreateRequestUser,
+)
 
 
 f = open('private_keys.json')
@@ -32,7 +35,24 @@ api_client = plaid.ApiClient(configuration)
 client = plaid_api.PlaidApi(api_client)
 
 
-def get_link_token(request):
+def get_categories():
+    try:
+
+        response = client.categories_get({})
+        a = response['categories']
+        print(f'categories_get response: {a}')
+        # print(f'type is {type(a)}')
+
+        with open('categories.csv', 'w') as f:
+            for item in a:
+                f.write("%s\n" % item)
+
+        return make_response(jsonify(response), 200)
+    except:
+        return make_response(jsonify('An Error Occurred'), 404)
+
+
+def create_link_token(request):
     try:
         print(f'request is {request}')
 
@@ -50,7 +70,7 @@ def get_link_token(request):
 
         # Create Link Token Response
         response = client.link_token_create(link_token_create_request)
-        print(f'response= {response}')
+        print(f'link_token_create response= {response}')
 
         link_token: str = response['link_token']
         print(f'get_link_token worked! The token = {link_token}')
@@ -60,7 +80,9 @@ def get_link_token(request):
 
         return jsonified_response
     except:
-        return make_response(jsonify('An error occurred'), 404)
+        error_response = make_response(jsonify('An Error Occurred'), 404)
+
+        return error_response
 
 
 def fetch_transaction_data(request: flask.Request):
@@ -116,3 +138,6 @@ def fetch_transaction_data(request: flask.Request):
         return make_response(jsonify(response_dict), 200)
     except:
         return make_response(jsonify('An Error Occurred'), 404)
+
+
+print(get_categories())
