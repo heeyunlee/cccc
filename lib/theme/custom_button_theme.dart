@@ -1,4 +1,4 @@
-import 'package:cccc/constants.dart';
+import 'package:cccc/constants/constants.dart';
 import 'package:cccc/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 
@@ -37,6 +37,28 @@ class CustomButtonTheme {
           Radius.circular(16.0),
         ),
       ),
+    ),
+  );
+
+  static final text1 = ButtonStyle(
+    padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+    textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+      (Set<MaterialState> states) {
+        if (states.any(interactiveStates.contains)) {
+          return TextStyles.button1Grey;
+        }
+
+        return TextStyles.button1;
+      },
+    ),
+    foregroundColor: MaterialStateProperty.resolveWith<Color>(
+      (Set<MaterialState> states) {
+        if (states.any(interactiveStates.contains)) {
+          return Colors.grey;
+        }
+
+        return Colors.white;
+      },
     ),
   );
 

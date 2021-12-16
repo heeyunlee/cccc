@@ -1,13 +1,14 @@
-import 'package:cccc/constants.dart';
+import 'package:cccc/constants/constants.dart';
+import 'package:cccc/model/plaid/transactions_list.dart';
 import 'package:cccc/model/enum/transactions_filter.dart';
 import 'package:cccc/model/plaid/transaction.dart';
-import 'package:cccc/recent_transactions_card.dart';
-import 'package:cccc/recent_transactions_card_header.dart';
+import 'package:cccc/view/recent_transactions_card.dart';
+import 'package:cccc/view/recent_transactions_card_header.dart';
+import 'package:cccc/view/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'home_flexible_space_bar.dart';
-import 'model/plaid/transactions_list.dart';
 
 final transactionsListProvider =
     StateNotifierProvider<TransactionsList, List<Transaction>>(
@@ -45,11 +46,11 @@ final filteredTransactions = Provider<List<Transaction>>(
   },
 );
 
-class Home extends StatelessWidget {
+class Home extends ConsumerWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -59,6 +60,13 @@ class Home extends StatelessWidget {
         slivers: [
           SliverAppBar(
             expandedHeight: size.height * 0.5,
+            actions: [
+              IconButton(
+                onPressed: () => SettingsScreen.show(context),
+                icon: const Icon(Icons.settings),
+              ),
+              const SizedBox(width: 8),
+            ],
             flexibleSpace: const HomeFlexibleSpaceBar(),
           ),
           SliverToBoxAdapter(

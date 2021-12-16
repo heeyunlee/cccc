@@ -1,6 +1,8 @@
 import 'dart:convert';
 
-import 'package:cccc/home.dart';
+import 'package:cccc/constants/keys.dart';
+import 'package:cccc/constants/logger_init.dart';
+import 'package:cccc/view/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -9,9 +11,6 @@ import 'package:plaid_flutter/plaid_flutter.dart';
 import 'package:cccc/model/plaid/plaid_transactions_response.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/theme/custom_button_theme.dart';
-import 'package:cccc/utils/logger_init.dart';
-
-import 'private_keys.dart';
 
 class ConnectWithPlaidScreen extends ConsumerStatefulWidget {
   const ConnectWithPlaidScreen({Key? key}) : super(key: key);
@@ -34,7 +33,7 @@ class _ConnectWithPlaidScreenState
   Future<String> _getLinkToken() async {
     final uri = Uri(
       scheme: 'https',
-      host: host,
+      host: Keys.cloudFunctionHost,
       path: 'get_link_token',
     );
 
@@ -91,7 +90,7 @@ class _ConnectWithPlaidScreenState
 
       final uri = Uri(
         scheme: 'https',
-        host: host,
+        host: Keys.cloudFunctionHost,
         path: 'fetch_transaction_data',
       );
 

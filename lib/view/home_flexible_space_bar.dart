@@ -1,9 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cccc/constants/urls.dart';
+import 'package:cccc/theme/custom_button_theme.dart';
 import 'package:flutter/material.dart';
 
 import 'connect_with_plaid_screen.dart';
-import 'constants.dart';
-import 'theme/custom_button_theme.dart';
 
 class HomeFlexibleSpaceBar extends StatelessWidget {
   const HomeFlexibleSpaceBar({
@@ -19,7 +19,7 @@ class HomeFlexibleSpaceBar extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         children: [
           CachedNetworkImage(
-            imageUrl: homeTabNetworkImage,
+            imageUrl: Urls.homeTabNetworkImage,
             fit: BoxFit.cover,
             height: size.height * 0.66,
             placeholder: (context, url) => const Center(
