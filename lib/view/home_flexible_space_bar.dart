@@ -18,14 +18,17 @@ class HomeFlexibleSpaceBar extends StatelessWidget {
       background: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          CachedNetworkImage(
-            imageUrl: Urls.homeTabNetworkImage,
-            fit: BoxFit.cover,
-            height: size.height * 0.66,
-            placeholder: (context, url) => const Center(
-              child: CircularProgressIndicator(),
+          Hero(
+            tag: 'logo',
+            child: CachedNetworkImage(
+              imageUrl: Urls.homeTabNetworkImage,
+              fit: BoxFit.cover,
+              height: size.height * 0.8,
+              placeholder: (context, url) => const Center(
+                child: CircularProgressIndicator(),
+              ),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
-            errorWidget: (context, url, error) => const Icon(Icons.error),
           ),
           Container(
             height: size.height * 0.66,

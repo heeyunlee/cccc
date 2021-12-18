@@ -1,7 +1,6 @@
 import 'package:cccc/routes/route_names.dart';
-import 'package:cccc/services/auth.dart';
+import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/theme/text_styles.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,12 +13,6 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
-  Future<void> _signOut(BuildContext context, FirebaseAuth auth) async {
-    await auth.signOut();
-
-    Navigator.of(context).pop();
-  }
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
@@ -30,7 +23,11 @@ class SettingsScreen extends ConsumerWidget {
       ),
       body: Center(
         child: ElevatedButton(
-          onPressed: () => _signOut(context, auth),
+          onPressed: () {
+            auth.signOut();
+
+            Navigator.of(context).pop();
+          },
           child: const Text('SIGN OUT', style: TextStyles.button2),
         ),
       ),
