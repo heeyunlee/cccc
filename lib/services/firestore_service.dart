@@ -65,11 +65,16 @@ class FirestoreService {
     required String path,
     required T Function(Map<String, dynamic>? data, String id) fromBuilder,
     required Map<String, Object?> Function(T model) toBuilder,
+    required String orderByField,
+    required bool descending,
   }) {
-    final reference = _instance.collection(path).withConverter<T>(
+    final reference = _instance
+        .collection(path)
+        .withConverter<T>(
           fromFirestore: (json, _) => fromBuilder(json.data(), json.id),
           toFirestore: (model, _) => toBuilder(model),
-        );
+        )
+        .orderBy(orderByField, descending: descending);
 
     final snapshots = reference.snapshots();
     final list = snapshots.map(

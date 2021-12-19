@@ -1,4 +1,7 @@
-import 'dart:convert';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'personal_finance_category.freezed.dart';
+part 'personal_finance_category.g.dart';
 
 /// Information describing the intent of the transaction. Most relevant for
 /// personal finance use cases, but not limited to such use cases. The field is
@@ -9,60 +12,13 @@ import 'dart:convert';
 ///
 /// This feature is currently in beta – to request access, contact
 /// transactions-feedback@plaid.com.
-class PersonalFinanceCategory {
-  PersonalFinanceCategory({
-    required this.primary,
-    required this.detailed,
-  });
+@Freezed()
+class PersonalFinanceCategory with _$PersonalFinanceCategory {
+  const factory PersonalFinanceCategory({
+    required String primary,
+    required String detailed,
+  }) = _PersonalFinanceCategory;
 
-  final String primary;
-  final String detailed;
-
-  PersonalFinanceCategory copyWith({
-    String? primary,
-    String? detailed,
-  }) {
-    return PersonalFinanceCategory(
-      primary: primary ?? this.primary,
-      detailed: detailed ?? this.detailed,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'primary': primary,
-      'detailed': detailed,
-    };
-  }
-
-  factory PersonalFinanceCategory.fromMap(Map<String, dynamic> map) {
-    final String primary = map['primary'];
-    final String detailed = map['detailed'];
-
-    return PersonalFinanceCategory(
-      primary: primary,
-      detailed: detailed,
-    );
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory PersonalFinanceCategory.fromJson(String source) =>
-      PersonalFinanceCategory.fromMap(json.decode(source));
-
-  @override
-  String toString() =>
-      'PersonalFinanceCategory(primary: $primary, detailed: $detailed)';
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is PersonalFinanceCategory &&
-        other.primary == primary &&
-        other.detailed == detailed;
-  }
-
-  @override
-  int get hashCode => primary.hashCode ^ detailed.hashCode;
+  factory PersonalFinanceCategory.fromJson(Map<String, dynamic> json) =>
+      _$PersonalFinanceCategoryFromJson(json);
 }

@@ -1,5 +1,14 @@
 # Change Log
 
+## [0.0.3] - Dec. 19th, 2021
+### New Features & Screens
+- Updated  `fetch_transaction_data` function to make a update on a firestore
+- Added `StreamBuilder` to stream list of `Transaction` from the Firestore
+- Added `TransactionsScreen`
+
+### Bug Fix & Refactor
+- Used `Freezed` package to generate classes
+
 ## [0.0.2] - Dec. 17th, 2021
 ### New Features & Screens
 - Add `FirebaseAuthService`, `FirestoreDatabase`, and `FirestoreService` class to network with Firebase effectively
@@ -7,3 +16,6 @@
 - Create `user` class using Freezed package
 
 ### Bug Fix & Refactor
+
+[0.0.2]: https://github.com/heeyunlee/cccc/commit/96682cce01f88cd05830057fc17f703601fc936a
+[0.0.3]: 

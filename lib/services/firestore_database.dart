@@ -1,3 +1,5 @@
+import 'package:cccc/constants/logger_init.dart';
+import 'package:cccc/model/plaid/transaction.dart';
 import 'package:cccc/model/user.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_path.dart';
@@ -10,7 +12,10 @@ final databaseProvider = Provider<FirestoreDatabase?>(
     final auth = ref.watch(authProvider);
 
     if (auth.currentUser?.uid != null) {
-      return FirestoreDatabase(uid: auth.currentUser!.uid);
+      final uid = auth.currentUser!.uid;
+      logger.d('Current User\'s UID: $uid');
+
+      return FirestoreDatabase(uid: uid);
     } else {
       return null;
     }
@@ -29,15 +34,34 @@ class FirestoreDatabase {
   Future<void> setUser(User user) => _service.setData<User>(
         path: FirestorePath.user(user.uid),
         data: user,
-        fromBuilder: (json, id) => User.fromJson(json!),
-        toBuilder: (model) => model.toJson(),
+        fromBuilder: (json, id) => User.fromMap(json!),
+        toBuilder: (model) => model.toMap(),
       );
 
-  Future<void> updateUser(User oldData, User newData) =>
+  Future<void> updateUser(User oldData, Map<String, dynamic> newData) =>
       _service.updateData<User>(
         path: FirestorePath.user(oldData.uid),
-        data: newData.toJson(),
-        fromBuilder: (json, id) => User.fromJson(json!),
-        toBuilder: (model) => model.toJson(),
+        data: newData,
+        fromBuilder: (json, id) => User.fromMap(json!),
+        toBuilder: (model) => model.toMap(),
+      );
+
+  Future<void> deleteUser() => _service.deleteData(
+        path: FirestorePath.user(uid!),
+      );
+
+  Stream<User?> userStream() => _service.documentStream(
+        path: FirestorePath.user(uid!),
+        fromBuilder: (json, id) => User.fromMap(json!),
+        toBuilder: (model) => model.toMap(),
+      );
+
+  Stream<List<Transaction?>> transactionsStream() =>
+      _service.collectionStream<Transaction>(
+        path: FirestorePath.transactions(uid!),
+        fromBuilder: (json, id) => Transaction.fromMap(json!),
+        toBuilder: (model) => model.toMap(),
+        orderByField: 'date',
+        descending: true,
       );
 }

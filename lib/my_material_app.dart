@@ -2,7 +2,8 @@ import 'package:cccc/constants/logger_init.dart';
 import 'package:cccc/routes/custom_router.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/theme/custom_theme.dart';
-import 'package:cccc/view/home.dart';
+import 'package:cccc/view/custom_stream_builder.dart';
+import 'package:cccc/view/home_screen.dart';
 import 'package:cccc/view/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fire_auth;
 import 'package:flutter/foundation.dart';
@@ -37,48 +38,19 @@ class MyMaterialApp extends ConsumerWidget {
 
     return MaterialApp(
       title: 'Credit Card Calorie Counter',
-      home: StreamBuilder<fire_auth.User?>(
+      home: CustomStreamBuilder<fire_auth.User?>(
         stream: auth.authStateChanges(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.active) {
-            final user = snapshot.data;
+        emptyWidget: const SignInScreen(),
+        builder: (context, user) {
+          if (user != null) {
+            return const HomeScreen();
+          } else {
+            logger.d('user does NOT exist');
 
-            if (user != null) {
-              return const Home();
-            } else {
-              logger.d('user does NOT exist');
-
-              return const SignInScreen();
-            }
+            return const SignInScreen();
           }
-
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
         },
       ),
-
-      // home: auth.authStateChanges().when(
-      //   data: (user) {
-      //     if (user == null) {
-      //       return const SignInViewScreen();
-      //     } else {
-      //       return const Home();
-      //     }
-      //   },
-      //   loading: () => const Scaffold(
-      //     body: Center(
-      //       child: CircularProgressIndicator(),
-      //     ),
-      //   ),
-      //   error: (e, _) => const Scaffold(
-      //     body: Center(
-      //       child: Text('Error'),
-      //     ),
-      //   ),
-      // ),
       theme: CustomTheme.theme,
       onGenerateRoute: CustomRouter.onGenerateRoute,
     );

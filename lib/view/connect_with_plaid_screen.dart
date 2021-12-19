@@ -1,14 +1,14 @@
 import 'dart:convert';
 
+import 'package:cccc/constants/cloud_functions.dart';
 import 'package:cccc/constants/keys.dart';
 import 'package:cccc/constants/logger_init.dart';
-import 'package:cccc/view/home.dart';
+import 'package:cccc/services/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:plaid_flutter/plaid_flutter.dart';
 
-import 'package:cccc/model/plaid/plaid_transactions_response.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/theme/custom_button_theme.dart';
 
@@ -27,30 +27,44 @@ class ConnectWithPlaidScreen extends ConsumerStatefulWidget {
 
 class _ConnectWithPlaidScreenState
     extends ConsumerState<ConnectWithPlaidScreen> {
-  String? _publicToken;
   bool _isLoading = false;
 
   Future<String> _getLinkToken() async {
-    final uri = Uri(
-      scheme: 'https',
-      host: Keys.cloudFunctionHost,
-      path: 'get_link_token',
-    );
+    final uid = ref.read(authProvider).currentUser!.uid;
 
-    final response = await http.post(uri);
-    final jsonResponse = jsonDecode(response.body);
-    final linkToken = jsonResponse['link_token'];
+    try {
+      final uri = Uri(
+        scheme: 'https',
+        host: Keys.cloudFunctionHost,
+        path: CloudFunctions.createLinkToken,
+      );
 
-    return linkToken;
+      final response = await http.post(
+        uri,
+        body: json.encode({
+          'uid': uid,
+        }),
+      );
+      logger.d('Response: ${response.body}');
+
+      final jsonResponse = jsonDecode(response.body);
+      final linkToken = jsonResponse['link_token'];
+
+      return linkToken;
+    } catch (e) {
+      logger.e('ERROR: $e');
+
+      return '';
+    }
   }
 
   void _onSuccessCallback(String publicToken, LinkSuccessMetadata metadata) {
-    _publicToken = publicToken;
-
     logger.d('''
         Successful Callback: $publicToken, 
         metadata: ${metadata.description()}
         ''');
+
+    _exchangePublicToken(publicToken);
   }
 
   void _onEventCallback(String event, LinkEventMetadata metadata) {
@@ -84,40 +98,26 @@ class _ConnectWithPlaidScreenState
     }
   }
 
-  Future<dynamic> _fetchTransactionData() async {
+  Future<void> _exchangePublicToken(String _publicToken) async {
     try {
-      final now = DateTime.now();
+      final uid = ref.read(authProvider).currentUser!.uid;
 
       final uri = Uri(
         scheme: 'https',
         host: Keys.cloudFunctionHost,
-        path: 'fetch_transaction_data',
+        path: CloudFunctions.exchangePublicToken,
       );
 
       final response = await http.post(
         uri,
         body: json.encode({
+          'uid': uid,
           'public_token': _publicToken,
-          'start_date': DateTime(2021, 11, 1).toString(),
-          'end_date': DateTime(now.year, now.month, now.day).toString(),
         }),
       );
-
-      final transactionResponse = PlaidTransactionResponse.fromJson(
-        response.body,
-      );
-      final transactions = transactionResponse.transactions;
-
-      ref.read(transactionsListProvider.notifier).add(transactions);
-
-      logger.d('transaction: $transactions');
-
-      // return transactions;
+      logger.d('Response: ${response.body}');
     } catch (e) {
-      // print(e.runtimeType);
-      // print(e);
-
-      return e.toString();
+      logger.d(e);
     }
   }
 
@@ -134,15 +134,11 @@ class _ConnectWithPlaidScreenState
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(
-          children: [
-            const Text(
+          children: const [
+            Text(
                 '''Lorem ipsum dolor sit amet, consectetur sadipiscing elit. Mauris in consectetur enim. Sed blandit lorem tempus lectus tincidunt, eget vestibulum nulla v
                   \niverra. Donec vel magna ac ante dignissim pulvinar. Morbi a auctor metus. 
                   \nNullam purus lacus, pharetra id metus interdum, sollicitudin tempus eros '''),
-            OutlinedButton(
-              onPressed: () => _fetchTransactionData(),
-              child: const Text('Fetch Transaction Data'),
-            ),
           ],
         ),
       ),

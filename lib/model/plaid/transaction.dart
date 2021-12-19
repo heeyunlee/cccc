@@ -2,21 +2,22 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-import 'plaid_location.dart';
 import 'payment_meta.dart';
 import 'personal_finance_category.dart';
+import 'plaid_location.dart';
 
 /// An array containing transactions from the account. Transactions are
 /// returned in reverse chronological order, with the most recent at the
 /// beginning of the array. The maximum number of transactions returned is
 /// determined by the count parameter.
+///
 class Transaction {
-  Transaction({
+  const Transaction({
     this.pendingTransactionId,
     this.categoryId,
     this.category,
-    required this.location,
-    required this.paymentMeta,
+    this.location,
+    this.paymentMeta,
     this.accountOwner,
     required this.name,
     this.originalDescription,
@@ -58,7 +59,7 @@ class Transaction {
   final List<String>? category;
 
   /// A representation of where a transaction took place
-  final PlaidLocation location;
+  final PlaidLocation? location;
 
   /// Transaction information specific to inter-bank transfers. If the
   /// transaction was not an inter-bank transfer, all fields will be `null`.
@@ -69,7 +70,7 @@ class Transaction {
   /// an Assets endpoint such as `/asset_report/get/` or
   /// `/asset_report/pdf/get`, this field will only appear in an Asset Report
   /// with Insights.
-  final PaymentMeta paymentMeta;
+  final PaymentMeta? paymentMeta;
 
   /// The name of the account owner. This field is not typically populated
   /// and only relevant when dealing with sub-accounts.
@@ -121,7 +122,7 @@ class Transaction {
   /// format ( `YYYY-MM-DD` ).
   ///
   /// Format: `date`
-  final String date;
+  final DateTime date;
 
   /// When true, identifies the transaction as pending or unsettled. Pending
   /// transaction details (name, type, amount, category ID) may change before
@@ -155,7 +156,7 @@ class Transaction {
   /// [ISO 8601]('https://en.wikipedia.org/wiki/ISO_8601') ( `YYYY-MM-DD` ).
   ///
   /// Format: `date`
-  final String? authorizedDate;
+  final DateTime? authorizedDate;
 
   /// Date and time when a transaction was authorized in
   /// [ISO 8601]('https://en.wikipedia.org/wiki/ISO_8601')
@@ -165,7 +166,7 @@ class Transaction {
   /// other countries, will be null.
   ///
   /// Format: `date-time`
-  final String? authorizedDatetime;
+  final DateTime? authorizedDatetime;
 
   /// Date and time when a transaction was posted in
   /// [ISO 8601]('https://en.wikipedia.org/wiki/ISO_8601')
@@ -175,7 +176,7 @@ class Transaction {
   /// other countries, will be null.
   ///
   /// Format: `date-time`
-  final String? datetime;
+  final DateTime? datetime;
 
   /// An identifier classifying the transaction type.
   ///
@@ -225,6 +226,102 @@ class Transaction {
   /// transactions-feedback@plaid.com.
   final PersonalFinanceCategory? personalFinanceCategory;
 
+  factory Transaction.fromMap(Map<String, dynamic> json) {
+    final String? pendingTransactionId = json['pending_transaction_id'];
+    final String? categoryId = json['category_id'];
+    final List<String>? category =
+        (json['category'] as List<dynamic>?)?.map((e) => e as String).toList();
+    final PlaidLocation? location = json['location'] == null
+        ? null
+        : PlaidLocation.fromJson(json['location'] as Map<String, dynamic>);
+    final PaymentMeta? paymentMeta = json['payment_meta'] == null
+        ? null
+        : PaymentMeta.fromJson(json['payment_meta'] as Map<String, dynamic>);
+    final String? accountOwner = json['account_owner'];
+    final String name = json['name'] as String;
+    final String? originalDescription = json['original_description'] as String?;
+    final String accountId = json['account_id'] as String;
+    final num amount = json['amount'] as num;
+    final String? isoCurrencyCode = json['iso_currency_code'] as String?;
+    final String? unofficialCurrencyCode =
+        json['unofficial_currency_code'] as String?;
+    final DateTime date = DateTime.parse(json['date'] as String);
+    final bool pending = json['pending'] as bool;
+    final String transactionId = json['transaction_id'] as String;
+    final String? merchantName = json['merchant_name'] as String?;
+    final String? checkNumber = json['check_number'] as String?;
+    final String paymentChannel = json['payment_channel'] as String;
+    final DateTime? authorizedDate = json['authorized_date'] == null
+        ? null
+        : DateTime.parse(json['authorized_date'] as String);
+    final DateTime? authorizedDatetime = json['authorized_datetime'] == null
+        ? null
+        : DateTime.parse(json['authorized_datetime'] as String);
+    final DateTime? datetime = json['datetime'] == null
+        ? null
+        : DateTime.parse(json['datetime'] as String);
+    final String? transactionCode = json['transaction_code'] as String?;
+    final PersonalFinanceCategory? personalFinanceCategory =
+        json['personal_finance_category'] == null
+            ? null
+            : PersonalFinanceCategory.fromJson(
+                json['personal_finance_category'] as Map<String, dynamic>);
+
+    return Transaction(
+      location: location,
+      paymentMeta: paymentMeta,
+      name: name,
+      accountId: accountId,
+      amount: amount,
+      date: date,
+      pending: pending,
+      transactionId: transactionId,
+      paymentChannel: paymentChannel,
+      accountOwner: accountOwner,
+      authorizedDate: authorizedDate,
+      authorizedDatetime: authorizedDatetime,
+      datetime: datetime,
+      isoCurrencyCode: isoCurrencyCode,
+      unofficialCurrencyCode: unofficialCurrencyCode,
+      categoryId: categoryId,
+      category: category,
+      pendingTransactionId: pendingTransactionId,
+      merchantName: merchantName,
+      checkNumber: checkNumber,
+      originalDescription: originalDescription,
+      transactionCode: transactionCode,
+      personalFinanceCategory: personalFinanceCategory,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'pendingTransactionId': pendingTransactionId,
+      'categoryId': categoryId,
+      'category': category,
+      'location': location,
+      'paymentMeta': paymentMeta,
+      'accountOwner': accountOwner,
+      'name': name,
+      'originalDescription': originalDescription,
+      'accountId': accountId,
+      'amount': amount,
+      'isoCurrencyCode': isoCurrencyCode,
+      'unofficialCurrencyCode': unofficialCurrencyCode,
+      'date': date,
+      'pending': pending,
+      'transactionId': transactionId,
+      'merchantName': merchantName,
+      'checkNumber': checkNumber,
+      'paymentChannel': paymentChannel,
+      'authorizedDate': authorizedDate?.toIso8601String(),
+      'authorizedDatetime': authorizedDatetime?.toIso8601String(),
+      'datetime': datetime?.toIso8601String(),
+      'transactionCode': transactionCode,
+      'personalFinanceCategory': personalFinanceCategory,
+    };
+  }
+
   Transaction copyWith({
     String? pendingTransactionId,
     String? categoryId,
@@ -238,15 +335,15 @@ class Transaction {
     num? amount,
     String? isoCurrencyCode,
     String? unofficialCurrencyCode,
-    String? date,
+    DateTime? date,
     bool? pending,
     String? transactionId,
     String? merchantName,
     String? checkNumber,
     String? paymentChannel,
-    String? authorizedDate,
-    String? authorizedDatetime,
-    String? datetime,
+    DateTime? authorizedDate,
+    DateTime? authorizedDatetime,
+    DateTime? datetime,
     String? transactionCode,
     PersonalFinanceCategory? personalFinanceCategory,
   }) {
@@ -276,89 +373,6 @@ class Transaction {
       transactionCode: transactionCode ?? this.transactionCode,
       personalFinanceCategory:
           personalFinanceCategory ?? this.personalFinanceCategory,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    return {
-      'pendingTransactionId': pendingTransactionId,
-      'categoryId': categoryId,
-      'category': category,
-      'location': location.toMap(),
-      'paymentMeta': paymentMeta.toMap(),
-      'accountOwner': accountOwner,
-      'name': name,
-      'originalDescription': originalDescription,
-      'accountId': accountId,
-      'amount': amount,
-      'isoCurrencyCode': isoCurrencyCode,
-      'unofficialCurrencyCode': unofficialCurrencyCode,
-      'date': date,
-      'pending': pending,
-      'transactionId': transactionId,
-      'merchantName': merchantName,
-      'checkNumber': checkNumber,
-      'paymentChannel': paymentChannel,
-      'authorizedDate': authorizedDate,
-      'authorizedDatetime': authorizedDatetime,
-      'datetime': datetime,
-      'transactionCode': transactionCode,
-      'personalFinanceCategory': personalFinanceCategory?.toMap(),
-    };
-  }
-
-  factory Transaction.fromMap(Map<String, dynamic> map) {
-    final String? pendingTransactionId = map['pending_transaction_id'];
-    final String? categoryId = map['category_id'];
-    final List<String>? category = List<String>.from(map['category']);
-    final PlaidLocation plaidLocation = PlaidLocation.fromMap(map['location']);
-    final PaymentMeta paymentMeta = PaymentMeta.fromMap(map['payment_meta']);
-    final String? accountOwner = map['account_owner'];
-    final String name = map['name'];
-    final String? originalDescription = map['original_description'];
-    final String accountId = map['account_id'];
-    final num amount = map['amount'];
-    final String? isoCurrencyCode = map['iso_currency_code'];
-    final String? unofficialCurrencyCode = map['unofficial_currency_code'];
-    final String date = map['date'];
-    final bool pending = map['pending'];
-    final String transactionId = map['transaction_id'];
-    final String? merchantName = map['merchant_name'];
-    final String? checkNumber = map['check_number'];
-    final String paymentChannel = map['payment_channel'];
-    final String? authorizedDate = map['authorized_date'];
-    final String? authorizedDatetime = map['authorized_datetime'];
-    final String? datetime = map['datetime'];
-    final String? transactionCode = map['transaction_code'];
-    final PersonalFinanceCategory? personalFinanceCategory =
-        (map['personal_finance_category'] != null)
-            ? PersonalFinanceCategory.fromMap(map['personal_finance_category'])
-            : null;
-
-    return Transaction(
-      pendingTransactionId: pendingTransactionId,
-      categoryId: categoryId,
-      category: category,
-      location: plaidLocation,
-      paymentMeta: paymentMeta,
-      accountOwner: accountOwner,
-      name: name,
-      originalDescription: originalDescription,
-      accountId: accountId,
-      amount: amount,
-      isoCurrencyCode: isoCurrencyCode,
-      unofficialCurrencyCode: unofficialCurrencyCode,
-      date: date,
-      pending: pending,
-      transactionId: transactionId,
-      merchantName: merchantName,
-      checkNumber: checkNumber,
-      paymentChannel: paymentChannel,
-      authorizedDate: authorizedDate,
-      authorizedDatetime: authorizedDatetime,
-      datetime: datetime,
-      transactionCode: transactionCode,
-      personalFinanceCategory: personalFinanceCategory,
     );
   }
 

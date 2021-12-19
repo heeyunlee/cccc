@@ -40,7 +40,7 @@ class PlaidTransactionResponse {
   Map<String, dynamic> toMap() {
     return {
       'accounts': accounts.map((x) => x.toMap()).toList(),
-      'transactions': transactions.map((x) => x.toMap()).toList(),
+      'transactions': transactions.map((x) => x.toJson()).toList(),
       'totalTransactions': totalTransactions,
       'item': item.toMap(),
       'requestId': requestId,
@@ -52,7 +52,7 @@ class PlaidTransactionResponse {
       map['accounts'].map((e) => Account.fromMap(e)),
     );
     final List<Transaction> transactions = List<Transaction>.from(
-      map['transactions'].map((e) => Transaction.fromMap(e)),
+      map['transactions'].map((e) => Transaction.fromJson(e)),
     );
     final int totalTransactions = map['total_transactions'];
     final PlaidItem item = PlaidItem.fromMap(map['item']);

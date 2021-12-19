@@ -50,7 +50,9 @@ class SignInViewModel with ChangeNotifier {
 
         final user = User(
           uid: uid,
-          plaidLinkToken: null,
+          plaidAccessToken: null,
+          plaidItemId: null,
+          plaidRequestId: null,
         );
 
         final database = ref.watch(databaseProvider);

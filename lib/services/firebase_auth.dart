@@ -1,12 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart' as fire_auth;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-// final authProvider = Provider<FirebaseAuth>((_) => FirebaseAuth.instance);
-
-// final authStateChangesProvider = StreamProvider<User?>(
-//   (ref) => ref.watch(authProvider).authStateChanges(),
-// );
-
 final authProvider = Provider<FirebaseAuthService>(
   (ref) => FirebaseAuthService(),
 );
@@ -20,7 +14,7 @@ class FirebaseAuthService {
 
   fire_auth.User? user;
 
-  void _setUser(fire_auth.User value) {
+  void _setUser(fire_auth.User? value) {
     user = value;
   }
 
@@ -38,5 +32,7 @@ class FirebaseAuthService {
 
   Future<void> signOut() async {
     await _auth.signOut();
+
+    _setUser(null);
   }
 }

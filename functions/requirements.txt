@@ -1,2 +1,3 @@
 plaid-python==8.6.0
 flask==2.0.2
+google-cloud-firestore==2.3.4
