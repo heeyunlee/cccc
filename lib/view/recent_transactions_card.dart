@@ -51,7 +51,7 @@ class RecentTransactionsCard extends ConsumerWidget {
                 margin: EdgeInsets.zero,
                 child: (data.isEmpty)
                     ? const SizedBox(
-                        height: 96 * 6,
+                        height: 96 * 3,
                         child: Center(
                           child: Text(
                             'No recent transactions',

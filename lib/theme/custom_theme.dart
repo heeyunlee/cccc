@@ -27,6 +27,7 @@ class CustomTheme {
       elevation: 0,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.dark,
       ),
     ),
   );

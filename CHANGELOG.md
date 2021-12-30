@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.0.4] - 
+### New Features & Screens
+
+### Bug Fix & Refactor
+- Create [CloudFunctions] service
+- Update readme.md
+
 ## [0.0.3] - Dec. 19th, 2021
 ### New Features & Screens
 - Updated  `fetch_transaction_data` function to make a update on a firestore
@@ -18,4 +25,4 @@
 ### Bug Fix & Refactor
 
 [0.0.2]: https://github.com/heeyunlee/cccc/commit/96682cce01f88cd05830057fc17f703601fc936a
-[0.0.3]: 
+[0.0.3]: https://github.com/heeyunlee/cccc/commit/0a5cdbd76996599dfd01a4c290ab7d0723d1e523

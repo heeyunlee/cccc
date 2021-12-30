@@ -1,12 +1,7 @@
-import 'dart:convert';
-
-import 'package:cccc/constants/cloud_functions.dart';
-import 'package:cccc/constants/keys.dart';
 import 'package:cccc/constants/logger_init.dart';
-import 'package:cccc/services/firebase_auth.dart';
+import 'package:cccc/services/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
 import 'package:plaid_flutter/plaid_flutter.dart';
 
 import 'package:cccc/routes/route_names.dart';
@@ -29,42 +24,15 @@ class _ConnectWithPlaidScreenState
     extends ConsumerState<ConnectWithPlaidScreen> {
   bool _isLoading = false;
 
-  Future<String> _getLinkToken() async {
-    final uid = ref.read(authProvider).currentUser!.uid;
-
-    try {
-      final uri = Uri(
-        scheme: 'https',
-        host: Keys.cloudFunctionHost,
-        path: CloudFunctions.createLinkToken,
-      );
-
-      final response = await http.post(
-        uri,
-        body: json.encode({
-          'uid': uid,
-        }),
-      );
-      logger.d('Response: ${response.body}');
-
-      final jsonResponse = jsonDecode(response.body);
-      final linkToken = jsonResponse['link_token'];
-
-      return linkToken;
-    } catch (e) {
-      logger.e('ERROR: $e');
-
-      return '';
-    }
-  }
-
   void _onSuccessCallback(String publicToken, LinkSuccessMetadata metadata) {
     logger.d('''
         Successful Callback: $publicToken, 
         metadata: ${metadata.description()}
         ''');
 
-    _exchangePublicToken(publicToken);
+    final function = ref.read(cloudFunctionsProvider);
+
+    function.exchangePublicToken(context, publicToken: publicToken);
   }
 
   void _onEventCallback(String event, LinkEventMetadata metadata) {
@@ -93,29 +61,6 @@ class _ConnectWithPlaidScreenState
       );
 
       plaidLinkToken.open();
-    } catch (e) {
-      logger.d(e);
-    }
-  }
-
-  Future<void> _exchangePublicToken(String _publicToken) async {
-    try {
-      final uid = ref.read(authProvider).currentUser!.uid;
-
-      final uri = Uri(
-        scheme: 'https',
-        host: Keys.cloudFunctionHost,
-        path: CloudFunctions.exchangePublicToken,
-      );
-
-      final response = await http.post(
-        uri,
-        body: json.encode({
-          'uid': uid,
-          'public_token': _publicToken,
-        }),
-      );
-      logger.d('Response: ${response.body}');
     } catch (e) {
       logger.d(e);
     }
@@ -155,9 +100,13 @@ class _ConnectWithPlaidScreenState
                   _isLoading = true;
                 });
 
-                final linkToken = await _getLinkToken();
+                final function = ref.read(cloudFunctionsProvider);
 
-                _openLink(linkToken);
+                final linkToken = await function.getLinkToken(context);
+
+                if (linkToken != null) {
+                  _openLink(linkToken);
+                }
 
                 setState(() {
                   _isLoading = false;

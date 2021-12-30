@@ -25,17 +25,28 @@ class TransactionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        padding: const EdgeInsets.only(
-          top: 80,
-          left: 16,
-          right: 16,
-          bottom: 48,
-        ),
-        itemCount: transactions.length,
-        itemBuilder: (context, index) => TransactionListTile(
-          transaction: transactions[index]!,
-        ),
+      body: CustomScrollView(
+        slivers: [
+          const SliverAppBar(
+            floating: true,
+            pinned: false,
+            stretch: true,
+            title: Text('Transactions'),
+          ),
+          SliverToBoxAdapter(
+            child: ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.only(
+                bottom: 48,
+              ),
+              itemCount: transactions.length,
+              itemBuilder: (context, index) => TransactionListTile(
+                transaction: transactions[index]!,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

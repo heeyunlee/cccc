@@ -91,3 +91,20 @@ const interactiveStates = <MaterialState>{
   MaterialState.hovered,
   MaterialState.focused,
 };
+
+class Constants {
+  static const Map<String, IconData> categoryIdToEmoji = {
+    '22001000': Icons.flight,
+    '22016000': Icons.hail,
+    '13005000': Icons.restaurant,
+    '19046000': Icons.store,
+    '13005032': Icons.fastfood,
+    '16000000': Icons.account_balance,
+    '16001000': Icons.credit_card,
+    '21006000': Icons.account_balance,
+    '21007000': Icons.account_balance,
+    '17018000': Icons.fitness_center,
+    '13005043': Icons.local_cafe,
+    '21005000': Icons.account_balance,
+  };
+}
