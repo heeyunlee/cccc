@@ -9,6 +9,7 @@ class User {
     this.plaidItemId,
     this.plaidRequestId,
     this.lastPlaidSyncTime,
+    this.lastLoginDate,
   });
 
   final String uid;
@@ -16,34 +17,7 @@ class User {
   final String? plaidItemId;
   final String? plaidRequestId;
   final DateTime? lastPlaidSyncTime;
-
-  // factory User.fromJson(Map<String, dynamic> json) {
-  //   final String uid = json['uid'] as String;
-  //   final String? plaidAccessToken = json['plaidAccessToken'] as String?;
-  //   final String? plaidItemId = json['plaidItemId'] as String?;
-  //   final String? plaidRequestId = json['plaidRequestId'] as String?;
-  //   final DateTime? lastPlaidSyncTime = json['lastPlaidSyncTime'] == null
-  //       ? null
-  //       : (json['lastPlaidSyncTime'] as Timestamp).toDate();
-
-  //   return User(
-  //     uid: uid,
-  //     plaidAccessToken: plaidAccessToken,
-  //     plaidItemId: plaidItemId,
-  //     plaidRequestId: plaidRequestId,
-  //     lastPlaidSyncTime: lastPlaidSyncTime,
-  //   );
-  // }
-
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     'uid': uid,
-  //     'plaidAccessToken': plaidAccessToken,
-  //     'plaidItemId': plaidItemId,
-  //     'plaidRequestId': plaidRequestId,
-  //     'lastPlaidSyncTime': lastPlaidSyncTime?.toIso8601String(),
-  //   };
-  // }
+  final DateTime? lastLoginDate;
 
   User copyWith({
     String? uid,
@@ -51,6 +25,7 @@ class User {
     String? plaidItemId,
     String? plaidRequestId,
     DateTime? lastPlaidSyncTime,
+    DateTime? lastLoginDate,
   }) {
     return User(
       uid: uid ?? this.uid,
@@ -58,6 +33,7 @@ class User {
       plaidItemId: plaidItemId ?? this.plaidItemId,
       plaidRequestId: plaidRequestId ?? this.plaidRequestId,
       lastPlaidSyncTime: lastPlaidSyncTime ?? this.lastPlaidSyncTime,
+      lastLoginDate: lastLoginDate ?? this.lastLoginDate,
     );
   }
 
@@ -67,7 +43,8 @@ class User {
       'plaidAccessToken': plaidAccessToken,
       'plaidItemId': plaidItemId,
       'plaidRequestId': plaidRequestId,
-      'lastPlaidSyncTime': lastPlaidSyncTime?.millisecondsSinceEpoch,
+      'lastPlaidSyncTime': lastPlaidSyncTime,
+      'lastLoginDate': lastLoginDate,
     };
   }
 
@@ -79,6 +56,9 @@ class User {
     final DateTime? lastPlaidSyncTime = map['lastPlaidSyncTime'] == null
         ? null
         : (map['lastPlaidSyncTime'] as Timestamp).toDate();
+    final DateTime? lastLoginDate = map['lastLoginDate'] == null
+        ? null
+        : (map['lastLoginDate'] as Timestamp).toDate();
 
     return User(
       uid: uid,
@@ -86,6 +66,7 @@ class User {
       lastPlaidSyncTime: lastPlaidSyncTime,
       plaidItemId: plaidItemId,
       plaidRequestId: plaidRequestId,
+      lastLoginDate: lastLoginDate,
     );
   }
 
@@ -95,7 +76,7 @@ class User {
 
   @override
   String toString() {
-    return 'User(uid: $uid, plaidAccessToken: $plaidAccessToken, plaidItemId: $plaidItemId, plaidRequestId: $plaidRequestId, lastPlaidSyncTime: $lastPlaidSyncTime)';
+    return 'User(uid: $uid, plaidAccessToken: $plaidAccessToken, plaidItemId: $plaidItemId, plaidRequestId: $plaidRequestId, lastPlaidSyncTime: $lastPlaidSyncTime, lastLoginDate: $lastLoginDate)';
   }
 
   @override
@@ -107,7 +88,8 @@ class User {
         other.plaidAccessToken == plaidAccessToken &&
         other.plaidItemId == plaidItemId &&
         other.plaidRequestId == plaidRequestId &&
-        other.lastPlaidSyncTime == lastPlaidSyncTime;
+        other.lastPlaidSyncTime == lastPlaidSyncTime &&
+        other.lastLoginDate == lastLoginDate;
   }
 
   @override
@@ -116,6 +98,7 @@ class User {
         plaidAccessToken.hashCode ^
         plaidItemId.hashCode ^
         plaidRequestId.hashCode ^
-        lastPlaidSyncTime.hashCode;
+        lastPlaidSyncTime.hashCode ^
+        lastLoginDate.hashCode;
   }
 }

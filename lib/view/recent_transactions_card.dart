@@ -1,4 +1,6 @@
+import 'package:cccc/constants/logger_init.dart';
 import 'package:cccc/model/plaid/transaction.dart';
+import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/theme/custom_button_theme.dart';
 import 'package:cccc/theme/text_styles.dart';
@@ -13,7 +15,14 @@ class RecentTransactionsCard extends ConsumerWidget {
   const RecentTransactionsCard({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final database = ref.watch(databaseProvider)!;
+    final auth = ref.watch(authProvider);
+    final uid = auth.currentUser?.uid;
+    final database = ref.watch(databaseProvider(uid))!;
+
+    logger.d('''
+    UID from auth: ${auth.currentUser?.uid}
+    UID from database ${database.uid}
+    ''');
 
     return CustomStreamBuilder<List<Transaction?>>(
       stream: database.transactionsStream(),

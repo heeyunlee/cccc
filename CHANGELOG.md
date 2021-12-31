@@ -1,8 +1,14 @@
 # Change Log
 
-## [0.0.4] - 
+## [0.0.5]
 ### New Features & Screens
+- Add `SignInWithGoogle` feature
+- Finish pull to refresh feature
 
+### Bug Fix & Refactor
+- 
+
+## [0.0.4] - Dec. 29th, 2021
 ### Bug Fix & Refactor
 - Create [CloudFunctions] service
 - Update readme.md
@@ -26,3 +32,4 @@
 
 [0.0.2]: https://github.com/heeyunlee/cccc/commit/96682cce01f88cd05830057fc17f703601fc936a
 [0.0.3]: https://github.com/heeyunlee/cccc/commit/0a5cdbd76996599dfd01a4c290ab7d0723d1e523
+[0.0.4]: https://github.com/heeyunlee/cccc/commit/2da3d6c1eb83d3d82ddaf7442c4e9d20f8e6f7c8

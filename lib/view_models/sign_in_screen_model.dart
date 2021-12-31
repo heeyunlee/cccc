@@ -7,6 +7,12 @@ import 'package:firebase_auth/firebase_auth.dart' as fire_auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+final signInViewModelProvider = ChangeNotifierProvider<SignInViewModel>(
+  (ref) => SignInViewModel(
+    auth: ref.watch(authProvider),
+  ),
+);
+
 class SignInViewModel with ChangeNotifier {
   SignInViewModel({
     required this.auth,
@@ -55,9 +61,45 @@ class SignInViewModel with ChangeNotifier {
           plaidRequestId: null,
         );
 
-        final database = ref.watch(databaseProvider);
+        final database = ref.watch(databaseProvider(uid));
 
         await database!.setUser(user);
+      },
+    );
+  }
+
+  Future<void> signInWithGoogle(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    await _signIn(
+      context,
+      signInMethod: () async {
+        await auth.signInWithGoogle();
+
+        final uid = auth.currentUser!.uid;
+        final now = DateTime.now();
+
+        final newUserData = User(
+          uid: uid,
+          plaidAccessToken: null,
+          plaidItemId: null,
+          plaidRequestId: null,
+          lastLoginDate: now,
+        );
+
+        final database = ref.watch(databaseProvider(uid));
+
+        final oldUserData = await database!.getUser(uid);
+
+        if (oldUserData != null) {
+          await database.updateUser(
+            oldUserData,
+            newUserData.toMap(),
+          );
+        } else {
+          await database.setUser(newUserData);
+        }
       },
     );
   }

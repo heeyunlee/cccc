@@ -17,7 +17,9 @@ import 'firestore_database.dart';
 
 final cloudFunctionsProvider = Provider<CloudFunctions>((ref) {
   final auth = ref.watch(authProvider);
-  final database = ref.watch(databaseProvider);
+  final uid = auth.currentUser?.uid;
+
+  final database = ref.watch(databaseProvider(uid));
 
   return CloudFunctions(auth: auth, database: database!);
 });
@@ -157,12 +159,14 @@ class CloudFunctions {
   }
 
   Future<void> fetchTransactionsData(BuildContext context, User user) async {
+    logger.d('`fetchTransactionsData` function called');
+
     if (user.plaidAccessToken != null) {
       try {
         final now = DateTime.now();
 
         final startDate =
-            user.lastPlaidSyncTime ?? now.subtract(const Duration(days: 30));
+            user.lastPlaidSyncTime ?? now.subtract(const Duration(days: 60));
 
         final response = await http.post(
           fetchTransactionsUri,
@@ -199,7 +203,7 @@ class CloudFunctions {
           defaultActionText: 'OK',
         );
       } on SocketException catch (e) {
-        logger.e(e);
+        logger.e('SocketException: $e');
 
         showAdaptiveAlertDialog(
           context,
@@ -218,5 +222,8 @@ class CloudFunctions {
         );
       }
     }
+    // } else {
+    //   await Future.delayed(const Duration(seconds: 2));
+    // }
   }
 }

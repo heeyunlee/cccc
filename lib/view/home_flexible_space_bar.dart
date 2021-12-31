@@ -15,7 +15,7 @@ class HomeFlexibleSpaceBar extends StatelessWidget {
 
     return FlexibleSpaceBar(
       background: Stack(
-        alignment: Alignment.bottomCenter,
+        fit: StackFit.passthrough,
         children: [
           Hero(
             tag: 'logo',
@@ -56,20 +56,24 @@ class HomeFlexibleSpaceBar extends StatelessWidget {
               ),
             ],
           ),
-          SizedBox(
-            width: size.width - 48,
-            height: 48,
-            child: OutlinedButton(
-              style: CustomButtonTheme.outline1,
-              onPressed: () => ConnectWithPlaidScreen.show(context),
-              child: Center(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.add),
-                    SizedBox(width: 4),
-                    Text('Add Account'),
-                  ],
+          Positioned(
+            left: 24,
+            bottom: 24,
+            child: SizedBox(
+              width: size.width - 48,
+              height: 48,
+              child: OutlinedButton(
+                style: CustomButtonTheme.outline1,
+                onPressed: () => ConnectWithPlaidScreen.show(context),
+                child: Center(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.add),
+                      SizedBox(width: 4),
+                      Text('Add Account'),
+                    ],
+                  ),
                 ),
               ),
             ),

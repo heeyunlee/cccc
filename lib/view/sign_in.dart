@@ -1,4 +1,4 @@
-import 'package:cccc/services/firebase_auth.dart';
+import 'package:cccc/constants/logger_init.dart';
 import 'package:cccc/theme/custom_button_theme.dart';
 import 'package:cccc/theme/text_styles.dart';
 import 'package:cccc/view_models/sign_in_screen_model.dart';
@@ -6,16 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
-final signInScreenModelProvider = ChangeNotifierProvider<SignInViewModel>(
-  (ref) => SignInViewModel(auth: ref.watch(authProvider)),
-);
-
-class SignInScreen extends ConsumerWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+class SignIn extends ConsumerWidget {
+  const SignIn({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final model = ref.watch(signInScreenModelProvider);
+    logger.d('[SignIn] Screen building...');
+
+    final model = ref.watch(signInViewModelProvider);
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -35,7 +33,9 @@ class SignInScreen extends ConsumerWidget {
             ),
             const Spacer(),
             OutlinedButton(
-              onPressed: () {},
+              onPressed: model.isLoading
+                  ? null
+                  : () => model.signInWithGoogle(context, ref),
               style: CustomButtonTheme.outline1,
               child: SizedBox(
                 height: 48,
@@ -57,7 +57,7 @@ class SignInScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 16),
-            const Text('or', style: TextStyles.button2Grey),
+            const Text('or', style: TextStyles.overlineGrey),
             TextButton(
               onPressed: model.isLoading
                   ? null

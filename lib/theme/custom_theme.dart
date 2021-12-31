@@ -23,7 +23,7 @@ class CustomTheme {
     scaffoldBackgroundColor: Colors.black,
     appBarTheme: const AppBarTheme(
       backgroundColor: Colors.transparent,
-      titleTextStyle: TextStyles.subtitle1,
+      titleTextStyle: TextStyles.subtitle2,
       elevation: 0,
       systemOverlayStyle: SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,

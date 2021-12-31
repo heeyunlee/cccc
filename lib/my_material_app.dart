@@ -3,8 +3,8 @@ import 'package:cccc/routes/custom_router.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/theme/custom_theme.dart';
 import 'package:cccc/view/custom_stream_builder.dart';
-import 'package:cccc/view/home_screen.dart';
-import 'package:cccc/view/sign_in_screen.dart';
+import 'package:cccc/view/home.dart';
+import 'package:cccc/view/sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fire_auth;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -40,14 +40,14 @@ class MyMaterialApp extends ConsumerWidget {
       title: 'Credit Card Calorie Counter',
       home: CustomStreamBuilder<fire_auth.User?>(
         stream: auth.authStateChanges(),
-        emptyWidget: const SignInScreen(),
+        emptyWidget: const SignIn(),
         builder: (context, user) {
           if (user != null) {
-            return const HomeScreen();
+            return const Home();
           } else {
-            logger.d('user does NOT exist');
+            logger.d('user does NOT exist. Opening [SignIn] Screen');
 
-            return const SignInScreen();
+            return const SignIn();
           }
         },
       ),

@@ -67,6 +67,8 @@ class CustomStreamBuilder<T> extends StatelessWidget {
               if (data != null) {
                 return builder(context, data);
               } else {
+                logger.i('Data does NOT exist. Building [emptyWidget]');
+
                 return emptyWidget ?? const Center(child: Text('Empty...'));
               }
           }

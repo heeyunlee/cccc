@@ -22,6 +22,14 @@ class ConnectWithPlaidScreen extends ConsumerStatefulWidget {
 
 class _ConnectWithPlaidScreenState
     extends ConsumerState<ConnectWithPlaidScreen> {
+  @override
+  void initState() {
+    super.initState();
+    PlaidLink.onSuccess(_onSuccessCallback);
+    PlaidLink.onEvent(_onEventCallback);
+    PlaidLink.onExit(_onExitCallback);
+  }
+
   bool _isLoading = false;
 
   void _onSuccessCallback(String publicToken, LinkSuccessMetadata metadata) {
@@ -53,14 +61,7 @@ class _ConnectWithPlaidScreenState
         token: linkToken,
       );
 
-      final plaidLinkToken = PlaidLink(
-        configuration: linkTokenConfiguration,
-        onSuccess: _onSuccessCallback,
-        onEvent: _onEventCallback,
-        onExit: _onExitCallback,
-      );
-
-      plaidLinkToken.open();
+      PlaidLink.open(configuration: linkTokenConfiguration);
     } catch (e) {
       logger.d(e);
     }

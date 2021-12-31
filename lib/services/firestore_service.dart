@@ -7,6 +7,23 @@ class FirestoreService {
 
   final _instance = FirebaseFirestore.instance;
 
+  // Document Future
+  Future<T?> getDocument<T>({
+    required String path,
+    required T Function(Map<String, dynamic>? data, String id) fromBuilder,
+    required Map<String, Object?> Function(T model) toBuilder,
+  }) async {
+    final reference = FirebaseFirestore.instance.doc(path).withConverter<T>(
+          fromFirestore: (json, _) => fromBuilder(json.data(), json.id),
+          toFirestore: (model, _) => toBuilder(model),
+        );
+    final snapshot = await reference.get();
+    if (snapshot.exists) {
+      return snapshot.data()!;
+    }
+    return null;
+  }
+
   // Create new Data
   Future<void> setData<T>({
     required String path,

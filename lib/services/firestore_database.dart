@@ -1,24 +1,13 @@
-import 'package:cccc/constants/logger_init.dart';
 import 'package:cccc/model/plaid/transaction.dart';
 import 'package:cccc/model/user.dart';
-import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_path.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firestore_service.dart';
 
-final databaseProvider = Provider<FirestoreDatabase?>(
-  (ref) {
-    final auth = ref.watch(authProvider);
-
-    if (auth.currentUser?.uid != null) {
-      final uid = auth.currentUser!.uid;
-      logger.d('Current User\'s UID: $uid');
-
-      return FirestoreDatabase(uid: uid);
-    } else {
-      return null;
-    }
+final databaseProvider = Provider.family<FirestoreDatabase?, String?>(
+  (ref, id) {
+    return FirestoreDatabase(uid: id);
   },
 );
 
@@ -30,6 +19,12 @@ class FirestoreDatabase {
   final String? uid;
 
   final _service = FirestoreService.instance;
+
+  Future<User?> getUser(String uid) => _service.getDocument<User>(
+        path: FirestorePath.user(uid),
+        fromBuilder: (json, id) => User.fromMap(json!),
+        toBuilder: (model) => model.toMap(),
+      );
 
   Future<void> setUser(User user) => _service.setData<User>(
         path: FirestorePath.user(user.uid),
