@@ -30,5 +30,7 @@ class CustomTheme {
         statusBarBrightness: Brightness.dark,
       ),
     ),
+    dividerColor: Colors.transparent,
+    dividerTheme: const DividerThemeData(color: Colors.transparent),
   );
 }

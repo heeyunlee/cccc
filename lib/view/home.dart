@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cccc/view/recent_transactions_card.dart';
 import 'package:cccc/view/settings_screen.dart';
+import 'accounts_card.dart';
 import 'custom_stream_builder.dart';
 import 'home_flexible_space_bar.dart';
 import 'package:shimmer/shimmer.dart';
@@ -87,8 +88,10 @@ class _HomeState extends ConsumerState<Home> {
         SliverToBoxAdapter(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: const <Widget>[
+              SizedBox(height: 16),
+              AccountsCard(),
               SizedBox(height: 16),
               RecentTransactionsCard(),
               SizedBox(height: 32),

@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:cccc/constants/helpers.dart';
+import 'package:cccc/model/enum/account_type.dart';
+
 import 'balance.dart';
 
 /// An array containing the accounts associated with the Item for which
@@ -71,7 +74,7 @@ class Account {
   ///
   /// Possible values: `investment`, `credit`, `depository`, `loan`,
   /// `brokerage`, `other`
-  final String type;
+  final AccountType type;
 
   /// See the Account type schema for a full listing of account types and
   /// corresponding subtypes.
@@ -127,7 +130,7 @@ class Account {
     String? mask,
     String? name,
     String? officialName,
-    String? type,
+    AccountType? type,
     String? subtype,
     String? verificationStatus,
   }) {
@@ -150,7 +153,7 @@ class Account {
       'mask': mask,
       'name': name,
       'officialName': officialName,
-      'type': type,
+      'type': enumToString(type),
       'subtype': subtype,
       'verificationStatus': verificationStatus,
     };
@@ -162,7 +165,7 @@ class Account {
     final String? mask = map['mask'];
     final String name = map['name'];
     final String? officialName = map['official_name'];
-    final String type = map['type'];
+    final AccountType type = enumFromString(map['type'], AccountType.values);
     final String? subtype = map['subtype'];
     final String? verificationStatus = map['verification_status'];
 

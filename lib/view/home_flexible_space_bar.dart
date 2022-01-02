@@ -1,14 +1,16 @@
-import 'package:cccc/theme/custom_button_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import 'connect_with_plaid_screen.dart';
+class HomeFlexibleSpaceBar extends ConsumerStatefulWidget {
+  const HomeFlexibleSpaceBar({Key? key}) : super(key: key);
 
-class HomeFlexibleSpaceBar extends StatelessWidget {
-  const HomeFlexibleSpaceBar({
-    Key? key,
-  }) : super(key: key);
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _HomeFlexibleSpaceBarState();
+}
 
+class _HomeFlexibleSpaceBarState extends ConsumerState<HomeFlexibleSpaceBar> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -55,28 +57,6 @@ class HomeFlexibleSpaceBar extends StatelessWidget {
                 ),
               ),
             ],
-          ),
-          Positioned(
-            left: 24,
-            bottom: 24,
-            child: SizedBox(
-              width: size.width - 48,
-              height: 48,
-              child: OutlinedButton(
-                style: CustomButtonTheme.outline1,
-                onPressed: () => ConnectWithPlaidScreen.show(context),
-                child: Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Icon(Icons.add),
-                      SizedBox(width: 4),
-                      Text('Add Account'),
-                    ],
-                  ),
-                ),
-              ),
-            ),
           ),
         ],
       ),

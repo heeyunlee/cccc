@@ -1,5 +1,7 @@
+import 'package:cccc/model/plaid/account.dart';
 import 'package:cccc/model/plaid/transaction.dart';
 import 'package:cccc/model/user.dart';
+import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_path.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -7,7 +9,16 @@ import 'firestore_service.dart';
 
 final databaseProvider = Provider.family<FirestoreDatabase?, String?>(
   (ref, id) {
-    return FirestoreDatabase(uid: id);
+    final auth = ref.watch(authProvider);
+    final uid = auth.currentUser?.uid;
+
+    if (id != null) {
+      return FirestoreDatabase(uid: id);
+    } else if (uid != null) {
+      return FirestoreDatabase(uid: uid);
+    } else {
+      return null;
+    }
   },
 );
 
@@ -58,5 +69,13 @@ class FirestoreDatabase {
         toBuilder: (model) => model.toMap(),
         orderByField: 'date',
         descending: true,
+      );
+
+  Stream<List<Account?>> accountsStream() => _service.collectionStream<Account>(
+        path: FirestorePath.accounts(uid!),
+        fromBuilder: (json, id) => Account.fromMap(json!),
+        toBuilder: (model) => model.toMap(),
+        orderByField: 'type',
+        descending: false,
       );
 }

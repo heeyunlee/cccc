@@ -36,6 +36,7 @@ class Transaction {
     this.datetime,
     this.transactionCode,
     this.personalFinanceCategory,
+    this.isFoodCategory,
   });
 
   /// The ID of a posted transaction's associated pending transaction, where
@@ -226,6 +227,8 @@ class Transaction {
   /// transactions-feedback@plaid.com.
   final PersonalFinanceCategory? personalFinanceCategory;
 
+  final bool? isFoodCategory;
+
   factory Transaction.fromMap(Map<String, dynamic> json) {
     final String? pendingTransactionId = json['pending_transaction_id'];
     final String? categoryId = json['category_id'];
@@ -266,6 +269,7 @@ class Transaction {
             ? null
             : PersonalFinanceCategory.fromJson(
                 json['personal_finance_category'] as Map<String, dynamic>);
+    final bool? isFoodCategory = json['is_food_category'] as bool?;
 
     return Transaction(
       location: location,
@@ -291,34 +295,36 @@ class Transaction {
       originalDescription: originalDescription,
       transactionCode: transactionCode,
       personalFinanceCategory: personalFinanceCategory,
+      isFoodCategory: isFoodCategory,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'pendingTransactionId': pendingTransactionId,
-      'categoryId': categoryId,
+      'pending_transaction_id': pendingTransactionId,
+      'category_id': categoryId,
       'category': category,
       'location': location,
-      'paymentMeta': paymentMeta,
-      'accountOwner': accountOwner,
+      'payment_meta': paymentMeta,
+      'account_owner': accountOwner,
       'name': name,
-      'originalDescription': originalDescription,
-      'accountId': accountId,
+      'original_description': originalDescription,
+      'account_id': accountId,
       'amount': amount,
-      'isoCurrencyCode': isoCurrencyCode,
-      'unofficialCurrencyCode': unofficialCurrencyCode,
+      'iso_currency_code': isoCurrencyCode,
+      'unofficial_currency_code': unofficialCurrencyCode,
       'date': date,
       'pending': pending,
-      'transactionId': transactionId,
-      'merchantName': merchantName,
-      'checkNumber': checkNumber,
-      'paymentChannel': paymentChannel,
-      'authorizedDate': authorizedDate?.toIso8601String(),
-      'authorizedDatetime': authorizedDatetime?.toIso8601String(),
+      'transaction_id': transactionId,
+      'merchant_name': merchantName,
+      'check_number': checkNumber,
+      'payment_channel': paymentChannel,
+      'authorized_date': authorizedDate?.toIso8601String(),
+      'authorized_datetime': authorizedDatetime?.toIso8601String(),
       'datetime': datetime?.toIso8601String(),
-      'transactionCode': transactionCode,
-      'personalFinanceCategory': personalFinanceCategory,
+      'transaction_code': transactionCode,
+      'personal_finance_category': personalFinanceCategory,
+      'is_food_category': isFoodCategory,
     };
   }
 
@@ -346,6 +352,7 @@ class Transaction {
     DateTime? datetime,
     String? transactionCode,
     PersonalFinanceCategory? personalFinanceCategory,
+    bool? isFoodCategory,
   }) {
     return Transaction(
       pendingTransactionId: pendingTransactionId ?? this.pendingTransactionId,
@@ -373,6 +380,7 @@ class Transaction {
       transactionCode: transactionCode ?? this.transactionCode,
       personalFinanceCategory:
           personalFinanceCategory ?? this.personalFinanceCategory,
+      isFoodCategory: isFoodCategory ?? this.isFoodCategory,
     );
   }
 
@@ -383,7 +391,7 @@ class Transaction {
 
   @override
   String toString() {
-    return 'Transaction(pendingTransactionId: $pendingTransactionId, categoryId: $categoryId, category: $category, location: $location, paymentMeta: $paymentMeta, accountOwner: $accountOwner, name: $name, originalDescription: $originalDescription, accountId: $accountId, amount: $amount, isoCurrencyCode: $isoCurrencyCode, unofficialCurrencyCode: $unofficialCurrencyCode, date: $date, pending: $pending, transactionId: $transactionId, merchantName: $merchantName, checkNumber: $checkNumber, paymentChannel: $paymentChannel, authorizedDate: $authorizedDate, authorizedDatetime: $authorizedDatetime, datetime: $datetime, transactionCode: $transactionCode, personalFinanceCategory: $personalFinanceCategory)';
+    return 'Transaction(pendingTransactionId: $pendingTransactionId, categoryId: $categoryId, category: $category, location: $location, paymentMeta: $paymentMeta, accountOwner: $accountOwner, name: $name, originalDescription: $originalDescription, accountId: $accountId, amount: $amount, isoCurrencyCode: $isoCurrencyCode, unofficialCurrencyCode: $unofficialCurrencyCode, date: $date, pending: $pending, transactionId: $transactionId, merchantName: $merchantName, checkNumber: $checkNumber, paymentChannel: $paymentChannel, authorizedDate: $authorizedDate, authorizedDatetime: $authorizedDatetime, datetime: $datetime, transactionCode: $transactionCode, personalFinanceCategory: $personalFinanceCategory, isFoodCategory: $isFoodCategory)';
   }
 
   @override
@@ -413,7 +421,8 @@ class Transaction {
         other.authorizedDatetime == authorizedDatetime &&
         other.datetime == datetime &&
         other.transactionCode == transactionCode &&
-        other.personalFinanceCategory == personalFinanceCategory;
+        other.personalFinanceCategory == personalFinanceCategory &&
+        other.isFoodCategory == isFoodCategory;
   }
 
   @override
@@ -440,6 +449,7 @@ class Transaction {
         authorizedDatetime.hashCode ^
         datetime.hashCode ^
         transactionCode.hashCode ^
-        personalFinanceCategory.hashCode;
+        personalFinanceCategory.hashCode ^
+        isFoodCategory.hashCode;
   }
 }

@@ -10,6 +10,7 @@ class User {
     this.plaidRequestId,
     this.lastPlaidSyncTime,
     this.lastLoginDate,
+    this.favoriteAccountId,
   });
 
   final String uid;
@@ -18,6 +19,7 @@ class User {
   final String? plaidRequestId;
   final DateTime? lastPlaidSyncTime;
   final DateTime? lastLoginDate;
+  final String? favoriteAccountId;
 
   User copyWith({
     String? uid,
@@ -26,6 +28,7 @@ class User {
     String? plaidRequestId,
     DateTime? lastPlaidSyncTime,
     DateTime? lastLoginDate,
+    String? favoriteAccountId,
   }) {
     return User(
       uid: uid ?? this.uid,
@@ -34,6 +37,7 @@ class User {
       plaidRequestId: plaidRequestId ?? this.plaidRequestId,
       lastPlaidSyncTime: lastPlaidSyncTime ?? this.lastPlaidSyncTime,
       lastLoginDate: lastLoginDate ?? this.lastLoginDate,
+      favoriteAccountId: favoriteAccountId ?? this.favoriteAccountId,
     );
   }
 
@@ -45,6 +49,7 @@ class User {
       'plaidRequestId': plaidRequestId,
       'lastPlaidSyncTime': lastPlaidSyncTime,
       'lastLoginDate': lastLoginDate,
+      'favoriteAccountId': favoriteAccountId,
     };
   }
 
@@ -59,6 +64,7 @@ class User {
     final DateTime? lastLoginDate = map['lastLoginDate'] == null
         ? null
         : (map['lastLoginDate'] as Timestamp).toDate();
+    final String? favoriteAccountId = map['favoriteAccountId'];
 
     return User(
       uid: uid,
@@ -67,6 +73,7 @@ class User {
       plaidItemId: plaidItemId,
       plaidRequestId: plaidRequestId,
       lastLoginDate: lastLoginDate,
+      favoriteAccountId: favoriteAccountId,
     );
   }
 
@@ -76,7 +83,7 @@ class User {
 
   @override
   String toString() {
-    return 'User(uid: $uid, plaidAccessToken: $plaidAccessToken, plaidItemId: $plaidItemId, plaidRequestId: $plaidRequestId, lastPlaidSyncTime: $lastPlaidSyncTime, lastLoginDate: $lastLoginDate)';
+    return 'User(uid: $uid, plaidAccessToken: $plaidAccessToken, plaidItemId: $plaidItemId, plaidRequestId: $plaidRequestId, lastPlaidSyncTime: $lastPlaidSyncTime, lastLoginDate: $lastLoginDate, favoriteAccountId: $favoriteAccountId)';
   }
 
   @override
@@ -89,7 +96,8 @@ class User {
         other.plaidItemId == plaidItemId &&
         other.plaidRequestId == plaidRequestId &&
         other.lastPlaidSyncTime == lastPlaidSyncTime &&
-        other.lastLoginDate == lastLoginDate;
+        other.lastLoginDate == lastLoginDate &&
+        other.favoriteAccountId == favoriteAccountId;
   }
 
   @override
@@ -99,6 +107,7 @@ class User {
         plaidItemId.hashCode ^
         plaidRequestId.hashCode ^
         lastPlaidSyncTime.hashCode ^
-        lastLoginDate.hashCode;
+        lastLoginDate.hashCode ^
+        favoriteAccountId.hashCode;
   }
 }

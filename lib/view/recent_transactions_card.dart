@@ -36,7 +36,7 @@ class RecentTransactionsCard extends ConsumerWidget {
               ),
               child: Row(
                 children: [
-                  const Text('Recent Transactions'),
+                  const Text('Transactions', style: TextStyles.h6),
                   const Spacer(),
                   TextButton(
                     onPressed: () => TransactionsScreen.show(
