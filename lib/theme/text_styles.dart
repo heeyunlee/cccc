@@ -35,6 +35,14 @@ class TextStyles {
     letterSpacing: 0.25,
   );
 
+  static const h4W900 = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w900,
+    fontSize: 34,
+    color: Colors.white,
+    letterSpacing: 0.25,
+  );
+
   static const h5 = TextStyle(
     fontFamily: defaultFont,
     fontWeight: FontWeight.w400,
@@ -91,6 +99,30 @@ class TextStyles {
     letterSpacing: 0.5,
   );
 
+  static const body1Bold = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.bold,
+    fontSize: 16,
+    color: Colors.white,
+    letterSpacing: 0.5,
+  );
+
+  static const body1Grey = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 16,
+    color: Colors.grey,
+    letterSpacing: 0.5,
+  );
+
+  static const body1White38Bold = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.bold,
+    fontSize: 16,
+    color: Colors.white38,
+    letterSpacing: 0.5,
+  );
+
   static const body1White54 = TextStyle(
     fontFamily: defaultFont,
     fontWeight: FontWeight.w400,
@@ -115,11 +147,19 @@ class TextStyles {
     letterSpacing: 0.25,
   );
 
-  static const body2White24 = TextStyle(
+  static const body2Bold = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.bold,
+    fontSize: 14,
+    color: Colors.white,
+    letterSpacing: 0.25,
+  );
+
+  static const body2White38 = TextStyle(
     fontFamily: defaultFont,
     fontWeight: FontWeight.w400,
     fontSize: 14,
-    color: Colors.white24,
+    color: Colors.white38,
     letterSpacing: 0.25,
   );
 
@@ -168,6 +208,22 @@ class TextStyles {
     fontWeight: FontWeight.w400,
     fontSize: 12,
     color: Colors.grey,
+    letterSpacing: 0.4,
+  );
+
+  static const captionWhite38 = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 12,
+    color: Colors.white38,
+    letterSpacing: 0.4,
+  );
+
+  static const captionWhite38Bold = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.bold,
+    fontSize: 12,
+    color: Colors.white38,
     letterSpacing: 0.4,
   );
 
