@@ -1,5 +1,5 @@
 import 'package:cccc/constants/logger_init.dart';
-import 'package:cccc/model/plaid/transaction.dart';
+import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/theme/custom_button_theme.dart';
@@ -9,7 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'custom_stream_builder.dart';
 import 'transaction_list_tile.dart';
-import 'transactions_screen.dart';
+import '../view/transactions_screen.dart';
 
 class RecentTransactionsCard extends ConsumerWidget {
   const RecentTransactionsCard({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
-import 'package:cccc/view/transaction_list_tile.dart';
+import 'package:cccc/models/plaid/transaction.dart';
+import 'package:cccc/widgets/transaction_list_tile.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cccc/model/plaid/transaction.dart';
 import 'package:cccc/routes/route_names.dart';
 
 class TransactionsScreen extends StatelessWidget {

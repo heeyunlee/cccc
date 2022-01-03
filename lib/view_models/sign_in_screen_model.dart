@@ -1,8 +1,8 @@
 import 'package:cccc/constants/logger_init.dart';
-import 'package:cccc/model/user.dart';
+import 'package:cccc/models/user.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
-import 'package:cccc/view/show_adaptive_alert_dialog.dart';
+import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fire_auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

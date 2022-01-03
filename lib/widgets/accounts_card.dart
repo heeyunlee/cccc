@@ -1,15 +1,13 @@
-import 'package:cccc/model/plaid/account.dart';
+import 'package:cccc/models/enum/account_type.dart';
+import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/theme/text_styles.dart';
-import 'package:cccc/view/accounts_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:collection/collection.dart';
-import 'package:cccc/model/enum/account_type.dart';
-
-import 'add_account_button.dart';
 import 'custom_stream_builder.dart';
+import 'accounts_expansion_tile.dart';
+import 'add_account_button.dart';
 
 class AccountsCard extends ConsumerWidget {
   const AccountsCard({Key? key}) : super(key: key);
@@ -17,7 +15,8 @@ class AccountsCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
-    final database = ref.watch(databaseProvider(auth.currentUser?.uid))!;
+    final uid = auth.currentUser!.uid;
+    final database = ref.watch(databaseProvider(uid))!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,9 +46,25 @@ class AccountsCard extends ConsumerWidget {
                           child: Column(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Transform.rotate(
-                                angle: -0.1,
-                                child: const Icon(Icons.credit_card),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Transform.rotate(
+                                    angle: -0.1,
+                                    child: const Icon(Icons.credit_card),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Text('+'),
+                                  const SizedBox(width: 8),
+                                  Transform.rotate(
+                                    angle: 0.1,
+                                    child: const Icon(Icons.account_balance),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  const Text('='),
+                                  const SizedBox(width: 8),
+                                  const Text('0'),
+                                ],
                               ),
                               const SizedBox(height: 24),
                               const Text('No accounts added yet.'),
@@ -67,36 +82,18 @@ class AccountsCard extends ConsumerWidget {
                       ],
                     );
                   } else {
-                    final dataByType = data.groupListsBy(
-                      (element) => element!.type,
-                    );
+                    final dataByType = <AccountType, List<Account?>>{};
+
+                    for (final account in data) {
+                      (dataByType[account!.type] ??= []).add(account);
+                    }
 
                     return Column(
                       children: [
                         ...dataByType.entries.map((entry) {
-                          return ExpansionTile(
-                            leading: Icon(entry.key.icon),
-                            initiallyExpanded: true,
-                            collapsedIconColor: Colors.white,
-                            iconColor: Colors.grey,
-                            collapsedTextColor: Colors.white,
-                            textColor: Colors.grey,
-                            title: Text(
-                              entry.key.str,
-                            ),
-                            children: [
-                              ListView.builder(
-                                padding: EdgeInsets.zero,
-                                shrinkWrap: true,
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemCount: entry.value.length,
-                                itemBuilder: (context, index) {
-                                  final account = entry.value[index];
-
-                                  return AccountsListTile(account: account!);
-                                },
-                              ),
-                            ],
+                          return AccountsExpansionTile(
+                            accountType: entry.key,
+                            accounts: entry.value,
                           );
                         }).toList(),
                         const Divider(

@@ -38,7 +38,7 @@ extension AccountTypeExtension on AccountType {
       case AccountType.depository:
         return Icons.account_balance;
       case AccountType.loan:
-        return Icons.account_balance;
+        return Icons.money_outlined;
       case AccountType.brokerage:
         return Icons.attach_money;
       case AccountType.other:

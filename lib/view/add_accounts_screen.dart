@@ -7,21 +7,20 @@ import 'package:plaid_flutter/plaid_flutter.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/theme/custom_button_theme.dart';
 
-class ConnectWithPlaidScreen extends ConsumerStatefulWidget {
-  const ConnectWithPlaidScreen({Key? key}) : super(key: key);
+class AddAccountsScreen extends ConsumerStatefulWidget {
+  const AddAccountsScreen({Key? key}) : super(key: key);
 
   static void show(BuildContext context) {
     Navigator.of(context).pushNamed(
-      RouteNames.connectPlaid,
+      RouteNames.addAccounts,
     );
   }
 
   @override
-  _ConnectWithPlaidScreenState createState() => _ConnectWithPlaidScreenState();
+  _AddAccountsScreenState createState() => _AddAccountsScreenState();
 }
 
-class _ConnectWithPlaidScreenState
-    extends ConsumerState<ConnectWithPlaidScreen> {
+class _AddAccountsScreenState extends ConsumerState<AddAccountsScreen> {
   @override
   void initState() {
     super.initState();

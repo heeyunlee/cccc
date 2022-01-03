@@ -1,30 +1,26 @@
 import 'dart:io';
 
 import 'package:cccc/constants/logger_init.dart';
-import 'package:cccc/model/user.dart';
+import 'package:cccc/models/user.dart';
 import 'package:cccc/services/cloud_functions.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:cccc/view/recent_transactions_card.dart';
+import 'package:cccc/widgets/recent_transactions_card.dart';
 import 'package:cccc/view/settings_screen.dart';
-import 'accounts_card.dart';
-import 'custom_stream_builder.dart';
-import 'home_flexible_space_bar.dart';
+import 'package:intl/intl.dart';
+import '../widgets/accounts_card.dart';
+import '../widgets/custom_stream_builder.dart';
+import '../widgets/home_flexible_space_bar.dart';
 import 'package:shimmer/shimmer.dart';
 
-class Home extends ConsumerStatefulWidget {
-  const Home({Key? key}) : super(key: key);
+class HomeScreen extends ConsumerWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _HomeState();
-}
-
-class _HomeState extends ConsumerState<Home> {
-  @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     logger.d('[Home] building...');
 
     final auth = ref.watch(authProvider);
@@ -39,11 +35,11 @@ class _HomeState extends ConsumerState<Home> {
         stream: database.userStream(),
         builder: (context, user) {
           if (Platform.isIOS) {
-            return _customScrollWidget(user!);
+            return _customScrollWidget(context, functions, user!);
           } else {
             return RefreshIndicator(
               onRefresh: () => functions.fetchTransactionsData(context, user!),
-              child: _customScrollWidget(user!),
+              child: _customScrollWidget(context, functions, user!),
             );
           }
         },
@@ -51,9 +47,14 @@ class _HomeState extends ConsumerState<Home> {
     );
   }
 
-  Widget _customScrollWidget(User user) {
+  Widget _customScrollWidget(
+    BuildContext context,
+    CloudFunctions functions,
+    User user,
+  ) {
     final size = MediaQuery.of(context).size;
-    final functions = ref.watch(cloudFunctionsProvider);
+    final today = DateTime.now();
+    final a = DateFormat.MMMEd().format(today);
 
     return CustomScrollView(
       slivers: [
@@ -74,8 +75,11 @@ class _HomeState extends ConsumerState<Home> {
         SliverAppBar(
           stretch: true,
           pinned: true,
+          backgroundColor: Colors.black,
           expandedHeight: size.height * 0.6,
           stretchTriggerOffset: 120,
+          centerTitle: true,
+          title: Text(a),
           actions: [
             IconButton(
               onPressed: () => SettingsScreen.show(context),

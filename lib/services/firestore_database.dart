@@ -1,6 +1,6 @@
-import 'package:cccc/model/plaid/account.dart';
-import 'package:cccc/model/plaid/transaction.dart';
-import 'package:cccc/model/user.dart';
+import 'package:cccc/models/plaid/account.dart';
+import 'package:cccc/models/plaid/transaction.dart';
+import 'package:cccc/models/user.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_path.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

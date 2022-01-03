@@ -1,8 +1,8 @@
 import 'package:cccc/constants/constants.dart';
+import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cccc/model/plaid/transaction.dart';
 import 'package:intl/intl.dart';
 
 class TransactionListTile extends StatelessWidget {

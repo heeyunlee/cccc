@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
-class SignIn extends ConsumerWidget {
-  const SignIn({Key? key}) : super(key: key);
+class SignInScreen extends ConsumerWidget {
+  const SignInScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

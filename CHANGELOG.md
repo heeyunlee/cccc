@@ -7,8 +7,10 @@
 - Add Accounts StreamBuilder
 - Use `groupListsBy` function from [collection] library to group accounts by type
 - Create [ExpansionTile] for accounts
+- Update Readme
 
 ### Bug Fix & Refactor
+- Separate [Widgets] and [Views]
 
 ## [0.0.4] - Dec. 29th, 2021
 ### Bug Fix & Refactor

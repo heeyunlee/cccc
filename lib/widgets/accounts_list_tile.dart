@@ -1,7 +1,7 @@
+import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cccc/model/plaid/account.dart';
 import 'package:intl/intl.dart';
 
 class AccountsListTile extends StatelessWidget {
@@ -18,13 +18,13 @@ class AccountsListTile extends StatelessWidget {
     final current = f.format(account.balance.current);
 
     return ListTile(
-      // leading: CircleAvatar(
-      //   backgroundColor: Colors.white24,
-      //   child: Icon(
-      //     account.type.icon,
-      //     color: Colors.white,
-      //   ),
-      // ),
+      leading: CircleAvatar(
+        backgroundColor: Colors.blueGrey,
+        child: Text(
+          account.name[0],
+          style: TextStyles.body2,
+        ),
+      ),
       contentPadding: const EdgeInsets.symmetric(
         horizontal: 16,
         vertical: 8,

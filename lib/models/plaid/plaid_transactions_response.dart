@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:cccc/model/plaid/account.dart';
-import 'package:cccc/model/plaid/plaid_item.dart';
-import 'package:cccc/model/plaid/transaction.dart';
+import 'account.dart';
+import 'plaid_item.dart';
+import 'transaction.dart';
 
 class PlaidTransactionResponse {
   PlaidTransactionResponse({

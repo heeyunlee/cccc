@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:cccc/constants/helpers.dart';
-import 'package:cccc/model/enum/account_type.dart';
+import 'package:cccc/models/enum/account_type.dart';
 
 import 'balance.dart';
 

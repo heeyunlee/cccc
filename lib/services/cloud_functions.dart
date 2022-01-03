@@ -3,8 +3,8 @@ import 'dart:io';
 import 'package:cccc/constants/cloud_functions_keys.dart';
 import 'package:cccc/constants/keys.dart';
 import 'package:cccc/constants/logger_init.dart';
-import 'package:cccc/model/user.dart';
-import 'package:cccc/view/show_adaptive_alert_dialog.dart';
+import 'package:cccc/models/user.dart';
+import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
@@ -222,8 +222,5 @@ class CloudFunctions {
         );
       }
     }
-    // } else {
-    //   await Future.delayed(const Duration(seconds: 2));
-    // }
   }
 }

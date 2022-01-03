@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-import 'package:cccc/model/plaid/plaid_error.dart';
+import 'plaid_error.dart';
 
 /// Metadata about the Item.
 class PlaidItem {
