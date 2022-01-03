@@ -1,6 +1,10 @@
+import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/routes/route_names.dart';
+import 'package:cccc/services/firebase_auth.dart';
+import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/theme/text_styles.dart';
 import 'package:cccc/view_models/transaction_detail_screen_model.dart';
+import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cccc/models/plaid/transaction.dart';
@@ -24,11 +28,17 @@ class TransactionDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final model = ref.watch(transactionDetailScreenModelProvider(transaction));
+    final auth = ref.watch(authProvider);
+    final uid = auth.currentUser!.uid;
+    final database = ref.watch(databaseProvider(uid));
 
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            floating: true,
+            pinned: false,
+            stretch: true,
             expandedHeight: 200,
             flexibleSpace: FlexibleSpaceBar(
               background: Stack(
@@ -60,6 +70,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                             padding: EdgeInsets.symmetric(vertical: 8),
                             child: Text('Pending', style: TextStyles.body1Grey),
                           ),
+                        const SizedBox(height: 8),
                         if (model.categories != null)
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -89,6 +100,27 @@ class TransactionDetailScreen extends ConsumerWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 16),
+                  CustomStreamBuilder<Account?>(
+                    stream: database.accountStream(model.accountId),
+                    builder: (context, data) {
+                      return ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 16,
+                        ),
+                        onTap: () {},
+                        leading: const Icon(Icons.account_balance),
+                        title: const Text(
+                          'Account',
+                          style: TextStyles.caption,
+                        ),
+                        trailing: Text(
+                          model.accountName(data),
+                          style: TextStyles.body2Bold,
+                        ),
+                      );
+                    },
+                  ),
                   ListTile(
                     contentPadding: const EdgeInsets.symmetric(
                       vertical: 8,
@@ -191,10 +223,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                       collapsedTextColor: Colors.white,
                       leading: Icon(Icons.dinner_dining),
                       title: Text('Menu', style: TextStyles.caption),
-                      children: [
-                        Placeholder(),
-                        Placeholder(),
-                      ],
+                      children: [],
                     ),
                 ],
               ),

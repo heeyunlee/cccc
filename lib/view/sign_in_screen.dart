@@ -1,4 +1,4 @@
-import 'package:cccc/constants/logger_init.dart';
+import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/theme/custom_button_theme.dart';
 import 'package:cccc/theme/text_styles.dart';
 import 'package:cccc/view_models/sign_in_screen_model.dart';

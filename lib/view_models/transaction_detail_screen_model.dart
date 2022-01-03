@@ -1,18 +1,31 @@
+import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/transaction.dart';
+import 'package:cccc/services/firebase_auth.dart';
+import 'package:cccc/services/firestore_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:cccc/extensions/string_extension.dart';
 
 final transactionDetailScreenModelProvider = ChangeNotifierProvider.autoDispose
-    .family<TransactionDetailScreenModel, Transaction>(
-  (ref, transaction) => TransactionDetailScreenModel(transaction),
-);
+    .family<TransactionDetailScreenModel, Transaction>((ref, transaction) {
+  final auth = ref.watch(authProvider);
+  final database = ref.watch(databaseProvider(auth.currentUser!.uid));
+
+  return TransactionDetailScreenModel(
+    transaction: transaction,
+    database: database,
+  );
+});
 
 class TransactionDetailScreenModel with ChangeNotifier {
-  TransactionDetailScreenModel(this.transaction);
+  TransactionDetailScreenModel({
+    required this.transaction,
+    required this.database,
+  });
 
   final Transaction transaction;
+  final FirestoreDatabase database;
 
   String get amount {
     final f = NumberFormat.simpleCurrency(
@@ -60,5 +73,15 @@ class TransactionDetailScreenModel with ChangeNotifier {
     final state = transaction.location?.region ?? 'State';
 
     return '$city, $state';
+  }
+
+  String get accountId => transaction.accountId;
+
+  String accountName(Account? account) {
+    if (account == null) {
+      return 'Not Found';
+    }
+
+    return account.name;
   }
 }

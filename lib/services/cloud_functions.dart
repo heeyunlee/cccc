@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:cccc/constants/cloud_functions_keys.dart';
 import 'package:cccc/constants/keys.dart';
-import 'package:cccc/constants/logger_init.dart';
+import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/models/user.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
@@ -18,10 +18,9 @@ import 'firestore_database.dart';
 final cloudFunctionsProvider = Provider<CloudFunctions>((ref) {
   final auth = ref.watch(authProvider);
   final uid = auth.currentUser?.uid;
+  final database = ref.watch(databaseProvider(uid!));
 
-  final database = ref.watch(databaseProvider(uid));
-
-  return CloudFunctions(auth: auth, database: database!);
+  return CloudFunctions(auth: auth, database: database);
 });
 
 class CloudFunctions {

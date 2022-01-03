@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cccc/constants/logger_init.dart';
+import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/models/user.dart';
 import 'package:cccc/services/cloud_functions.dart';
 import 'package:cccc/services/firebase_auth.dart';
@@ -24,8 +24,8 @@ class HomeScreen extends ConsumerWidget {
     logger.d('[Home] building...');
 
     final auth = ref.watch(authProvider);
-    final uid = auth.currentUser?.uid;
-    final database = ref.watch(databaseProvider(uid))!;
+    final uid = auth.currentUser!.uid;
+    final database = ref.watch(databaseProvider(uid));
     final functions = ref.watch(cloudFunctionsProvider);
 
     return Scaffold(

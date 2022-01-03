@@ -40,6 +40,11 @@ class CustomButtonTheme {
     ),
   );
 
+  static final elevatedGrey = ElevatedButton.styleFrom(
+    primary: Colors.grey,
+    textStyle: TextStyles.button1,
+  );
+
   static final text1 = ButtonStyle(
     padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
     textStyle: MaterialStateProperty.resolveWith<TextStyle>(
@@ -58,6 +63,28 @@ class CustomButtonTheme {
         }
 
         return Colors.white;
+      },
+    ),
+  );
+
+  static final text1Primary = ButtonStyle(
+    padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+    textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+      (Set<MaterialState> states) {
+        if (states.any(interactiveStates.contains)) {
+          return TextStyles.button1Primary400;
+        }
+
+        return TextStyles.button1Primary;
+      },
+    ),
+    foregroundColor: MaterialStateProperty.resolveWith<Color>(
+      (Set<MaterialState> states) {
+        if (states.any(interactiveStates.contains)) {
+          return Colors.blueAccent[400]!;
+        }
+
+        return Colors.blueAccent;
       },
     ),
   );

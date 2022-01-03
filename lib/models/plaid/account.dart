@@ -1,7 +1,8 @@
 import 'dart:convert';
 
-import 'package:cccc/constants/helpers.dart';
+import 'package:cccc/extensions/enum_extension.dart';
 import 'package:cccc/models/enum/account_type.dart';
+import 'package:cccc/extensions/string_extension.dart';
 
 import 'balance.dart';
 
@@ -165,7 +166,7 @@ class Account {
     final String? mask = map['mask'];
     final String name = map['name'];
     final String? officialName = map['official_name'];
-    final AccountType type = enumFromString(map['type'], AccountType.values);
+    final AccountType type = (map['type'] as String).toEnum(AccountType.values);
     final String? subtype = map['subtype'];
     final String? verificationStatus = map['verification_status'];
 

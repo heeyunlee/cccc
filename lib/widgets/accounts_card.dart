@@ -16,7 +16,7 @@ class AccountsCard extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
     final uid = auth.currentUser!.uid;
-    final database = ref.watch(databaseProvider(uid))!;
+    final database = ref.watch(databaseProvider(uid));
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,

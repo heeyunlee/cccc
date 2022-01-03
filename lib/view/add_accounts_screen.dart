@@ -1,4 +1,4 @@
-import 'package:cccc/constants/logger_init.dart';
+import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/services/cloud_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

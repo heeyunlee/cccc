@@ -1,4 +1,4 @@
-import 'package:cccc/constants/logger_init.dart';
+import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/routes/custom_router.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/theme/custom_theme.dart';

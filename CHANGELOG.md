@@ -2,7 +2,7 @@
 
 ## [0.0.6]
 ### New Features & Screens
-- Add [TransactionDetailScreen]
+- Add `TransactionDetailScreen` and `TransactionDetailScreenModel`
 
 ### Bug Fix & Refactor
 

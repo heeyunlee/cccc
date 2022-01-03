@@ -32,6 +32,7 @@ This project uses the following technologies:
 ```
 lib/
 │───constants/
+│───extensions/
 │───models/
 │───routes/
 │───services/
@@ -42,11 +43,12 @@ lib/
 ```
 
 - constants: constant values such as urls, keys, etc
+- extensions: custom extensions for `String` or `Enum`
 - models: custom classes and enums
 - routes: for routing within the app
 - services: for using Firebase Authentication, Cloud Firestore, and Functions
 - theme: app-level ThemeData, TextStyle, buttonTheme, and Color Palette
-- view: [Scaffold]-level ui components
+- view: `Scaffold`-level ui components
 - view_models: view model for each view scaffolds
 - widgets: widgets that are used in view
   

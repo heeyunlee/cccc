@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cccc/theme/custom_button_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,14 +22,16 @@ Future<bool?> showAdaptiveAlertDialog(
         content: Text(content),
         actions: <Widget>[
           if (cancelAcitionText != null)
-            ElevatedButton(
+            TextButton(
+              style: CustomButtonTheme.text1,
               onPressed: () => Navigator.of(context).pop(false),
               child: Text(cancelAcitionText),
             ),
-          ElevatedButton(
+          TextButton(
+            style: CustomButtonTheme.text1Primary,
             onPressed: () => Navigator.of(context).pop(true),
             child: Text(defaultActionText),
-          )
+          ),
         ],
       ),
     );

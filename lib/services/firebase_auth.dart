@@ -2,9 +2,15 @@ import 'package:firebase_auth/firebase_auth.dart' as fire_auth;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import 'logger_init.dart';
+
 final authProvider = Provider<FirebaseAuthService>(
   (ref) => FirebaseAuthService(),
 );
+
+// final authStateChangesProvider = StreamProvider<fire_auth.User?>(
+//   (ref) => ref.watch(authProvider).authStateChanges(),
+// );
 
 class FirebaseAuthService {
   final fire_auth.FirebaseAuth _auth = fire_auth.FirebaseAuth.instance;
@@ -38,6 +44,8 @@ class FirebaseAuthService {
     if (googleSignInAccount != null) {
       // Obtain the auth details from the request
       final googleAuth = await googleSignInAccount.authentication;
+      logger.i('googleAuth: ${googleAuth.accessToken}');
+      logger.i('googleAuth: ${googleAuth.idToken}');
 
       if (googleAuth.idToken != null) {
         final authCredential = fire_auth.GoogleAuthProvider.credential(

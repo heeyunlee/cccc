@@ -1,4 +1,4 @@
-import 'package:cccc/constants/logger_init.dart';
+import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/models/user.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
@@ -33,11 +33,17 @@ class SignInViewModel with ChangeNotifier {
       await signInMethod();
       error = null;
     } on fire_auth.FirebaseException catch (e) {
-      error = e;
-      _showSignInError(context, exception: error);
+      _showSignInError(context, exception: e);
+    } catch (e) {
+      logger.e(e);
 
-      rethrow;
-    } finally {
+      showAdaptiveAlertDialog(
+        context,
+        title: 'Sign in failed',
+        content: 'Sign in failed. Please try again later.',
+        defaultActionText: 'OK',
+      );
+
       isLoading = false;
       notifyListeners();
     }
@@ -63,7 +69,7 @@ class SignInViewModel with ChangeNotifier {
 
         final database = ref.watch(databaseProvider(uid));
 
-        await database!.setUser(user);
+        await database.setUser(user);
       },
     );
   }
@@ -75,30 +81,26 @@ class SignInViewModel with ChangeNotifier {
     await _signIn(
       context,
       signInMethod: () async {
-        await auth.signInWithGoogle();
+        final user = await auth.signInWithGoogle();
 
-        final uid = auth.currentUser!.uid;
+        final uid = user!.uid;
         final now = DateTime.now();
 
-        final newUserData = User(
-          uid: uid,
-          plaidAccessToken: null,
-          plaidItemId: null,
-          plaidRequestId: null,
-          lastLoginDate: now,
-        );
+        final newUserData = {
+          'uid': uid,
+          'lastLoginDate': now,
+        };
 
         final database = ref.watch(databaseProvider(uid));
-
-        final oldUserData = await database!.getUser(uid);
+        final oldUserData = await database.getUser(uid);
 
         if (oldUserData != null) {
           await database.updateUser(
             oldUserData,
-            newUserData.toMap(),
+            newUserData,
           );
         } else {
-          await database.setUser(newUserData);
+          await database.setUser(User.fromMap(newUserData));
         }
       },
     );

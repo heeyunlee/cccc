@@ -1,4 +1,4 @@
-import 'package:cccc/constants/logger_init.dart';
+import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
@@ -16,8 +16,8 @@ class RecentTransactionsCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
-    final uid = auth.currentUser?.uid;
-    final database = ref.watch(databaseProvider(uid))!;
+    final uid = auth.currentUser!.uid;
+    final database = ref.watch(databaseProvider(uid));
 
     logger.d('''
     UID from auth: ${auth.currentUser?.uid}

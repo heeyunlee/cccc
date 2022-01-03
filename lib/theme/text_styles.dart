@@ -171,6 +171,22 @@ class TextStyles {
     letterSpacing: 1.25,
   );
 
+  static const button1Primary = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+    color: Colors.blueAccent,
+    letterSpacing: 1.25,
+  );
+
+  static final button1Primary400 = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+    color: Colors.blueAccent[300],
+    letterSpacing: 1.25,
+  );
+
   static const button1Grey = TextStyle(
     fontFamily: defaultFont,
     fontWeight: FontWeight.w500,
