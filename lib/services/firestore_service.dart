@@ -100,4 +100,54 @@ class FirestoreService {
 
     return list;
   }
+
+  // Collection Stream
+  Stream<List<T?>> whereCollectionStream<T>({
+    required String path,
+    required T Function(Map<String, dynamic>? data, String id) fromBuilder,
+    required Map<String, Object?> Function(T model) toBuilder,
+    required String orderByField,
+    required bool descending,
+    required Object where,
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
+    bool? isNull,
+  }) {
+    final reference = _instance
+        .collection(path)
+        .withConverter<T>(
+          fromFirestore: (json, _) => fromBuilder(json.data(), json.id),
+          toFirestore: (model, _) => toBuilder(model),
+        )
+        .where(
+          where,
+          isEqualTo: isEqualTo,
+          isNotEqualTo: isNotEqualTo,
+          isLessThan: isLessThan,
+          isLessThanOrEqualTo: isLessThanOrEqualTo,
+          isGreaterThan: isGreaterThan,
+          isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+          arrayContains: arrayContains,
+          arrayContainsAny: arrayContainsAny,
+          whereIn: whereIn,
+          whereNotIn: whereNotIn,
+          isNull: isNull,
+        )
+        .orderBy(orderByField, descending: descending);
+
+    final snapshots = reference.snapshots();
+    final list = snapshots.map(
+      (event) => event.docs.map((doc) => doc.data()).toList(),
+    );
+
+    return list;
+  }
 }

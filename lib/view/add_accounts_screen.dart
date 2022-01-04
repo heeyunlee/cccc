@@ -1,5 +1,4 @@
-import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/services/cloud_functions.dart';
+import 'package:cccc/view_models/add_accounts_screen_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
@@ -22,52 +21,18 @@ class AddAccountsScreen extends ConsumerStatefulWidget {
 
 class _AddAccountsScreenState extends ConsumerState<AddAccountsScreen> {
   @override
-  void initState() {
-    super.initState();
-    PlaidLink.onSuccess(_onSuccessCallback);
-    PlaidLink.onEvent(_onEventCallback);
-    PlaidLink.onExit(_onExitCallback);
-  }
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final model = ref.watch(addAccountsScreenModelProvider);
 
-  bool _isLoading = false;
-
-  void _onSuccessCallback(String publicToken, LinkSuccessMetadata metadata) {
-    logger.d('''
-        Successful Callback: $publicToken, 
-        metadata: ${metadata.description()}
-        ''');
-
-    final function = ref.read(cloudFunctionsProvider);
-
-    function.exchangePublicToken(context, publicToken: publicToken);
-  }
-
-  void _onEventCallback(String event, LinkEventMetadata metadata) {
-    logger.d("onEvent: $event, metadata: ${metadata.description()}");
-  }
-
-  void _onExitCallback(LinkError? error, LinkExitMetadata metadata) {
-    logger.d("onExit metadata: ${metadata.description()}");
-
-    if (error != null) {
-      logger.d("onExit error: ${error.description()}");
-    }
-  }
-
-  Future<void> _openLink(String linkToken) async {
-    try {
-      LinkTokenConfiguration linkTokenConfiguration = LinkTokenConfiguration(
-        token: linkToken,
-      );
-
-      PlaidLink.open(configuration: linkTokenConfiguration);
-    } catch (e) {
-      logger.d(e);
-    }
+    PlaidLink.onSuccess(model.onSuccessCallback);
+    PlaidLink.onEvent(model.onEventCallback);
+    PlaidLink.onExit(model.onExitCallback);
   }
 
   @override
   Widget build(BuildContext context) {
+    final model = ref.watch(addAccountsScreenModelProvider);
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -81,9 +46,10 @@ class _AddAccountsScreenState extends ConsumerState<AddAccountsScreen> {
         child: Column(
           children: const [
             Text(
-                '''Lorem ipsum dolor sit amet, consectetur sadipiscing elit. Mauris in consectetur enim. Sed blandit lorem tempus lectus tincidunt, eget vestibulum nulla v
+              '''Lorem ipsum dolor sit amet, consectetur sadipiscing elit. Mauris in consectetur enim. Sed blandit lorem tempus lectus tincidunt, eget vestibulum nulla v
                   \niverra. Donec vel magna ac ante dignissim pulvinar. Morbi a auctor metus. 
-                  \nNullam purus lacus, pharetra id metus interdum, sollicitudin tempus eros '''),
+                  \nNullam purus lacus, pharetra id metus interdum, sollicitudin tempus eros ''',
+            ),
           ],
         ),
       ),
@@ -95,25 +61,9 @@ class _AddAccountsScreenState extends ConsumerState<AddAccountsScreen> {
             height: 56,
             width: size.width - 48,
             child: OutlinedButton(
-              onPressed: () async {
-                setState(() {
-                  _isLoading = true;
-                });
-
-                final function = ref.read(cloudFunctionsProvider);
-
-                final linkToken = await function.getLinkToken(context);
-
-                if (linkToken != null) {
-                  _openLink(linkToken);
-                }
-
-                setState(() {
-                  _isLoading = false;
-                });
-              },
+              onPressed: () => model.openLink(context),
               style: CustomButtonTheme.outline1,
-              child: _isLoading
+              child: model.isLoading
                   ? const CircularProgressIndicator(
                       strokeWidth: 1.5,
                       color: Colors.white,

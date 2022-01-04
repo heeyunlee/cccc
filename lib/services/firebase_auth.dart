@@ -8,10 +8,6 @@ final authProvider = Provider<FirebaseAuthService>(
   (ref) => FirebaseAuthService(),
 );
 
-// final authStateChangesProvider = StreamProvider<fire_auth.User?>(
-//   (ref) => ref.watch(authProvider).authStateChanges(),
-// );
-
 class FirebaseAuthService {
   final fire_auth.FirebaseAuth _auth = fire_auth.FirebaseAuth.instance;
   final googleSignIn = GoogleSignIn();
@@ -44,8 +40,11 @@ class FirebaseAuthService {
     if (googleSignInAccount != null) {
       // Obtain the auth details from the request
       final googleAuth = await googleSignInAccount.authentication;
-      logger.i('googleAuth: ${googleAuth.accessToken}');
-      logger.i('googleAuth: ${googleAuth.idToken}');
+
+      logger.d('''
+      googleAuth accessToken: ${googleAuth.accessToken}
+      googleAuth idToken: ${googleAuth.idToken}
+      ''');
 
       if (googleAuth.idToken != null) {
         final authCredential = fire_auth.GoogleAuthProvider.credential(

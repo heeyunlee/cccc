@@ -1,6 +1,8 @@
+import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/routes/adaptive_page_route.dart';
 import 'package:cccc/routes/route_names.dart';
+import 'package:cccc/view/account_detail_screen.dart';
 import 'package:cccc/view/add_accounts_screen.dart';
 import 'package:cccc/view/home_screen.dart';
 import 'package:cccc/view/settings_screen.dart';
@@ -48,6 +50,15 @@ class CustomRouter {
           rootNavigator: false,
           maintainState: true,
           builder: (context) => TransactionDetailScreen(transaction: args),
+          settings: settings,
+        );
+      case RouteNames.account:
+        final args = settings.arguments as Account;
+
+        return adaptiveRoute(
+          rootNavigator: false,
+          maintainState: true,
+          builder: (context) => AccountDetailScreen(account: args),
           settings: settings,
         );
       default:

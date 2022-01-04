@@ -1,9 +1,7 @@
-import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/services/firebase_auth.dart';
-import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/theme/custom_button_theme.dart';
 import 'package:cccc/theme/text_styles.dart';
+import 'package:cccc/view_models/home_screen_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -12,20 +10,17 @@ import 'transaction_list_tile.dart';
 import '../view/transactions_screen.dart';
 
 class RecentTransactionsCard extends ConsumerWidget {
-  const RecentTransactionsCard({Key? key}) : super(key: key);
+  const RecentTransactionsCard({
+    Key? key,
+    required this.model,
+  }) : super(key: key);
+
+  final HomeScreenModel model;
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(authProvider);
-    final uid = auth.currentUser!.uid;
-    final database = ref.watch(databaseProvider(uid));
-
-    logger.d('''
-    UID from auth: ${auth.currentUser?.uid}
-    UID from database ${database.uid}
-    ''');
-
     return CustomStreamBuilder<List<Transaction?>>(
-      stream: database.transactionsStream(),
+      stream: model.transactionsStream,
       builder: (context, data) {
         return Column(
           children: [

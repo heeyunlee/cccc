@@ -1,5 +1,6 @@
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/theme/text_styles.dart';
+import 'package:cccc/view/account_detail_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -18,6 +19,7 @@ class AccountsListTile extends StatelessWidget {
     final current = f.format(account.balance.current);
 
     return ListTile(
+      onTap: () => AccountDetailScreen.show(context, account),
       leading: CircleAvatar(
         backgroundColor: Colors.blueGrey,
         child: Text(
@@ -29,7 +31,6 @@ class AccountsListTile extends StatelessWidget {
         horizontal: 16,
         vertical: 8,
       ),
-      onTap: () {},
       title: Text(
         account.name,
         style: TextStyles.body2,
@@ -38,15 +39,6 @@ class AccountsListTile extends StatelessWidget {
         '${account.subtype}',
         style: TextStyles.captionGrey,
       ),
-      // subtitle: Padding(
-      //   padding: const EdgeInsets.symmetric(
-      //     vertical: 8,
-      //   ),
-      //   child: Text(
-      //     '\$ $current',
-      //     style: TextStyles.h6W900,
-      //   ),
-      // ),
       trailing: Padding(
         padding: const EdgeInsets.symmetric(
           vertical: 8,

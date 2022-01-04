@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 
 class User {
   const User({
@@ -11,6 +12,7 @@ class User {
     this.lastPlaidSyncTime,
     this.lastLoginDate,
     this.favoriteAccountId,
+    required this.accountsIds,
   });
 
   final String uid;
@@ -20,6 +22,7 @@ class User {
   final DateTime? lastPlaidSyncTime;
   final DateTime? lastLoginDate;
   final String? favoriteAccountId;
+  final List<String> accountsIds;
 
   User copyWith({
     String? uid,
@@ -29,6 +32,7 @@ class User {
     DateTime? lastPlaidSyncTime,
     DateTime? lastLoginDate,
     String? favoriteAccountId,
+    List<String>? accountsIds,
   }) {
     return User(
       uid: uid ?? this.uid,
@@ -38,6 +42,7 @@ class User {
       lastPlaidSyncTime: lastPlaidSyncTime ?? this.lastPlaidSyncTime,
       lastLoginDate: lastLoginDate ?? this.lastLoginDate,
       favoriteAccountId: favoriteAccountId ?? this.favoriteAccountId,
+      accountsIds: accountsIds ?? this.accountsIds,
     );
   }
 
@@ -50,6 +55,7 @@ class User {
       'lastPlaidSyncTime': lastPlaidSyncTime,
       'lastLoginDate': lastLoginDate,
       'favoriteAccountId': favoriteAccountId,
+      'accountsIds': accountsIds,
     };
   }
 
@@ -65,6 +71,8 @@ class User {
         ? null
         : (map['lastLoginDate'] as Timestamp).toDate();
     final String? favoriteAccountId = map['favoriteAccountId'];
+    final List<String> accountsIds =
+        map['accountsIds'].map<String>((e) => e.toString()).toList();
 
     return User(
       uid: uid,
@@ -74,6 +82,7 @@ class User {
       plaidRequestId: plaidRequestId,
       lastLoginDate: lastLoginDate,
       favoriteAccountId: favoriteAccountId,
+      accountsIds: accountsIds,
     );
   }
 
@@ -83,7 +92,7 @@ class User {
 
   @override
   String toString() {
-    return 'User(uid: $uid, plaidAccessToken: $plaidAccessToken, plaidItemId: $plaidItemId, plaidRequestId: $plaidRequestId, lastPlaidSyncTime: $lastPlaidSyncTime, lastLoginDate: $lastLoginDate, favoriteAccountId: $favoriteAccountId)';
+    return 'User(uid: $uid, plaidAccessToken: $plaidAccessToken, plaidItemId: $plaidItemId, plaidRequestId: $plaidRequestId, lastPlaidSyncTime: $lastPlaidSyncTime, lastLoginDate: $lastLoginDate, favoriteAccountId: $favoriteAccountId, accountsIds: $accountsIds)';
   }
 
   @override
@@ -97,7 +106,8 @@ class User {
         other.plaidRequestId == plaidRequestId &&
         other.lastPlaidSyncTime == lastPlaidSyncTime &&
         other.lastLoginDate == lastLoginDate &&
-        other.favoriteAccountId == favoriteAccountId;
+        other.favoriteAccountId == favoriteAccountId &&
+        listEquals(other.accountsIds, accountsIds);
   }
 
   @override
@@ -108,6 +118,7 @@ class User {
         plaidRequestId.hashCode ^
         lastPlaidSyncTime.hashCode ^
         lastLoginDate.hashCode ^
-        favoriteAccountId.hashCode;
+        favoriteAccountId.hashCode ^
+        accountsIds.hashCode;
   }
 }

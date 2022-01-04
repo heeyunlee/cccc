@@ -84,4 +84,6 @@ class TransactionDetailScreenModel with ChangeNotifier {
 
     return account.name;
   }
+
+  Stream<Account?> get acocuntStream => database.accountStream(accountId);
 }

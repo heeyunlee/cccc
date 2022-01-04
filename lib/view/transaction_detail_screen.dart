@@ -1,7 +1,5 @@
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/routes/route_names.dart';
-import 'package:cccc/services/firebase_auth.dart';
-import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/theme/text_styles.dart';
 import 'package:cccc/view_models/transaction_detail_screen_model.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
@@ -28,9 +26,6 @@ class TransactionDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final model = ref.watch(transactionDetailScreenModelProvider(transaction));
-    final auth = ref.watch(authProvider);
-    final uid = auth.currentUser!.uid;
-    final database = ref.watch(databaseProvider(uid));
 
     return Scaffold(
       body: CustomScrollView(
@@ -101,7 +96,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                 children: [
                   const SizedBox(height: 16),
                   CustomStreamBuilder<Account?>(
-                    stream: database.accountStream(model.accountId),
+                    stream: model.acocuntStream,
                     builder: (context, data) {
                       return ListTile(
                         contentPadding: const EdgeInsets.symmetric(

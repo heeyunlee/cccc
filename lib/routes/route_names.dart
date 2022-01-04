@@ -4,4 +4,5 @@ class RouteNames {
   static const settings = 'settings';
   static const transactions = 'transactions';
   static const transaction = '/transaction';
+  static const account = '/account';
 }

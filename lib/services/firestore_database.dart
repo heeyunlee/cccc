@@ -62,6 +62,18 @@ class FirestoreDatabase {
     );
   }
 
+  Stream<List<Transaction?>> transactionsForAccountStream(String accountId) {
+    return _service.whereCollectionStream<Transaction>(
+      path: FirestorePath.transactions(uid!),
+      fromBuilder: (json, id) => Transaction.fromMap(json!),
+      toBuilder: (model) => model.toMap(),
+      orderByField: 'date',
+      descending: true,
+      where: 'account_id',
+      isEqualTo: accountId,
+    );
+  }
+
   Stream<List<Account?>> accountsStream() => _service.collectionStream<Account>(
         path: FirestorePath.accounts(uid!),
         fromBuilder: (json, id) => Account.fromMap(json!),

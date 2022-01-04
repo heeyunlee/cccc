@@ -3,8 +3,11 @@
 ## [0.0.6]
 ### New Features & Screens
 - Add `TransactionDetailScreen` and `TransactionDetailScreenModel`
+- Create `HomeScreenModel`
+- Add `AccountDetailScreen` and `AccountDetailScreenModel`
 
 ### Bug Fix & Refactor
+- Restructure functions folder
 
 
 ## [0.0.5] - Jan. 2nd, 2022

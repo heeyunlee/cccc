@@ -1,8 +1,6 @@
-import 'package:cccc/models/enum/account_type.dart';
 import 'package:cccc/models/plaid/account.dart';
-import 'package:cccc/services/firebase_auth.dart';
-import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/theme/text_styles.dart';
+import 'package:cccc/view_models/home_screen_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'custom_stream_builder.dart';
@@ -10,14 +8,15 @@ import 'accounts_expansion_tile.dart';
 import 'add_account_button.dart';
 
 class AccountsCard extends ConsumerWidget {
-  const AccountsCard({Key? key}) : super(key: key);
+  const AccountsCard({
+    Key? key,
+    required this.model,
+  }) : super(key: key);
+
+  final HomeScreenModel model;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(authProvider);
-    final uid = auth.currentUser!.uid;
-    final database = ref.watch(databaseProvider(uid));
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -36,7 +35,7 @@ class AccountsCard extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomStreamBuilder<List<Account?>>(
-                stream: database.accountsStream(),
+                stream: model.accountsStream,
                 builder: (context, data) {
                   if (data.isEmpty) {
                     return Column(
@@ -82,20 +81,16 @@ class AccountsCard extends ConsumerWidget {
                       ],
                     );
                   } else {
-                    final dataByType = <AccountType, List<Account?>>{};
-
-                    for (final account in data) {
-                      (dataByType[account!.type] ??= []).add(account);
-                    }
-
                     return Column(
                       children: [
-                        ...dataByType.entries.map((entry) {
-                          return AccountsExpansionTile(
-                            accountType: entry.key,
-                            accounts: entry.value,
-                          );
-                        }).toList(),
+                        ...model.accountsByType(data).entries.map(
+                          (entry) {
+                            return AccountsExpansionTile(
+                              accountType: entry.key,
+                              accounts: entry.value,
+                            );
+                          },
+                        ).toList(),
                         const Divider(
                           indent: 16,
                           endIndent: 16,

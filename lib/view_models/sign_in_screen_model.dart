@@ -7,7 +7,8 @@ import 'package:firebase_auth/firebase_auth.dart' as fire_auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final signInViewModelProvider = ChangeNotifierProvider<SignInViewModel>(
+final signInViewModelProvider =
+    ChangeNotifierProvider.autoDispose<SignInViewModel>(
   (ref) => SignInViewModel(
     auth: ref.watch(authProvider),
   ),
@@ -30,6 +31,7 @@ class SignInViewModel with ChangeNotifier {
     try {
       isLoading = true;
       notifyListeners();
+
       await signInMethod();
       error = null;
     } on fire_auth.FirebaseException catch (e) {
@@ -43,10 +45,10 @@ class SignInViewModel with ChangeNotifier {
         content: 'Sign in failed. Please try again later.',
         defaultActionText: 'OK',
       );
-
-      isLoading = false;
-      notifyListeners();
     }
+
+    isLoading = false;
+    notifyListeners();
   }
 
   Future<void> signInAnonymously(
@@ -65,6 +67,7 @@ class SignInViewModel with ChangeNotifier {
           plaidAccessToken: null,
           plaidItemId: null,
           plaidRequestId: null,
+          accountsIds: [],
         );
 
         final database = ref.watch(databaseProvider(uid));
@@ -86,13 +89,14 @@ class SignInViewModel with ChangeNotifier {
         final uid = user!.uid;
         final now = DateTime.now();
 
+        final database = ref.watch(databaseProvider(uid));
+        final oldUserData = await database.getUser(uid);
+
         final newUserData = {
           'uid': uid,
           'lastLoginDate': now,
+          'accountsIds': oldUserData?.accountsIds ?? [],
         };
-
-        final database = ref.watch(databaseProvider(uid));
-        final oldUserData = await database.getUser(uid);
 
         if (oldUserData != null) {
           await database.updateUser(
