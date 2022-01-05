@@ -12,13 +12,14 @@ import '../widgets/accounts_card.dart';
 import '../widgets/custom_stream_builder.dart';
 import '../widgets/home_flexible_space_bar.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    logger.d('[Home] building...');
+    logger.d('[Home] building... on Web? $kIsWeb');
 
     final model = ref.watch(homeScreenModelProvider);
 
@@ -28,13 +29,17 @@ class HomeScreen extends ConsumerWidget {
       body: CustomStreamBuilder<User?>(
         stream: model.userStream,
         builder: (context, user) {
-          if (Platform.isIOS) {
+          if (kIsWeb) {
             return _customScrollWidget(context, user!, model);
           } else {
-            return RefreshIndicator(
-              onRefresh: () => model.fetchData(context, user!),
-              child: _customScrollWidget(context, user!, model),
-            );
+            if (Platform.isIOS) {
+              return _customScrollWidget(context, user!, model);
+            } else {
+              return RefreshIndicator(
+                onRefresh: () => model.fetchData(context, user!),
+                child: _customScrollWidget(context, user!, model),
+              );
+            }
           }
         },
       ),
@@ -46,9 +51,11 @@ class HomeScreen extends ConsumerWidget {
     User user,
     HomeScreenModel model,
   ) {
+    final media = MediaQuery.of(context);
+
     return CustomScrollView(
       slivers: [
-        if (Platform.isIOS)
+        if (!kIsWeb && Platform.isIOS)
           CupertinoSliverRefreshControl(
             onRefresh: () => model.fetchData(context, user),
             builder: (context, _, __, ___, ____) {
@@ -56,7 +63,7 @@ class HomeScreen extends ConsumerWidget {
                 highlightColor: Colors.green,
                 baseColor: Colors.lightGreen,
                 child: Container(
-                  height: MediaQuery.of(context).padding.top + 48,
+                  height: media.padding.top + 48,
                   color: Colors.lightGreen,
                 ),
               );
@@ -66,8 +73,8 @@ class HomeScreen extends ConsumerWidget {
           stretch: true,
           pinned: true,
           backgroundColor: Colors.black,
-          expandedHeight: MediaQuery.of(context).size.height * 0.6,
-          stretchTriggerOffset: 120,
+          expandedHeight: media.size.height * 0.6,
+          stretchTriggerOffset: media.size.height * 0.2,
           centerTitle: true,
           title: Text(model.today),
           actions: [

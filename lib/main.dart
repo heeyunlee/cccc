@@ -1,15 +1,28 @@
+import 'package:cccc/services/logger_init.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 
 import 'my_material_app.dart';
+import 'firebase_options.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(
-    const ProviderScope(
-      child: MyApp(),
+    DevicePreview(
+      // enabled: !kReleaseMode,
+      enabled: false,
+      builder: (context) => const ProviderScope(
+        child: MyApp(),
+      ),
     ),
   );
 }
@@ -21,12 +34,18 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     final _initialization = Firebase.initializeApp();
 
+    if (kDebugMode || kProfileMode) {
+      initLogger(Level.debug);
+    }
+
     return FutureBuilder(
       // Initialize FlutterFire:
       future: _initialization,
       builder: (context, snapshot) {
         // Check for errors
         if (snapshot.hasError) {
+          logger.e(snapshot.error);
+
           return Container();
         }
 

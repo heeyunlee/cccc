@@ -5,22 +5,18 @@ import 'package:cccc/theme/custom_theme.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/view/home_screen.dart';
 import 'package:cccc/view/sign_in_screen.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fire_auth;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logger/logger.dart';
 
 class MyMaterialApp extends ConsumerWidget {
   const MyMaterialApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    if (kDebugMode || kProfileMode) {
-      initLogger(Level.debug);
-    }
-
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -37,6 +33,9 @@ class MyMaterialApp extends ConsumerWidget {
     final auth = ref.watch(authProvider);
 
     return MaterialApp(
+      useInheritedMediaQuery: kReleaseMode ? false : true,
+      locale: kReleaseMode ? null : DevicePreview.locale(context),
+      builder: kReleaseMode ? null : DevicePreview.appBuilder,
       title: 'Credit Card Calorie Counter',
       home: CustomStreamBuilder<fire_auth.User?>(
         stream: auth.authStateChanges(),

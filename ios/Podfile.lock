@@ -86,6 +86,8 @@ PODS:
     - Flutter
     - Plaid (= 2.3.1)
   - PromisesObjC (2.0.0)
+  - shared_preferences_ios (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
@@ -95,6 +97,7 @@ DEPENDENCIES:
   - Flutter (from `Flutter`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
   - plaid_flutter (from `.symlinks/plugins/plaid_flutter/ios`)
+  - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
 
 SPEC REPOS:
   trunk:
@@ -128,6 +131,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/google_sign_in/ios"
   plaid_flutter:
     :path: ".symlinks/plugins/plaid_flutter/ios"
+  shared_preferences_ios:
+    :path: ".symlinks/plugins/shared_preferences_ios/ios"
 
 CHECKOUT OPTIONS:
   FirebaseFirestore:
@@ -155,6 +160,7 @@ SPEC CHECKSUMS:
   Plaid: 370b301a884270b5ab796f7a4bd72e4d1cc8be8b
   plaid_flutter: e8c18a8f8eb96d4bdda6a69aac5e2d9c25b10f90
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
+  shared_preferences_ios: aef470a42dc4675a1cdd50e3158b42e3d1232b32
 
 PODFILE CHECKSUM: ee3f50d8399c978283101f15507e3263e6a0eb8d
 

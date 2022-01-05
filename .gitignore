@@ -75,3 +75,4 @@
 
 # Private Keys
 **/lib/constants/keys.dart
+**/lib/firebase_options.dart
