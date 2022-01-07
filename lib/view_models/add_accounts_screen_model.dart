@@ -37,7 +37,7 @@ class AddAccountsScreenModel with ChangeNotifier {
     } catch (e) {
       logger.e(e);
 
-      showAdaptiveAlertDialog(
+      showAdaptiveDialog(
         context,
         title: 'title',
         content: 'content',

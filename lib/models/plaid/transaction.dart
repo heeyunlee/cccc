@@ -2,6 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
+import 'package:cccc/extensions/string_extension.dart';
+import 'package:cccc/models/enum/payment_channel.dart';
+import 'package:cccc/models/transaction_item.dart';
+
 import 'payment_meta.dart';
 import 'personal_finance_category.dart';
 import 'plaid_location.dart';
@@ -37,6 +41,7 @@ class Transaction {
     this.transactionCode,
     this.personalFinanceCategory,
     this.isFoodCategory,
+    this.transactionItems,
   });
 
   /// The ID of a posted transaction's associated pending transaction, where
@@ -150,8 +155,8 @@ class Transaction {
   ///
   /// This field replaces the `transaction_type` field.
   ///
-  /// Possible values: `online`, in store, other
-  final String paymentChannel;
+  /// Possible values: `online`, `in store`, `other`
+  final PaymentChannel paymentChannel;
 
   /// The date that the transaction was authorized. Dates are returned in an
   /// [ISO 8601]('https://en.wikipedia.org/wiki/ISO_8601') ( `YYYY-MM-DD` ).
@@ -227,8 +232,15 @@ class Transaction {
   /// transactions-feedback@plaid.com.
   final PersonalFinanceCategory? personalFinanceCategory;
 
+  /// BELOW ARE CUSTOM CREATED FIELDS FOR TRANSCTION DATA
+
+  /// true if the categoryId is in foodCategory
   final bool? isFoodCategory;
 
+  /// List of [TransactionItem] from either receipt scan or other sources
+  final List<TransactionItem>? transactionItems;
+
+  /// Factory Constructor
   factory Transaction.fromMap(Map<String, dynamic> json) {
     final String? pendingTransactionId = json['pending_transaction_id'];
     final String? categoryId = json['category_id'];
@@ -253,7 +265,8 @@ class Transaction {
     final String transactionId = json['transaction_id'] as String;
     final String? merchantName = json['merchant_name'] as String?;
     final String? checkNumber = json['check_number'] as String?;
-    final String paymentChannel = json['payment_channel'] as String;
+    final PaymentChannel paymentChannel =
+        (json['payment_channel'] as String).toEnum(PaymentChannel.values);
     final DateTime? authorizedDate = json['authorized_date'] == null
         ? null
         : DateTime.parse(json['authorized_date'] as String);
@@ -270,6 +283,12 @@ class Transaction {
             : PersonalFinanceCategory.fromJson(
                 json['personal_finance_category'] as Map<String, dynamic>);
     final bool? isFoodCategory = json['is_food_category'] as bool?;
+    final List<TransactionItem>? transactionItems =
+        (json['transaction_items'] != null)
+            ? (json['transaction_items'] as List)
+                .map((e) => TransactionItem.fromMap(e))
+                .toList()
+            : null;
 
     return Transaction(
       location: location,
@@ -296,6 +315,7 @@ class Transaction {
       transactionCode: transactionCode,
       personalFinanceCategory: personalFinanceCategory,
       isFoodCategory: isFoodCategory,
+      transactionItems: transactionItems,
     );
   }
 
@@ -318,13 +338,14 @@ class Transaction {
       'transaction_id': transactionId,
       'merchant_name': merchantName,
       'check_number': checkNumber,
-      'payment_channel': paymentChannel,
+      'payment_channel': paymentChannel.str,
       'authorized_date': authorizedDate?.toIso8601String(),
       'authorized_datetime': authorizedDatetime?.toIso8601String(),
       'datetime': datetime?.toIso8601String(),
       'transaction_code': transactionCode,
       'personal_finance_category': personalFinanceCategory,
       'is_food_category': isFoodCategory,
+      'transaction_items': transactionItems?.map((e) => e.toMap()).toList(),
     };
   }
 
@@ -346,13 +367,14 @@ class Transaction {
     String? transactionId,
     String? merchantName,
     String? checkNumber,
-    String? paymentChannel,
+    PaymentChannel? paymentChannel,
     DateTime? authorizedDate,
     DateTime? authorizedDatetime,
     DateTime? datetime,
     String? transactionCode,
     PersonalFinanceCategory? personalFinanceCategory,
     bool? isFoodCategory,
+    List<TransactionItem>? transactionItems,
   }) {
     return Transaction(
       pendingTransactionId: pendingTransactionId ?? this.pendingTransactionId,
@@ -381,6 +403,7 @@ class Transaction {
       personalFinanceCategory:
           personalFinanceCategory ?? this.personalFinanceCategory,
       isFoodCategory: isFoodCategory ?? this.isFoodCategory,
+      transactionItems: transactionItems ?? this.transactionItems,
     );
   }
 
@@ -391,7 +414,7 @@ class Transaction {
 
   @override
   String toString() {
-    return 'Transaction(pendingTransactionId: $pendingTransactionId, categoryId: $categoryId, category: $category, location: $location, paymentMeta: $paymentMeta, accountOwner: $accountOwner, name: $name, originalDescription: $originalDescription, accountId: $accountId, amount: $amount, isoCurrencyCode: $isoCurrencyCode, unofficialCurrencyCode: $unofficialCurrencyCode, date: $date, pending: $pending, transactionId: $transactionId, merchantName: $merchantName, checkNumber: $checkNumber, paymentChannel: $paymentChannel, authorizedDate: $authorizedDate, authorizedDatetime: $authorizedDatetime, datetime: $datetime, transactionCode: $transactionCode, personalFinanceCategory: $personalFinanceCategory, isFoodCategory: $isFoodCategory)';
+    return 'Transaction(pendingTransactionId: $pendingTransactionId, categoryId: $categoryId, category: $category, location: $location, paymentMeta: $paymentMeta, accountOwner: $accountOwner, name: $name, originalDescription: $originalDescription, accountId: $accountId, amount: $amount, isoCurrencyCode: $isoCurrencyCode, unofficialCurrencyCode: $unofficialCurrencyCode, date: $date, pending: $pending, transactionId: $transactionId, merchantName: $merchantName, checkNumber: $checkNumber, paymentChannel: $paymentChannel, authorizedDate: $authorizedDate, authorizedDatetime: $authorizedDatetime, datetime: $datetime, transactionCode: $transactionCode, personalFinanceCategory: $personalFinanceCategory, isFoodCategory: $isFoodCategory, transactionItems: $transactionItems)';
   }
 
   @override
@@ -422,7 +445,8 @@ class Transaction {
         other.datetime == datetime &&
         other.transactionCode == transactionCode &&
         other.personalFinanceCategory == personalFinanceCategory &&
-        other.isFoodCategory == isFoodCategory;
+        other.isFoodCategory == isFoodCategory &&
+        listEquals(other.transactionItems, transactionItems);
   }
 
   @override
@@ -450,6 +474,7 @@ class Transaction {
         datetime.hashCode ^
         transactionCode.hashCode ^
         personalFinanceCategory.hashCode ^
-        isFoodCategory.hashCode;
+        isFoodCategory.hashCode ^
+        transactionItems.hashCode;
   }
 }

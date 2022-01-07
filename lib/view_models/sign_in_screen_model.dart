@@ -7,8 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart' as fire_auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final signInViewModelProvider =
-    ChangeNotifierProvider.autoDispose<SignInViewModel>(
+final signInViewModelProvider = ChangeNotifierProvider<SignInViewModel>(
   (ref) => SignInViewModel(
     auth: ref.watch(authProvider),
   ),
@@ -39,7 +38,7 @@ class SignInViewModel with ChangeNotifier {
     } catch (e) {
       logger.e(e);
 
-      showAdaptiveAlertDialog(
+      showAdaptiveDialog(
         context,
         title: 'Sign in failed',
         content: 'Sign in failed. Please try again later.',
@@ -116,7 +115,7 @@ class SignInViewModel with ChangeNotifier {
   }) {
     logger.e(exception);
 
-    showAdaptiveAlertDialog(
+    showAdaptiveDialog(
       context,
       defaultActionText: 'OK',
       title: 'Sign in failed',

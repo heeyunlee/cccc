@@ -9,6 +9,14 @@ extension CapExtension on String {
   }
 
   T toEnum<T>(List<T> values) {
-    return values.firstWhere((e) => this == enumToString(e));
+    if (contains(' ')) {
+      final camel = split(' ').sublist(1).map((e) => e.title).join();
+      final lower = split(' ')[0];
+      final lowerCamel = lower + camel;
+
+      return values.firstWhere((e) => lowerCamel == enumToString(e));
+    } else {
+      return values.firstWhere((e) => this == enumToString(e));
+    }
   }
 }

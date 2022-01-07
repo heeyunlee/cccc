@@ -65,14 +65,14 @@ class HomeScreenModel with ChangeNotifier {
       if (response.statusCode == 404) {
         logger.e(response);
 
-        showAdaptiveAlertDialog(
+        showAdaptiveDialog(
           context,
           title: 'An Error Occurred',
           content: 'An Error Occurred',
           defaultActionText: 'OK',
         );
       }
-      throw showAdaptiveAlertDialog(
+      throw showAdaptiveDialog(
         context,
         title: 'An Error Occurred',
         content: 'An Error Occurred',
@@ -81,7 +81,7 @@ class HomeScreenModel with ChangeNotifier {
     } on SocketException catch (e) {
       logger.e('SocketException: $e');
 
-      showAdaptiveAlertDialog(
+      showAdaptiveDialog(
         context,
         title: 'An Error Occurred',
         content: 'An Error Occurred',
@@ -90,7 +90,7 @@ class HomeScreenModel with ChangeNotifier {
     } catch (e) {
       logger.e(e);
 
-      showAdaptiveAlertDialog(
+      showAdaptiveDialog(
         context,
         title: 'An Error Occurred',
         content: 'An Error Occurred',

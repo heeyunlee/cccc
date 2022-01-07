@@ -1,12 +1,13 @@
 import 'package:cccc/constants/constants.dart';
 import 'package:cccc/theme/text_styles.dart';
+import 'package:cccc/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomButtonTheme {
   static final outline1 = ButtonStyle(
     side: MaterialStateProperty.resolveWith<BorderSide>(
       (Set<MaterialState> states) {
-        if (states.any(interactiveStates.contains)) {
+        if (states.any(kInteractiveStates.contains)) {
           return const BorderSide(color: Colors.grey, width: 1.0);
         }
 
@@ -15,7 +16,7 @@ class CustomButtonTheme {
     ),
     foregroundColor: MaterialStateProperty.resolveWith<Color>(
       (Set<MaterialState> states) {
-        if (states.any(interactiveStates.contains)) {
+        if (states.any(kInteractiveStates.contains)) {
           return Colors.grey;
         }
 
@@ -24,7 +25,53 @@ class CustomButtonTheme {
     ),
     textStyle: MaterialStateProperty.resolveWith<TextStyle>(
       (Set<MaterialState> states) {
-        if (states.any(interactiveStates.contains)) {
+        if (states.any(kInteractiveStates.contains)) {
+          return TextStyles.button1Grey;
+        }
+
+        return TextStyles.button1;
+      },
+    ),
+    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+      const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(
+          Radius.circular(16.0),
+        ),
+      ),
+    ),
+  );
+
+  static final elevated1 = ButtonStyle(
+    // side: MaterialStateProperty.resolveWith<BorderSide>(
+    //   (Set<MaterialState> states) {
+    //     if (states.any(kInteractiveStates.contains)) {
+    //       return const BorderSide(color: Colors.grey, width: 1.0);
+    //     }
+
+    //     return const BorderSide(color: Colors.white, width: 1.0);
+    //   },
+    // ),
+    backgroundColor: MaterialStateProperty.resolveWith<Color>(
+      (Set<MaterialState> states) {
+        if (states.any(kInteractiveStates.contains)) {
+          return ThemeColors.primary600;
+        }
+
+        return ThemeColors.primary500;
+      },
+    ),
+    foregroundColor: MaterialStateProperty.resolveWith<Color>(
+      (Set<MaterialState> states) {
+        if (states.any(kInteractiveStates.contains)) {
+          return Colors.white70;
+        }
+
+        return Colors.white;
+      },
+    ),
+    textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+      (Set<MaterialState> states) {
+        if (states.any(kInteractiveStates.contains)) {
           return TextStyles.button1Grey;
         }
 
@@ -49,7 +96,7 @@ class CustomButtonTheme {
     padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
     textStyle: MaterialStateProperty.resolveWith<TextStyle>(
       (Set<MaterialState> states) {
-        if (states.any(interactiveStates.contains)) {
+        if (states.any(kInteractiveStates.contains)) {
           return TextStyles.button1Grey;
         }
 
@@ -58,7 +105,7 @@ class CustomButtonTheme {
     ),
     foregroundColor: MaterialStateProperty.resolveWith<Color>(
       (Set<MaterialState> states) {
-        if (states.any(interactiveStates.contains)) {
+        if (states.any(kInteractiveStates.contains)) {
           return Colors.grey;
         }
 
@@ -71,8 +118,8 @@ class CustomButtonTheme {
     padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
     textStyle: MaterialStateProperty.resolveWith<TextStyle>(
       (Set<MaterialState> states) {
-        if (states.any(interactiveStates.contains)) {
-          return TextStyles.button1Primary400;
+        if (states.any(kInteractiveStates.contains)) {
+          return TextStyles.button1Primary300;
         }
 
         return TextStyles.button1Primary;
@@ -80,11 +127,11 @@ class CustomButtonTheme {
     ),
     foregroundColor: MaterialStateProperty.resolveWith<Color>(
       (Set<MaterialState> states) {
-        if (states.any(interactiveStates.contains)) {
-          return Colors.blueAccent[400]!;
+        if (states.any(kInteractiveStates.contains)) {
+          return ThemeColors.primary300;
         }
 
-        return Colors.blueAccent;
+        return ThemeColors.primary500;
       },
     ),
   );
@@ -93,7 +140,7 @@ class CustomButtonTheme {
     padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
     textStyle: MaterialStateProperty.resolveWith<TextStyle>(
       (Set<MaterialState> states) {
-        if (states.any(interactiveStates.contains)) {
+        if (states.any(kInteractiveStates.contains)) {
           return TextStyles.button2Grey;
         }
 
@@ -102,7 +149,7 @@ class CustomButtonTheme {
     ),
     foregroundColor: MaterialStateProperty.resolveWith<Color>(
       (Set<MaterialState> states) {
-        if (states.any(interactiveStates.contains)) {
+        if (states.any(kInteractiveStates.contains)) {
           return Colors.grey;
         }
 

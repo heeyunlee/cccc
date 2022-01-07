@@ -1,3 +1,4 @@
+import 'package:cccc/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
 
 class TextStyles {
@@ -175,15 +176,15 @@ class TextStyles {
     fontFamily: defaultFont,
     fontWeight: FontWeight.w500,
     fontSize: 14,
-    color: Colors.blueAccent,
+    color: ThemeColors.primary500,
     letterSpacing: 1.25,
   );
 
-  static final button1Primary400 = TextStyle(
+  static const button1Primary300 = TextStyle(
     fontFamily: defaultFont,
     fontWeight: FontWeight.w500,
     fontSize: 14,
-    color: Colors.blueAccent[300],
+    color: ThemeColors.primary300,
     letterSpacing: 1.25,
   );
 
@@ -216,6 +217,21 @@ class TextStyles {
     fontWeight: FontWeight.w400,
     fontSize: 12,
     color: Colors.white,
+    letterSpacing: 0.4,
+  );
+
+  static const captionBold = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.bold,
+    fontSize: 12,
+    color: Colors.white,
+    letterSpacing: 0.4,
+  );
+
+  static const captionNoColor = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 12,
     letterSpacing: 0.4,
   );
 

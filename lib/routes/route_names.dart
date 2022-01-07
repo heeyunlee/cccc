@@ -5,4 +5,5 @@ class RouteNames {
   static const transactions = 'transactions';
   static const transaction = '/transaction';
   static const account = '/account';
+  static const scanReceipts = '/scanReceipts';
 }

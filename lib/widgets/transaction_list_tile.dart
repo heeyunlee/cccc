@@ -29,7 +29,7 @@ class TransactionListTile extends StatelessWidget {
         child: Align(
           alignment: Alignment.centerLeft,
           child: Icon(
-            Constants.categoryIdToEmoji[transaction.categoryId],
+            kCategoryIdEmojiMap[transaction.categoryId],
             size: 20,
             color: transaction.pending ? Colors.white38 : Colors.white,
           ),

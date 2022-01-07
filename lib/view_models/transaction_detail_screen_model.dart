@@ -5,7 +5,7 @@ import 'package:cccc/services/firestore_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
-import 'package:cccc/extensions/string_extension.dart';
+import 'package:cccc/models/enum/payment_channel.dart';
 
 final transactionDetailScreenModelProvider = ChangeNotifierProvider.autoDispose
     .family<TransactionDetailScreenModel, Transaction>((ref, transaction) {
@@ -60,7 +60,7 @@ class TransactionDetailScreenModel with ChangeNotifier {
   String get paymentChannel {
     final a = transaction.paymentChannel;
 
-    return a.title;
+    return a.str;
   }
 
   String get lat => transaction.location?.lat?.toString() ?? 'Lat';

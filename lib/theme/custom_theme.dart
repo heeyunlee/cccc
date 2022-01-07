@@ -1,4 +1,5 @@
 import 'package:cccc/theme/text_styles.dart';
+import 'package:cccc/theme/theme_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -18,6 +19,25 @@ class CustomTheme {
       button: TextStyles.button1,
       caption: TextStyles.caption,
       overline: TextStyles.overline,
+    ),
+    primaryColor: ThemeColors.primary500,
+    listTileTheme: const ListTileThemeData(
+      iconColor: Colors.white,
+    ),
+    primarySwatch: MaterialColor(
+      ThemeColors.primary500.value,
+      const {
+        50: ThemeColors.primary050,
+        100: ThemeColors.primary100,
+        200: ThemeColors.primary200,
+        300: ThemeColors.primary300,
+        400: ThemeColors.primary400,
+        500: ThemeColors.primary500,
+        600: ThemeColors.primary600,
+        700: ThemeColors.primary700,
+        800: ThemeColors.primary800,
+        900: ThemeColors.primary900,
+      },
     ),
     brightness: Brightness.dark,
     scaffoldBackgroundColor: Colors.black,

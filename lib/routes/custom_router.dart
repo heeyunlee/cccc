@@ -5,6 +5,7 @@ import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/view/account_detail_screen.dart';
 import 'package:cccc/view/add_accounts_screen.dart';
 import 'package:cccc/view/home_screen.dart';
+import 'package:cccc/view/scan_receipts_screen.dart';
 import 'package:cccc/view/settings_screen.dart';
 import 'package:cccc/view/transaction_detail_screen.dart';
 import 'package:cccc/view/transactions_screen.dart';
@@ -59,6 +60,13 @@ class CustomRouter {
           rootNavigator: false,
           maintainState: true,
           builder: (context) => AccountDetailScreen(account: args),
+          settings: settings,
+        );
+      case RouteNames.scanReceipts:
+        return adaptiveRoute(
+          rootNavigator: true,
+          maintainState: true,
+          builder: (context) => const ScanReceiptsScreen(),
           settings: settings,
         );
       default:

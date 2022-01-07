@@ -3,9 +3,18 @@
 ## [0.0.7]
 ### New Features & Screens
 - Add `DevicePreview` library for better debugging over all across platforms
+- Add `Transaction` dummy data
+- Add `TransactionItem` class
+- Add `PaymentChannel` enum
+- Add `TransactionItemType` enum
+- Add color swatch
+- Add `AddReceiptScreen` screen
+- Add `ReceiptWidget`
+- Add `showCustomBottomSheet`
 
 ### Bug Fix & Refactor
 - Build on web works now
+- Modify `toEnum` function
 
 ## [0.0.6]: Jan. 3rd, 2022
 ### New Features & Screens

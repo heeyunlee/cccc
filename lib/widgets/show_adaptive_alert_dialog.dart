@@ -4,7 +4,7 @@ import 'package:cccc/theme/custom_button_theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Future<bool?> showAdaptiveAlertDialog(
+Future<bool?> showAdaptiveDialog(
   BuildContext context, {
   required String title,
   required String content,
