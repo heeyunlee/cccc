@@ -20,8 +20,13 @@ Future<void> showCustomBottomSheet(
   } else {
     showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.zero,
+          bottomRight: Radius.zero,
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
       ),
       builder: (context) {
         final bottomPadding = MediaQuery.of(context).padding.bottom;

@@ -1,6 +1,6 @@
 import 'package:cccc/models/enum/transaction_item_type.dart';
-import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/models/transaction_item.dart';
+import 'package:cccc/models/transaction_items.dart';
 import 'package:cccc/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -8,11 +8,11 @@ import 'package:intl/intl.dart';
 class ReceiptWidget extends StatelessWidget {
   const ReceiptWidget({
     Key? key,
-    required this.transaction,
+    required this.transactionItems,
     this.color,
   }) : super(key: key);
 
-  final Transaction transaction;
+  final TransactionItems transactionItems;
   final Color? color;
 
   @override
@@ -27,9 +27,9 @@ class ReceiptWidget extends StatelessWidget {
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: transaction.transactionItems!.length,
+            itemCount: transactionItems.transactionItems.length,
             itemBuilder: (context, index) {
-              final item = transaction.transactionItems![index];
+              final item = transactionItems.transactionItems[index];
 
               return Padding(
                 padding: const EdgeInsets.symmetric(
@@ -63,7 +63,7 @@ class ReceiptWidget extends StatelessWidget {
                 const Text('Total', style: TextStyles.body1Bold),
                 const Spacer(),
                 Text(
-                  _transactionAmount(transaction),
+                  _transactionAmount(),
                   style: TextStyles.body1Bold,
                 ),
               ],
@@ -106,12 +106,14 @@ class ReceiptWidget extends StatelessWidget {
     return amount;
   }
 
-  String _transactionAmount(Transaction transaction) {
+  String _transactionAmount() {
+    final item = transactionItems.transactionItems[0];
+
     final f = NumberFormat.simpleCurrency(
-      name: transaction.isoCurrencyCode,
+      name: item.isoCurrencyCode,
       decimalDigits: 2,
     );
-    final amount = f.format(transaction.amount);
+    final amount = f.format(item.amount);
 
     return amount;
   }

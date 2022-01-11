@@ -16,7 +16,7 @@ class TransactionItem {
   });
 
   final String transactionItemId;
-  final String transactionId;
+  final String? transactionId;
   final String? receiptId;
   final num amount;
   final TransactionItemType type;
@@ -48,14 +48,16 @@ class TransactionItem {
       'transactionItemId': transactionItemId,
       'transactionId': transactionId,
       'receiptId': receiptId,
+      'name': name,
       'amount': amount,
       'type': enumToString(type),
+      'isoCurrencyCode': isoCurrencyCode,
     };
   }
 
   factory TransactionItem.fromMap(Map<String, dynamic> map) {
     final String transactionItemId = map['transactionItemId'];
-    final String transactionId = map['transactionId'];
+    final String? transactionId = map['transactionId'];
     final String? receiptId = map['receiptId'];
     final String name = map['name'];
     final TransactionItemType type =

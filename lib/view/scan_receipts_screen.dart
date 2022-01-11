@@ -8,8 +8,9 @@ import 'package:cccc/widgets/receipt_widget.dart';
 import 'package:cccc/widgets/show_custom_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:image_picker/image_picker.dart';
 
-class ScanReceiptsScreen extends ConsumerWidget {
+class ScanReceiptsScreen extends ConsumerStatefulWidget {
   const ScanReceiptsScreen({Key? key}) : super(key: key);
 
   static void show(BuildContext context) {
@@ -19,7 +20,12 @@ class ScanReceiptsScreen extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ScanReceiptsScreen> createState() => _ScanReceiptsScreenState();
+}
+
+class _ScanReceiptsScreenState extends ConsumerState<ScanReceiptsScreen> {
+  @override
+  Widget build(BuildContext context) {
     logger.d('[ScanReceiptsScreen] building... ');
 
     final size = MediaQuery.of(context).size;
@@ -28,149 +34,127 @@ class ScanReceiptsScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Scan Receipts'),
       ),
-      body: Column(
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(
+              height: size.width / 1.5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.camera_alt, size: 40),
+                      SizedBox(width: 24),
+                      Icon(Icons.arrow_forward),
+                      SizedBox(width: 24),
+                      Icon(Icons.receipt_long, size: 40),
+                      SizedBox(width: 24),
+                      Icon(Icons.arrow_forward),
+                      SizedBox(width: 24),
+                      Icon(Icons.list, size: 40),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+                  const Padding(
+                    padding: EdgeInsets.all(24),
+                    child: Text(
+                      'Take a picture of receipt. \nTurn it into list of items. \nDo more detailed expense tracking.',
+                      style: TextStyles.body2,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            _buildReceipt(),
+            const SizedBox(height: 48),
+          ],
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: _buildFAB(),
+    );
+  }
+
+  Widget _buildReceipt() {
+    final model = ref.watch(scanReceiptsScreenModelProvider);
+
+    if (model.isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    } else {
+      final theme = Theme.of(context);
+
+      return ReceiptWidget(
+        color: theme.primaryColor.withOpacity(0.24),
+        transactionItems: transactionItemsDummyData,
+      );
+    }
+  }
+
+  Widget _buildFAB() {
+    final model = ref.watch(scanReceiptsScreenModelProvider);
+    final size = MediaQuery.of(context).size;
+
+    return Container(
+      height: 80,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            Colors.transparent,
+            Colors.black,
+          ],
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            height: size.width / 1.5,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.camera_alt, size: 40),
-                    SizedBox(width: 24),
-                    Icon(Icons.arrow_forward),
-                    SizedBox(width: 24),
-                    Icon(Icons.receipt_long, size: 40),
-                    SizedBox(width: 24),
-                    Icon(Icons.arrow_forward),
-                    SizedBox(width: 24),
-                    Icon(Icons.list, size: 40),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                const Padding(
-                  padding: EdgeInsets.all(24),
-                  child: Text(
-                    'Take a picture of receipt. \nTurn it into list of items. \nDo more detailed expense tracking.',
-                    style: TextStyles.body2,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
-              ],
+            height: 48,
+            width: (size.width - 64) / 2,
+            child: OutlinedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              style: CustomButtonTheme.outline1,
+              child: const Text('Cancel'),
             ),
           ),
-          ReceiptWidget(transaction: transactionDummyData),
-          // Card(
-          //   margin: const EdgeInsets.all(24),
-          //   child: Column(
-          //     children: [
-          //       const SizedBox(height: 8),
-          //       ListView.builder(
-          //         shrinkWrap: true,
-          //         padding: EdgeInsets.zero,
-          //         physics: const NeverScrollableScrollPhysics(),
-          //         itemCount: transactionDummyData.transactionItems!.length,
-          //         itemBuilder: (context, index) {
-          //           final item = transactionDummyData.transactionItems![index];
-
-          //           return Padding(
-          //             padding: const EdgeInsets.symmetric(
-          //               horizontal: 16,
-          //               vertical: 8,
-          //             ),
-          //             child: Column(
-          //               children: [
-          //                 if (item.type == TransactionItemType.subtotal)
-          //                   const Padding(
-          //                     padding: EdgeInsets.only(bottom: 12),
-          //                     child: Divider(color: Colors.white24),
-          //                   ),
-          //                 Row(
-          //                   children: [
-          //                     Text(
-          //                       model.itemName(item),
-          //                       style: model.itemTextStyle(item),
-          //                     ),
-          //                     const Spacer(),
-          //                     Text(
-          //                       model.itemAmount(item),
-          //                       style: model.itemTextStyle(item),
-          //                     ),
-          //                   ],
-          //                 ),
-          //               ],
-          //             ),
-          //           );
-          //         },
-          //       ),
-          //       const SizedBox(height: 8),
-          //       Padding(
-          //         padding: const EdgeInsets.symmetric(
-          //           horizontal: 16,
-          //           vertical: 8,
-          //         ),
-          //         child: Row(
-          //           children: [
-          //             const Text('Total', style: TextStyles.body1Bold),
-          //             const Spacer(),
-          //             Text(
-          //               model.transactionAmount(transactionDummyData),
-          //               style: TextStyles.body1Bold,
-          //             ),
-          //           ],
-          //         ),
-          //       ),
-          //       const SizedBox(height: 8),
-          //     ],
-          //   ),
-          // ),
-          const Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: 48,
-                width: (size.width - 64) / 2,
-                child: OutlinedButton(
-                  onPressed: () => Navigator.of(context).pop(),
-                  style: CustomButtonTheme.outline1,
-                  child: const Text('Cancel'),
-                ),
-              ),
-              const SizedBox(width: 16),
-              SizedBox(
-                height: 48,
-                width: (size.width - 64) / 2,
-                child: OutlinedButton(
-                  onPressed: () async {
-                    await showCustomBottomSheet(
-                      context,
-                      title: 'Camera',
-                      subtitle: 'Open it',
-                      firstActionIconData: Icons.camera_alt,
-                      firstActionTitle: 'Camera',
-                      onFirstActionTap: () => ref
-                          .read(scanReceiptsScreenModelProvider)
-                          .openCamera(context),
-                      secondActionIconData: Icons.photo_library,
-                      secondActionTitle: 'Photo Library',
-                      onSecondActionTap: () => ref
-                          .read(scanReceiptsScreenModelProvider)
-                          .openGallery(context),
-                      thirdActionIconData: Icons.close,
-                      thirdActionTitle: 'Close',
-                      onThirdActionTap: () => Navigator.of(context).pop(),
-                    );
-                  },
-                  style: CustomButtonTheme.elevated1,
-                  child: const FittedBox(child: Text('Upload a Receipt')),
-                ),
-              ),
-            ],
+          const SizedBox(width: 16),
+          SizedBox(
+            height: 48,
+            width: (size.width - 64) / 2,
+            child: OutlinedButton(
+              onPressed: () async {
+                await showCustomBottomSheet(
+                  context,
+                  title: 'Camera',
+                  subtitle: 'Open it',
+                  firstActionIconData: Icons.camera_alt,
+                  firstActionTitle: 'Camera',
+                  onFirstActionTap: () => model.pickAndUploadImage(
+                    context,
+                    source: ImageSource.camera,
+                  ),
+                  secondActionIconData: Icons.photo_library,
+                  secondActionTitle: 'Photo Library',
+                  onSecondActionTap: () => model.pickAndUploadImage(
+                    context,
+                    source: ImageSource.gallery,
+                  ),
+                  thirdActionIconData: Icons.close,
+                  thirdActionTitle: 'Close',
+                  onThirdActionTap: () => Navigator.of(context).pop(),
+                );
+              },
+              style: CustomButtonTheme.elevated1,
+              child: const FittedBox(child: Text('Upload a Receipt')),
+            ),
           ),
-          const SizedBox(height: 48),
         ],
       ),
     );

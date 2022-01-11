@@ -1,5 +1,6 @@
 import 'package:cccc/constants/cloud_functions_keys.dart';
 import 'package:cccc/constants/keys.dart';
+import 'package:cccc/models/transaction_items.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/models/user.dart';
 import 'package:flutter/material.dart';
@@ -43,6 +44,18 @@ class CloudFunctions {
     scheme: 'https',
     host: Keys.cloudFunctionHost,
     path: CloudFunctionsKeys.getTransactions,
+  );
+
+  static Uri updateTransactionsWithImage = Uri(
+    scheme: 'https',
+    host: Keys.cloudFunctionHost,
+    path: CloudFunctionsKeys.updateTransactionsWithImage,
+  );
+
+  static Uri processReceiptTextsUri = Uri(
+    scheme: 'https',
+    host: Keys.cloudFunctionHost,
+    path: CloudFunctionsKeys.processReceiptTexts,
   );
 
   Future<String?> getLinkToken() async {
@@ -106,6 +119,57 @@ class CloudFunctions {
       }
     } else {
       await Future.delayed(const Duration(seconds: 2));
+    }
+  }
+
+  Future<void> updateTransactionsData(
+    BuildContext context,
+    String? url,
+  ) async {
+    logger.d('`updateTransactionsData` function called');
+
+    if (url != null) {
+      logger.d('plaidAccessToken exists');
+
+      final response = await http.post(
+        updateTransactionsWithImage,
+        body: json.encode({
+          'url': url,
+        }),
+      );
+      logger.d('Response: ${response.body}');
+    }
+  }
+
+  Future<TransactionItems?> processReceiptTexts(
+    BuildContext context, {
+    String? rawTexts,
+    required Map<String, double> textsWithPosition,
+  }) async {
+    logger.d('`processReceiptTexts` function called');
+
+    if (rawTexts != null) {
+      logger.d('[rawTexts] exists');
+
+      final response = await http.post(
+        processReceiptTextsUri,
+        body: json.encode({
+          'raw_texts': rawTexts,
+          'texts_with_position': textsWithPosition,
+        }),
+      );
+      logger.d('response ${response.body}');
+
+      if (response.statusCode == 200) {
+        final list = TransactionItems.fromJson(response.body);
+        logger.d('Response Body: \n$list');
+
+        return list;
+      } else {
+        logger.d('Response did not return correctly');
+      }
+    } else {
+      logger.d('raw text was null');
     }
   }
 }

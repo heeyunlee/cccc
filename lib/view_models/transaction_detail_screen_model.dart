@@ -52,7 +52,7 @@ class TransactionDetailScreenModel with ChangeNotifier {
 
   bool get isPending => transaction.pending;
 
-  List<String>? get categories => transaction.category;
+  List<String> get categories => transaction.category ?? [];
 
   String get originalDescription =>
       transaction.originalDescription ?? 'No Description';

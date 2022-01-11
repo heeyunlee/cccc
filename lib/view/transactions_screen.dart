@@ -32,8 +32,9 @@ class TransactionsScreen extends StatelessWidget {
         slivers: [
           const SliverAppBar(
             floating: true,
-            pinned: false,
+            pinned: true,
             stretch: true,
+            backgroundColor: Colors.black,
             title: Text('Transactions'),
           ),
           SliverToBoxAdapter(

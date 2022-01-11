@@ -3,6 +3,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
@@ -33,6 +34,29 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final _initialization = Firebase.initializeApp();
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarBrightness: Brightness.dark,
+        systemNavigationBarContrastEnforced: false,
+        systemNavigationBarColor: Colors.transparent,
+        systemNavigationBarDividerColor: Colors.transparent,
+      ),
+    );
+
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.edgeToEdge,
+      overlays: [
+        SystemUiOverlay.top,
+        SystemUiOverlay.bottom,
+      ],
+    );
 
     if (kDebugMode || kProfileMode) {
       initLogger(Level.debug);

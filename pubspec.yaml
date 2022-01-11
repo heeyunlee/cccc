@@ -28,6 +28,8 @@ dependencies:
   cloud_firestore: ^3.1.4
   firebase_auth: ^3.3.3
   google_sign_in: ^5.2.1
+  firebase_storage: ^10.2.4
+  google_ml_kit: ^0.7.3
 
   # State Management
   flutter_riverpod: ^1.0.2

@@ -1,6 +1,13 @@
 # Change Log
 
-## [0.0.7]
+## [0.0.8]
+### New Features & Screens
+- Create `ScanReceiptsScreenModel`
+- Create `FirebaseStorageService` to use Firebase Storage
+- Finish building `process_receipt_texts` function in python
+- Add `google_ml_kit` library to read texts on image
+
+## [0.0.7] Jan. 7th, 2022
 ### New Features & Screens
 - Add `DevicePreview` library for better debugging over all across platforms
 - Add `Transaction` dummy data
@@ -60,7 +67,7 @@
 
 ### Bug Fix & Refactor
 
-
+[0.0.7]: https://github.com/heeyunlee/cccc/commit/e3d944be91e599146db2ef94a64112858fad7760
 [0.0.6]: https://github.com/heeyunlee/cccc/commit/491bbb9d227f6d26649f4f048ceb7b9c00b2c1f6
 [0.0.5]: https://github.com/heeyunlee/cccc/commit/3ce45d9d293c912f3791acaeda7d2c91b860a4cf
 [0.0.4]: https://github.com/heeyunlee/cccc/commit/2da3d6c1eb83d3d82ddaf7442c4e9d20f8e6f7c8

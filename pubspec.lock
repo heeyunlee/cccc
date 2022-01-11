@@ -274,6 +274,27 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.5.3"
+  firebase_storage:
+    dependency: "direct main"
+    description:
+      name: firebase_storage
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "10.2.4"
+  firebase_storage_platform_interface:
+    dependency: transitive
+    description:
+      name: firebase_storage_platform_interface
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.11"
+  firebase_storage_web:
+    dependency: transitive
+    description:
+      name: firebase_storage_web
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.2.5"
   fixnum:
     dependency: transitive
     description:
@@ -357,6 +378,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.0.2"
+  google_ml_kit:
+    dependency: "direct main"
+    description:
+      name: google_ml_kit
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.7.3"
   google_sign_in:
     dependency: "direct main"
     description:
