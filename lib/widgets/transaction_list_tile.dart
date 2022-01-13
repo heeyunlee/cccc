@@ -10,9 +10,13 @@ class TransactionListTile extends StatelessWidget {
   const TransactionListTile({
     Key? key,
     required this.transaction,
+    this.enableOnTap = true,
+    this.onTap,
   }) : super(key: key);
 
   final Transaction transaction;
+  final bool? enableOnTap;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +77,9 @@ class TransactionListTile extends StatelessWidget {
           ),
         ),
       ),
-      onTap: () => TransactionDetailScreen.show(context, transaction),
+      onTap: enableOnTap!
+          ? onTap ?? () => TransactionDetailScreen.show(context, transaction)
+          : null,
     );
   }
 }

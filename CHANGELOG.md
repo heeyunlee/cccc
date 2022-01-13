@@ -2,10 +2,11 @@
 
 ## [0.0.8]
 ### New Features & Screens
-- Create `ScanReceiptsScreenModel`
-- Create `FirebaseStorageService` to use Firebase Storage
-- Finish building `process_receipt_texts` function in python
-- Add `google_ml_kit` library to read texts on image
+- Add a feature to read receipt image and update transaction
+  - Create `ScanReceiptsScreenModel`
+  - Create `FirebaseStorageService` to use Firebase Storage
+  - Finish building `process_receipt_texts` function in python
+  - Add `google_ml_kit` library to read texts on image
 
 ## [0.0.7] Jan. 7th, 2022
 ### New Features & Screens

@@ -149,7 +149,7 @@ class CloudFunctions {
     logger.d('`processReceiptTexts` function called');
 
     if (rawTexts != null) {
-      logger.d('[rawTexts] exists');
+      logger.d('[rawTexts] exists $rawTexts');
 
       final response = await http.post(
         processReceiptTextsUri,

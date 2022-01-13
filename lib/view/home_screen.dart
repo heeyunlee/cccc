@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/models/user.dart';
-import 'package:cccc/view/scan_receipts_screen.dart';
+import 'package:cccc/view/scan_receipt_screen.dart';
 import 'package:cccc/view_models/home_screen_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -80,7 +80,7 @@ class HomeScreen extends ConsumerWidget {
           title: Text(model.today),
           leading: IconButton(
             icon: const Icon(Icons.photo_camera),
-            onPressed: () => ScanReceiptsScreen.show(context),
+            onPressed: () => ScanReceiptScreen.show(context),
           ),
           actions: [
             IconButton(

@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:cccc/models/transaction_item.dart';
 
 class TransactionItems {
-  TransactionItems({
+  const TransactionItems({
     required this.transactionItems,
   });
 

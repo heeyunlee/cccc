@@ -50,6 +50,21 @@ class CustomTheme {
         statusBarBrightness: Brightness.dark,
       ),
     ),
+    bottomSheetTheme: const BottomSheetThemeData(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.zero,
+          bottomRight: Radius.zero,
+          topLeft: Radius.circular(16),
+          topRight: Radius.circular(16),
+        ),
+      ),
+    ),
+    cardTheme: CardTheme(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+    ),
     dividerColor: Colors.transparent,
     dividerTheme: const DividerThemeData(color: Colors.transparent),
   );

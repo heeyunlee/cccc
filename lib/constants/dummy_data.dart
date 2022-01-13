@@ -57,8 +57,8 @@ final transactionDummyData = Transaction(
   ],
 );
 
-final transactionItemsDummyData = TransactionItems(
-  transactionItems: const [
+const transactionItemsDummyData = TransactionItems(
+  transactionItems: [
     TransactionItem(
       transactionItemId: 'transactionItemId',
       transactionId: 'transactionId',

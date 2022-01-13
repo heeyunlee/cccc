@@ -4,8 +4,9 @@
 - [**CCCC: Food-Focused Expense Tracker**](#cccc-food-focused-expense-tracker)
     - [**Table of contents**](#table-of-contents)
   - [**Introduction**](#introduction)
-  - [**Screenshots**](#screenshots)
-    - [Using Plaid Link](#using-plaid-link)
+  - [**Features**](#features)
+    - [Using Plaid Link to link bank accounts and fetch transaction data](#using-plaid-link-to-link-bank-accounts-and-fetch-transaction-data)
+    - [Scan Receipt Image Using Google ML and Python](#scan-receipt-image-using-google-ml-and-python)
   - [**Architecture**](#architecture)
 
 
@@ -19,12 +20,14 @@ This project uses the following technologies:
 - [Plaid API] for connecting with bank accounts and fetching transactions data
 
 
-## **Screenshots**
+## **Features**
 
-### Using Plaid Link
+### Using Plaid Link to link bank accounts and fetch transaction data
    Open Plaid Link         |   Connect Bank Account    |     Fetch Transactions    |
 :-------------------------:|:-------------------------:|:-------------------------:|
 <img src="readme_assets/plaid_ios_1.gif" width="200"/>|<img src="readme_assets/plaid_ios_2.gif" width="200"/>|<img src="readme_assets/plaid_ios_3.gif" width="200"/>
+
+### Scan Receipt Image Using Google ML and Python
 
 
 ## **Architecture**

@@ -7,6 +7,7 @@ from flask import jsonify, make_response
 import pandas as pd
 import numpy as np
 from string import punctuation
+import dateutil.parser as dparser
 
 
 def recognize_text(raw_text: str) -> tuple:
@@ -102,6 +103,7 @@ def find_description(texts_dict: dict, target_prices: list):
         description_clean = re.sub(
             f'[{re.escape(punctuation)}]', '', description_clean)
         description_clean = re.sub(r"\b[0-9]+\b\s*", "", description_clean)
+        description_clean = description_clean.strip()
 
         processsed_descriptions.append(description_clean)
 
@@ -136,7 +138,7 @@ def process_receipt_texts(request: flask.Request):
         transaction_items = []
         receipt_id = str(uuid.uuid4())
 
-        for i in range(len(target_prices) - 1):
+        for i in range(len(target_prices)):
             id = str(uuid.uuid4())
 
             if 'tax' in descriptions[i]:
@@ -144,13 +146,13 @@ def process_receipt_texts(request: flask.Request):
             elif 'tip' in descriptions[i]:
                 type = 'tip'
             else:
-                type = 'subtotal'
+                type = 'item'
 
             item: dict = {
                 'name': descriptions[i],
                 'transactionItemId': id,
                 'amount': target_prices[i],
-                'isoCurrencyCode': 'US',
+                'isoCurrencyCode': 'USD',
                 'receiptId': receipt_id,
                 'type': type,
             }

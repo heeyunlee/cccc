@@ -6,7 +6,7 @@ import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/theme/custom_button_theme.dart';
 import 'package:cccc/theme/text_styles.dart';
 import 'package:cccc/theme/theme_colors.dart';
-import 'package:cccc/view/scan_receipts_screen.dart';
+import 'package:cccc/view/scan_receipt_screen.dart';
 import 'package:cccc/view_models/transaction_detail_screen_model.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/receipt_widget.dart';
@@ -74,8 +74,10 @@ class TransactionDetailScreen extends ConsumerWidget {
                             if (model.isPending)
                               const Padding(
                                 padding: EdgeInsets.symmetric(vertical: 8),
-                                child: Text('Pending',
-                                    style: TextStyles.body1Grey),
+                                child: Text(
+                                  'Pending',
+                                  style: TextStyles.body1Grey,
+                                ),
                               ),
                             const SizedBox(height: 8),
                             Row(
@@ -298,7 +300,10 @@ class TransactionDetailScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
               TextButton(
-                onPressed: () => ScanReceiptsScreen.show(context),
+                onPressed: () => ScanReceiptScreen.show(
+                  context,
+                  transaction: transaction,
+                ),
                 style: CustomButtonTheme.text1Primary,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,

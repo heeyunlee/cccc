@@ -52,6 +52,17 @@ class FirestoreDatabase {
         toBuilder: (model) => model.toMap(),
       );
 
+  Future<void> updateTransaction(
+    Transaction oldData,
+    Map<String, dynamic> newData,
+  ) =>
+      _service.updateData<Transaction>(
+        path: FirestorePath.transaction(uid!, oldData.transactionId),
+        data: newData,
+        fromBuilder: (json, id) => Transaction.fromMap(json!),
+        toBuilder: (model) => model.toMap(),
+      );
+
   Stream<List<Transaction?>> transactionsStream() {
     return _service.collectionStream<Transaction>(
       path: FirestorePath.transactions(uid!),
@@ -71,6 +82,18 @@ class FirestoreDatabase {
       descending: true,
       where: 'account_id',
       isEqualTo: accountId,
+    );
+  }
+
+  Stream<List<Transaction?>> transactionsSpecificAmount(num amount) {
+    return _service.whereCollectionStream<Transaction>(
+      path: FirestorePath.transactions(uid!),
+      fromBuilder: (json, id) => Transaction.fromMap(json!),
+      toBuilder: (model) => model.toMap(),
+      orderByField: 'date',
+      descending: true,
+      where: 'amount',
+      isEqualTo: amount,
     );
   }
 

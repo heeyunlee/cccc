@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cccc/extensions/enum_extension.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:cccc/extensions/string_extension.dart';
@@ -243,19 +244,23 @@ class Transaction {
   /// Factory Constructor
   factory Transaction.fromMap(Map<String, dynamic> json) {
     final String? pendingTransactionId = json['pending_transaction_id'];
+
     final String? categoryId = json['category_id'];
     final List<String>? category =
         (json['category'] as List<dynamic>?)?.map((e) => e as String).toList();
+
     final PlaidLocation? location = json['location'] == null
         ? null
         : PlaidLocation.fromJson(json['location'] as Map<String, dynamic>);
     final PaymentMeta? paymentMeta = json['payment_meta'] == null
         ? null
         : PaymentMeta.fromJson(json['payment_meta'] as Map<String, dynamic>);
+
     final String? accountOwner = json['account_owner'];
     final String name = json['name'] as String;
     final String? originalDescription = json['original_description'] as String?;
     final String accountId = json['account_id'] as String;
+
     final num amount = json['amount'] as num;
     final String? isoCurrencyCode = json['iso_currency_code'] as String?;
     final String? unofficialCurrencyCode =
@@ -267,6 +272,7 @@ class Transaction {
     final String? checkNumber = json['check_number'] as String?;
     final PaymentChannel paymentChannel =
         (json['payment_channel'] as String).toEnum(PaymentChannel.values);
+
     final DateTime? authorizedDate = json['authorized_date'] == null
         ? null
         : DateTime.parse(json['authorized_date'] as String);
@@ -277,6 +283,7 @@ class Transaction {
         ? null
         : DateTime.parse(json['datetime'] as String);
     final String? transactionCode = json['transaction_code'] as String?;
+
     final PersonalFinanceCategory? personalFinanceCategory =
         json['personal_finance_category'] == null
             ? null
@@ -324,8 +331,8 @@ class Transaction {
       'pending_transaction_id': pendingTransactionId,
       'category_id': categoryId,
       'category': category,
-      'location': location,
-      'payment_meta': paymentMeta,
+      'location': location?.toJson(),
+      'payment_meta': paymentMeta?.toJson(),
       'account_owner': accountOwner,
       'name': name,
       'original_description': originalDescription,
@@ -333,17 +340,17 @@ class Transaction {
       'amount': amount,
       'iso_currency_code': isoCurrencyCode,
       'unofficial_currency_code': unofficialCurrencyCode,
-      'date': date,
+      'date': date.toIso8601String(),
       'pending': pending,
       'transaction_id': transactionId,
       'merchant_name': merchantName,
       'check_number': checkNumber,
-      'payment_channel': paymentChannel.str,
+      'payment_channel': enumToString(paymentChannel),
       'authorized_date': authorizedDate?.toIso8601String(),
       'authorized_datetime': authorizedDatetime?.toIso8601String(),
       'datetime': datetime?.toIso8601String(),
       'transaction_code': transactionCode,
-      'personal_finance_category': personalFinanceCategory,
+      'personal_finance_category': personalFinanceCategory?.toJson(),
       'is_food_category': isFoodCategory,
       'transaction_items': transactionItems?.map((e) => e.toMap()).toList(),
     };

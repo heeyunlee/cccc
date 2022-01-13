@@ -17,12 +17,14 @@ class ReceiptWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+
     return Card(
       color: color,
       margin: const EdgeInsets.all(24),
       child: Column(
         children: [
-          const SizedBox(height: 8),
+          const SizedBox(height: 24),
           ListView.builder(
             shrinkWrap: true,
             padding: EdgeInsets.zero,
@@ -44,10 +46,23 @@ class ReceiptWidget extends StatelessWidget {
                         child: Divider(color: Colors.white24),
                       ),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(_itemName(item), style: _itemTextStyle(item)),
-                        const Spacer(),
-                        Text(_itemAmount(item), style: _itemTextStyle(item)),
+                        SizedBox(
+                          width: size.width - 164,
+                          child: Text(
+                            _itemName(item),
+                            maxLines: 1,
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                            style: _itemTextStyle(item),
+                          ),
+                        ),
+                        Text(
+                          _itemAmount(item),
+                          style: _itemTextStyle(item),
+                          maxLines: 1,
+                        ),
                       ],
                     ),
                   ],
@@ -55,21 +70,7 @@ class ReceiptWidget extends StatelessWidget {
               );
             },
           ),
-          const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              children: [
-                const Text('Total', style: TextStyles.body1Bold),
-                const Spacer(),
-                Text(
-                  _transactionAmount(),
-                  style: TextStyles.body1Bold,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 24),
         ],
       ),
     );
@@ -84,7 +85,7 @@ class ReceiptWidget extends StatelessWidget {
       case TransactionItemType.item:
         return TextStyles.caption;
       case TransactionItemType.subtotal:
-        return TextStyles.captionBold;
+        return TextStyles.body1Bold;
       case TransactionItemType.tax:
         return TextStyles.caption;
       case TransactionItemType.tip:
@@ -97,18 +98,6 @@ class ReceiptWidget extends StatelessWidget {
   }
 
   String _itemAmount(TransactionItem item) {
-    final f = NumberFormat.simpleCurrency(
-      name: item.isoCurrencyCode,
-      decimalDigits: 2,
-    );
-    final amount = f.format(item.amount);
-
-    return amount;
-  }
-
-  String _transactionAmount() {
-    final item = transactionItems.transactionItems[0];
-
     final f = NumberFormat.simpleCurrency(
       name: item.isoCurrencyCode,
       decimalDigits: 2,
