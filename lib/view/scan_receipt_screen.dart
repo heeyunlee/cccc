@@ -104,8 +104,10 @@ class ScanReceiptScreen extends StatelessWidget {
             child: OutlinedButton(
               onPressed: () => showModalBottomSheet(
                 context: context,
-                isDismissible: false,
+                // isDismissible: false,
+                // enableDrag: true,
                 isScrollControlled: true,
+
                 builder: (context) => ScanReceiptBottomSheet(
                   transaction: transaction,
                 ),

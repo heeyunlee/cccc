@@ -50,13 +50,11 @@ class CustomTheme {
         statusBarBrightness: Brightness.dark,
       ),
     ),
-    bottomSheetTheme: const BottomSheetThemeData(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          bottomLeft: Radius.zero,
-          bottomRight: Radius.zero,
-          topLeft: Radius.circular(16),
-          topRight: Radius.circular(16),
+    bottomSheetTheme: BottomSheetThemeData(
+      backgroundColor: Colors.grey[850]!,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(16),
         ),
       ),
     ),

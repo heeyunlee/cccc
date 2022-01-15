@@ -2,10 +2,11 @@
 
 ## [0.0.9]
 ### New Features & Screens
-- Update iOS icon
+- Add iOS and Android icon
 
 ### Bug Fix & Refactor
 - Update `process_receipts_texts` google cloud functions
+- Fix RenderFlex overflowed problem with `ScanReceiptBottomSheet` widget
 
 ## [0.0.8]
 ### New Features & Screens

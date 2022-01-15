@@ -1,7 +1,9 @@
-# **CCCC: Food-Focused Expense Tracker**
+<img src="readme_assets/cccc_logo_v1.svg" width="100"/>
+
+# **CCCC: Credit Card Calorie Counter**
 
 ### **Table of contents**
-- [**CCCC: Food-Focused Expense Tracker**](#cccc-food-focused-expense-tracker)
+- [**CCCC: Credit Card Calorie Counter**](#cccc-credit-card-calorie-counter)
     - [**Table of contents**](#table-of-contents)
   - [**Introduction**](#introduction)
   - [**Features**](#features)

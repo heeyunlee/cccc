@@ -1,9 +1,9 @@
 import 'package:cccc/models/enum/scan_receipt_state.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/theme/custom_button_theme.dart';
 import 'package:cccc/view_models/scan_receipt_bottom_sheet_model.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
+import 'package:cccc/widgets/floating_outlined_button.dart';
 import 'package:cccc/widgets/transaction_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -78,21 +78,12 @@ class MatchTransactionWithItemsWidget extends ConsumerWidget {
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: SizedBox(
-                      height: 48,
-                      width: double.maxFinite,
-                      child: OutlinedButton(
-                        onPressed: () => ref
-                            .read(scanReceiptBottomSheetModelProvider)
-                            .toggleState(ScanReceiptState.start),
-                        style: CustomButtonTheme.outline1,
-                        child: const Text('Scan different receipt'),
-                      ),
-                    ),
+                  FloatingOutlinedButton(
+                    buttonName: 'Scan Different Receipt',
+                    onPressed: () => ref
+                        .read(scanReceiptBottomSheetModelProvider)
+                        .toggleState(ScanReceiptState.start),
                   ),
-                  SizedBox(height: padding.bottom),
                 ],
               );
             }
