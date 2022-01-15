@@ -1,6 +1,5 @@
 import 'package:cccc/models/enum/payment_channel.dart';
 import 'package:cccc/models/plaid/account.dart';
-import 'package:cccc/models/transaction_items.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/theme/custom_button_theme.dart';
@@ -275,9 +274,7 @@ class TransactionDetailScreen extends ConsumerWidget {
 
     if (transaction.transactionItems != null) {
       return ReceiptWidget(
-        transactionItems: TransactionItems(
-          transactionItems: transaction.transactionItems!,
-        ),
+        transactionItems: transaction.transactionItems!,
         color: ThemeColors.primary500.withOpacity(0.24),
       );
     } else {

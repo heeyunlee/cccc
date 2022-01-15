@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.0.9]
+### New Features & Screens
+- Update iOS icon
+
+### Bug Fix & Refactor
+- Update `process_receipts_texts` google cloud functions
+
 ## [0.0.8]
 ### New Features & Screens
 - Add a feature to read receipt image and update transaction
@@ -68,6 +75,7 @@
 
 ### Bug Fix & Refactor
 
+[0.0.8]: https://github.com/heeyunlee/cccc/commit/424609ca970fcc04657240673cd7a3ddf38c7bdc
 [0.0.7]: https://github.com/heeyunlee/cccc/commit/e3d944be91e599146db2ef94a64112858fad7760
 [0.0.6]: https://github.com/heeyunlee/cccc/commit/491bbb9d227f6d26649f4f048ceb7b9c00b2c1f6
 [0.0.5]: https://github.com/heeyunlee/cccc/commit/3ce45d9d293c912f3791acaeda7d2c91b860a4cf

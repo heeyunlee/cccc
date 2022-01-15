@@ -33,8 +33,10 @@ class CheckItemsWidget extends ConsumerWidget {
         ),
         const Spacer(),
         ReceiptWidget(
+          date: model.receiptResponse!.date,
+          name: model.receiptResponse!.name,
           color: theme.primaryColor.withOpacity(0.24),
-          transactionItems: model.transactionItems!,
+          transactionItems: model.receiptResponse!.transactionItems!,
         ),
         const Spacer(),
         const Padding(

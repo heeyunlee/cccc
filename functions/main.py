@@ -2,4 +2,4 @@ from source.create_link_token import create_link_token
 from source.exchange_public_token import exchange_public_token
 from source.get_transactions import get_transactions
 from source.update_transactions_is_food import update_transactions_is_food
-from source.process_receipts_texts import process_receipt_texts
+from source.process_receipts_texts_v2 import process_receipt_texts

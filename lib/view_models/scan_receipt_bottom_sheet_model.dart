@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:cccc/models/enum/scan_receipt_state.dart';
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/models/transaction_items.dart';
+import 'package:cccc/models/receipt_response.dart';
 import 'package:cccc/services/cloud_functions.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
@@ -13,6 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cccc/extensions/text_element_extension.dart';
 
 final scanReceiptBottomSheetModelProvider = ChangeNotifierProvider.autoDispose(
   (ref) {
@@ -42,13 +43,13 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
   final FirestoreDatabase database;
 
   File? get image => _image;
-  TransactionItems? get transactionItems => _transactionItems;
+  ReceiptResponse? get receiptResponse => _receiptResponse;
   Transaction? get transaction => _transaction;
   ScanReceiptState get state => _state;
   Stream<List<Transaction?>>? get transactionsStream => _transactionsStream;
 
   File? _image;
-  TransactionItems? _transactionItems;
+  ReceiptResponse? _receiptResponse;
   Transaction? _transaction;
   ScanReceiptState _state = ScanReceiptState.start;
   Stream<List<Transaction?>>? _transactionsStream;
@@ -58,15 +59,26 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Map<String, double> _rawTextsToMap(RecognisedText texts) {
+  List<Map<String, dynamic>> _getTextsWithOffsets(RecognisedText texts) {
+    logger.d('`_getTextsWithOffsets` function called');
+
     final nestedLines = texts.blocks.map((e) => e.lines).toList();
     final textLines = nestedLines.expand((e) => e).toList();
+    final textElements = textLines.expand((e) => e.elements).toList();
+    final textElementsMap = textElements.map((e) => e.toMap).toList();
 
-    final textsWithPosition = {
-      for (final line in textLines) line.text: line.rect.bottom,
-    };
+    // print(textElements.map((e) => e.toString()));
 
-    return textsWithPosition;
+    // final textsWithOffsets = {
+    //   for (final element in textElements)
+    //     element.text: element.cornerPoints.map((e) => [e.dx, e.dy]).toList(),
+    // };
+
+    // logger.d('Texts With Offset: $textsWithOffsets');
+
+    logger.d('Text Elements = ${textElementsMap.toString()}');
+
+    return textElementsMap;
   }
 
   Future<void> chooseImage(
@@ -94,7 +106,7 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
     }
   }
 
-  Future<TransactionItems?> _extractTexts(BuildContext context) async {
+  Future<ReceiptResponse?> _extractTexts(BuildContext context) async {
     try {
       toggleState(ScanReceiptState.loading);
 
@@ -104,38 +116,46 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
         final textDetector = GoogleMlKit.vision.textDetector();
         final inputImage = InputImage.fromFile(_image!);
         final recognisedText = await textDetector.processImage(inputImage);
+        logger.d('[recognisedText] function ended');
 
-        final items = await functions.processReceiptTexts(
+        final textsWithOffsets = _getTextsWithOffsets(recognisedText);
+
+        final response = await functions.processReceiptTexts(
           context,
-          rawTexts: recognisedText.text,
-          textsWithPosition: _rawTextsToMap(recognisedText),
+          rawTexts: recognisedText.text.replaceAll('\n', ', '),
+          textsWithOffsets: textsWithOffsets,
         );
 
-        return items;
+        logger.d('Items $response');
+
+        return response;
       } else {
-        showAdaptiveDialog(
-          context,
-          title: 'An Error Occurred',
-          content: 'Image file was not added properly. Please try again.',
-          defaultActionText: 'OK',
-        );
+        toggleState(ScanReceiptState.error);
+
+        // showAdaptiveDialog(
+        //   context,
+        //   title: 'An Error Occurred',
+        //   content: 'Image file was not added properly. Please try again.',
+        //   defaultActionText: 'OK',
+        // );
       }
     } catch (e) {
-      showAdaptiveDialog(
-        context,
-        title: 'Something went wrong',
-        content: e.toString(),
-        defaultActionText: 'OK',
-      );
+      toggleState(ScanReceiptState.error);
+
+      // showAdaptiveDialog(
+      //   context,
+      //   title: 'Something went wrong',
+      //   content: e.toString(),
+      //   defaultActionText: 'OK',
+      // );
     }
   }
 
   Future<void> getTransactionitems(BuildContext context) async {
-    final items = await _extractTexts(context);
+    final response = await _extractTexts(context);
 
-    if (items != null) {
-      _transactionItems = items;
-      logger.d('Items $items');
+    if (response != null) {
+      _receiptResponse = response;
 
       toggleState(ScanReceiptState.checkTexts);
     } else {
@@ -149,8 +169,8 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
     BuildContext context, {
     Transaction? transaction,
   }) async {
-    final index = _transactionItems!.transactionItems.length - 1;
-    final maxItem = _transactionItems!.transactionItems[index];
+    final index = _receiptResponse!.transactionItems!.length - 1;
+    final maxItem = _receiptResponse!.transactionItems![index];
     final maxAmount = maxItem.amount;
 
     if (transaction != null) {
@@ -192,7 +212,7 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
   Future<void> _updateTransationData(BuildContext context) async {
     if (_transaction != null) {
       final updatedTransaction = _transaction!
-          .copyWith(transactionItems: _transactionItems!.transactionItems)
+          .copyWith(transactionItems: _receiptResponse!.transactionItems)
           .toMap();
 
       // Update Transactions

@@ -1,6 +1,6 @@
 import 'package:cccc/constants/cloud_functions_keys.dart';
 import 'package:cccc/constants/keys.dart';
-import 'package:cccc/models/transaction_items.dart';
+import 'package:cccc/models/receipt_response.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/models/user.dart';
 import 'package:flutter/material.dart';
@@ -141,30 +141,32 @@ class CloudFunctions {
     }
   }
 
-  Future<TransactionItems?> processReceiptTexts(
+  Future<ReceiptResponse?> processReceiptTexts(
     BuildContext context, {
     String? rawTexts,
-    required Map<String, double> textsWithPosition,
+    required List<Map<String, dynamic>> textsWithOffsets,
   }) async {
     logger.d('`processReceiptTexts` function called');
 
     if (rawTexts != null) {
-      logger.d('[rawTexts] exists $rawTexts');
+      logger.d('[rawTexts] exists \n$rawTexts');
 
       final response = await http.post(
         processReceiptTextsUri,
         body: json.encode({
           'raw_texts': rawTexts,
-          'texts_with_position': textsWithPosition,
+          'texts_with_offsets': textsWithOffsets,
         }),
       );
-      logger.d('response ${response.body}');
+      logger.d('Response Body1 : ${response.body}');
 
       if (response.statusCode == 200) {
-        final list = TransactionItems.fromJson(response.body);
-        logger.d('Response Body: \n$list');
+        final a = ReceiptResponse.fromJson(response.body);
+        // final date = response.body;
+        // final list = TransactionItems.fromJson(response.body);
+        logger.d('Response Body2 : \n$a');
 
-        return list;
+        return a;
       } else {
         logger.d('Response did not return correctly');
       }

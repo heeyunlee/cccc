@@ -5,7 +5,7 @@
     - [**Table of contents**](#table-of-contents)
   - [**Introduction**](#introduction)
   - [**Features**](#features)
-    - [Using Plaid Link to link bank accounts and fetch transaction data](#using-plaid-link-to-link-bank-accounts-and-fetch-transaction-data)
+    - [Link Bank Accounts and Fetch Transactions Data](#link-bank-accounts-and-fetch-transactions-data)
     - [Scan Receipt Image Using Google ML and Python](#scan-receipt-image-using-google-ml-and-python)
   - [**Architecture**](#architecture)
 
@@ -22,12 +22,18 @@ This project uses the following technologies:
 
 ## **Features**
 
-### Using Plaid Link to link bank accounts and fetch transaction data
+### Link Bank Accounts and Fetch Transactions Data
    Open Plaid Link         |   Connect Bank Account    |     Fetch Transactions    |
 :-------------------------:|:-------------------------:|:-------------------------:|
 <img src="readme_assets/plaid_ios_1.gif" width="200"/>|<img src="readme_assets/plaid_ios_2.gif" width="200"/>|<img src="readme_assets/plaid_ios_3.gif" width="200"/>
 
+For this feature, I used 
+
 ### Scan Receipt Image Using Google ML and Python
+
+   Android                 |           iOS           |
+:-------------------------:|:-----------------------:|
+<img src="readme_assets/scan_receipt_android.gif" width="200"/>|<img src="readme_assets/scan_receipt_ios.gif" width="200"/>
 
 
 ## **Architecture**

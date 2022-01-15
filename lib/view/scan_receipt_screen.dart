@@ -59,7 +59,7 @@ class ScanReceiptScreen extends StatelessWidget {
           ),
           ReceiptWidget(
             color: Theme.of(context).primaryColor.withOpacity(0.24),
-            transactionItems: transactionItemsDummyData,
+            transactionItems: transactionDummyData.transactionItems!,
           ),
           const SizedBox(height: 48),
         ],

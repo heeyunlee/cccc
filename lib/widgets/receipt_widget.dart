@@ -1,6 +1,5 @@
 import 'package:cccc/models/enum/transaction_item_type.dart';
 import 'package:cccc/models/transaction_item.dart';
-import 'package:cccc/models/transaction_items.dart';
 import 'package:cccc/theme/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -9,10 +8,14 @@ class ReceiptWidget extends StatelessWidget {
   const ReceiptWidget({
     Key? key,
     required this.transactionItems,
+    this.date,
+    this.name,
     this.color,
   }) : super(key: key);
 
-  final TransactionItems transactionItems;
+  final List<TransactionItem> transactionItems;
+  final DateTime? date;
+  final String? name;
   final Color? color;
 
   @override
@@ -25,13 +28,18 @@ class ReceiptWidget extends StatelessWidget {
       child: Column(
         children: [
           const SizedBox(height: 24),
+          if (name != null) Text(name!),
+          if (name != null) const SizedBox(height: 16),
+          if (date != null)
+            Text(DateFormat.yMMMd().format(date!), style: TextStyles.caption),
+          if (date != null) const SizedBox(height: 24),
           ListView.builder(
             shrinkWrap: true,
             padding: EdgeInsets.zero,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: transactionItems.transactionItems.length,
+            itemCount: transactionItems.length,
             itemBuilder: (context, index) {
-              final item = transactionItems.transactionItems[index];
+              final item = transactionItems[index];
 
               return Padding(
                 padding: const EdgeInsets.symmetric(
