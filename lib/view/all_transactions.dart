@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 
 import 'package:cccc/routes/route_names.dart';
 
-class TransactionsScreen extends StatelessWidget {
-  const TransactionsScreen({
+class AllTransactions extends StatelessWidget {
+  const AllTransactions({
     Key? key,
     required this.transactions,
   }) : super(key: key);

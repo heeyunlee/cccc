@@ -2,14 +2,14 @@ import 'package:cccc/constants/dummy_data.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/theme/custom_button_theme.dart';
-import 'package:cccc/theme/text_styles.dart';
+import 'package:cccc/styles/button_styles.dart';
+import 'package:cccc/styles/text_styles.dart';
 import 'package:cccc/widgets/receipt_widget.dart';
-import 'package:cccc/view/scan_receipt_bottom_sheet.dart';
+import 'package:cccc/widgets/scan_receipt/scan_receipt_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
-class ScanReceiptScreen extends StatelessWidget {
-  const ScanReceiptScreen({
+class ScanReceipt extends StatelessWidget {
+  const ScanReceipt({
     Key? key,
     required this.transaction,
   }) : super(key: key);
@@ -72,52 +72,36 @@ class ScanReceiptScreen extends StatelessWidget {
   Widget _buildFAB(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Container(
-      height: 80,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.transparent,
-            Colors.black,
-          ],
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: 48,
+          width: (size.width - 64) / 2,
+          child: OutlinedButton(
+            onPressed: () => Navigator.of(context).pop(),
+            style: ButtonStyles.outline1,
+            child: const Text('Cancel'),
+          ),
         ),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 48,
-            width: (size.width - 64) / 2,
-            child: OutlinedButton(
-              onPressed: () => Navigator.of(context).pop(),
-              style: CustomButtonTheme.outline1,
-              child: const Text('Cancel'),
-            ),
-          ),
-          const SizedBox(width: 16),
-          SizedBox(
-            height: 48,
-            width: (size.width - 64) / 2,
-            child: OutlinedButton(
-              onPressed: () => showModalBottomSheet(
-                context: context,
-                // isDismissible: false,
-                // enableDrag: true,
-                isScrollControlled: true,
-
-                builder: (context) => ScanReceiptBottomSheet(
-                  transaction: transaction,
-                ),
+        const SizedBox(width: 16, height: 80),
+        SizedBox(
+          height: 48,
+          width: (size.width - 64) / 2,
+          child: OutlinedButton(
+            onPressed: () => showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (context) => ScanReceiptBottomSheet(
+                transaction: transaction,
               ),
-              style: CustomButtonTheme.elevated1,
-              child: const FittedBox(child: Text('Upload a Receipt')),
             ),
+            style: ButtonStyles.elevated1,
+            child: const FittedBox(child: Text('Upload a Receipt')),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:cccc/theme/custom_button_theme.dart';
+import 'package:cccc/styles/button_styles.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -23,12 +23,12 @@ Future<bool?> showAdaptiveDialog(
         actions: <Widget>[
           if (cancelAcitionText != null)
             TextButton(
-              style: CustomButtonTheme.text1,
+              style: ButtonStyles.text1,
               onPressed: () => Navigator.of(context).pop(false),
               child: Text(cancelAcitionText),
             ),
           TextButton(
-            style: CustomButtonTheme.text1Primary,
+            style: ButtonStyles.text1Primary,
             onPressed: () => Navigator.of(context).pop(true),
             child: Text(defaultActionText),
           ),

@@ -1,7 +1,7 @@
 import 'package:cccc/constants/constants.dart';
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/theme/text_styles.dart';
-import 'package:cccc/view/transaction_detail_screen.dart';
+import 'package:cccc/styles/text_styles.dart';
+import 'package:cccc/view/transaction_detail.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -78,7 +78,7 @@ class TransactionListTile extends StatelessWidget {
         ),
       ),
       onTap: enableOnTap!
-          ? onTap ?? () => TransactionDetailScreen.show(context, transaction)
+          ? onTap ?? () => TransactionDetail.show(context, transaction)
           : null,
     );
   }

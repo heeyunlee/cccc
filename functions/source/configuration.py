@@ -9,10 +9,10 @@ data = json.load(f)
 f.close()
 
 configuration = plaid.Configuration(
-    host=plaid.Environment.Sandbox,
+    host=plaid.Environment.Development,
     api_key={
         'clientId': data['client_id'],
-        'secret': data['secret_sandbox'],
+        'secret': data['secret_development'],
     }
 )
 

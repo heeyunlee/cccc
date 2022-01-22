@@ -1,4 +1,4 @@
-import 'package:cccc/theme/theme_colors.dart';
+import 'package:cccc/styles/theme_colors.dart';
 import 'package:flutter/material.dart';
 
 class TextStyles {

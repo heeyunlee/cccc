@@ -2,21 +2,21 @@ import 'dart:io';
 
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/models/user.dart';
-import 'package:cccc/view/scan_receipt_screen.dart';
+import 'package:cccc/view/scan_receipt.dart';
 import 'package:cccc/view_models/home_screen_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cccc/widgets/recent_transactions_card.dart';
-import 'package:cccc/view/settings_screen.dart';
+import 'package:cccc/view/settings.dart';
 import '../widgets/accounts_card.dart';
 import '../widgets/custom_stream_builder.dart';
 import '../widgets/home_flexible_space_bar.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
-class HomeScreen extends ConsumerWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+class Home extends ConsumerWidget {
+  const Home({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -28,6 +28,9 @@ class HomeScreen extends ConsumerWidget {
       extendBody: true,
       extendBodyBehindAppBar: true,
       body: CustomStreamBuilder<User?>(
+        // TODO: add errorWidget and loadingWidget
+        errorWidget: Container(),
+        loadingWidget: Container(),
         stream: model.userStream,
         builder: (context, user) {
           if (kIsWeb) {
@@ -80,11 +83,11 @@ class HomeScreen extends ConsumerWidget {
           title: Text(model.today),
           leading: IconButton(
             icon: const Icon(Icons.photo_camera),
-            onPressed: () => ScanReceiptScreen.show(context),
+            onPressed: () => ScanReceipt.show(context),
           ),
           actions: [
             IconButton(
-              onPressed: () => SettingsScreen.show(context),
+              onPressed: () => Settings.show(context),
               icon: const Icon(Icons.settings),
             ),
             const SizedBox(width: 8),
@@ -100,7 +103,7 @@ class HomeScreen extends ConsumerWidget {
               AccountsCard(model: model),
               const SizedBox(height: 16),
               RecentTransactionsCard(model: model),
-              const SizedBox(height: 32),
+              SizedBox(height: 32 + MediaQuery.of(context).padding.bottom),
             ],
           ),
         ),

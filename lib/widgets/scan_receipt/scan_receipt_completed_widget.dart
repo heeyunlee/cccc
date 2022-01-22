@@ -1,4 +1,4 @@
-import 'package:cccc/theme/custom_button_theme.dart';
+import 'package:cccc/styles/button_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -19,7 +19,7 @@ class ScanReceiptCompletedWidget extends ConsumerWidget {
             height: 48,
             width: double.maxFinite,
             child: OutlinedButton(
-              style: CustomButtonTheme.outline1,
+              style: ButtonStyles.outline1,
               onPressed: () => Navigator.of(context).pop(),
               child: const Text('Comlete!'),
             ),

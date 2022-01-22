@@ -1,6 +1,12 @@
 # Change Log
 
-## [0.0.9]
+## [0.0.10]
+### New Features & Screens
+
+### Bug Fix & Refactor
+- Refactor some code
+
+## [0.0.9] Jan 15th, 2022
 ### New Features & Screens
 - Add iOS and Android icon
 
@@ -8,7 +14,7 @@
 - Update `process_receipts_texts` google cloud functions
 - Fix RenderFlex overflowed problem with `ScanReceiptBottomSheet` widget
 
-## [0.0.8]
+## [0.0.8] Jan. 12th, 2022
 ### New Features & Screens
 - Add a feature to read receipt image and update transaction
   - Create `ScanReceiptsScreenModel`
@@ -76,6 +82,8 @@
 
 ### Bug Fix & Refactor
 
+[0.0.10]: https://github.com/heeyunlee/cccc
+[0.0.9]: https://github.com/heeyunlee/cccc/commit/168154fd54fee57a68a75c2b2339068c9a5cf21f
 [0.0.8]: https://github.com/heeyunlee/cccc/commit/424609ca970fcc04657240673cd7a3ddf38c7bdc
 [0.0.7]: https://github.com/heeyunlee/cccc/commit/e3d944be91e599146db2ef94a64112858fad7760
 [0.0.6]: https://github.com/heeyunlee/cccc/commit/491bbb9d227f6d26649f4f048ceb7b9c00b2c1f6

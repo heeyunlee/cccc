@@ -1,17 +1,18 @@
 import 'package:cccc/models/enum/scan_receipt_state.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/theme/text_styles.dart';
+import 'package:cccc/styles/text_styles.dart';
 import 'package:cccc/view_models/scan_receipt_bottom_sheet_model.dart';
+import 'package:cccc/widgets/bottom_sheet_card.dart';
 import 'package:cccc/widgets/floating_outlined_button.dart';
 import 'package:cccc/widgets/scan_receipt/check_receipt_image_widget.dart';
 import 'package:cccc/widgets/scan_receipt/scan_receipt_completed_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../widgets/scan_receipt/choose_image_to_scan_widget.dart';
-import '../widgets/scan_receipt/match_transaction_with_items_widget.dart';
-import '../widgets/scan_receipt/check_items_widget.dart';
+import 'choose_image_to_scan_widget.dart';
+import 'match_transaction_with_items_widget.dart';
+import 'check_items_widget.dart';
 
 class ScanReceiptBottomSheet extends ConsumerStatefulWidget {
   const ScanReceiptBottomSheet({
@@ -36,15 +37,17 @@ class _ScanReceiptBottomSheetState
       duration: const Duration(milliseconds: 300),
       height: _getHeight(),
       alignment: Alignment.topCenter,
-      child: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 300),
-            child: _buildChild(),
-          ),
-          _buildButton(),
-        ],
+      child: BottomSheetCard(
+        child: Stack(
+          alignment: Alignment.bottomCenter,
+          children: [
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 300),
+              child: _buildChild(),
+            ),
+            _buildButton(),
+          ],
+        ),
       ),
     );
   }

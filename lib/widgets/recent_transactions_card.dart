@@ -1,13 +1,13 @@
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/theme/custom_button_theme.dart';
-import 'package:cccc/theme/text_styles.dart';
+import 'package:cccc/styles/button_styles.dart';
+import 'package:cccc/styles/text_styles.dart';
 import 'package:cccc/view_models/home_screen_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'custom_stream_builder.dart';
 import 'transaction_list_tile.dart';
-import '../view/transactions_screen.dart';
+import '../view/all_transactions.dart';
 
 class RecentTransactionsCard extends ConsumerWidget {
   const RecentTransactionsCard({
@@ -20,8 +20,11 @@ class RecentTransactionsCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomStreamBuilder<List<Transaction?>>(
+      // TODO: add errorWidget and loadingWidget
+      errorWidget: Container(),
+      loadingWidget: Container(),
       stream: model.transactionsStream,
-      builder: (context, data) {
+      builder: (context, transactions) {
         return Column(
           children: [
             Padding(
@@ -34,11 +37,11 @@ class RecentTransactionsCard extends ConsumerWidget {
                   const Text('Transactions', style: TextStyles.h6),
                   const Spacer(),
                   TextButton(
-                    onPressed: () => TransactionsScreen.show(
+                    onPressed: () => AllTransactions.show(
                       context,
-                      transactions: data,
+                      transactions: transactions ?? [],
                     ),
-                    style: CustomButtonTheme.text2,
+                    style: ButtonStyles.text2,
                     child: const Text('VIEW ALL'),
                   ),
                 ],
@@ -53,7 +56,7 @@ class RecentTransactionsCard extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 margin: EdgeInsets.zero,
-                child: (data.isEmpty)
+                child: (transactions == null || transactions.isEmpty)
                     ? const SizedBox(
                         height: 96 * 3,
                         child: Center(
@@ -67,10 +70,11 @@ class RecentTransactionsCard extends ConsumerWidget {
                         padding: EdgeInsets.zero,
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: data.length > 5 ? 5 : data.length,
+                        itemCount:
+                            transactions.length > 5 ? 5 : transactions.length,
                         itemBuilder: (context, index) {
                           return TransactionListTile(
-                            transaction: data[index]!,
+                            transaction: transactions[index]!,
                           );
                         },
                       ),

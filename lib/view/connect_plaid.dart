@@ -4,10 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
 
 import 'package:cccc/routes/route_names.dart';
-import 'package:cccc/theme/custom_button_theme.dart';
+import 'package:cccc/styles/button_styles.dart';
 
-class AddAccountsScreen extends ConsumerStatefulWidget {
-  const AddAccountsScreen({Key? key}) : super(key: key);
+class ConnectPlaid extends ConsumerStatefulWidget {
+  const ConnectPlaid({Key? key}) : super(key: key);
 
   static void show(BuildContext context) {
     Navigator.of(context).pushNamed(
@@ -16,10 +16,10 @@ class AddAccountsScreen extends ConsumerStatefulWidget {
   }
 
   @override
-  _AddAccountsScreenState createState() => _AddAccountsScreenState();
+  _ConnectPlaidState createState() => _ConnectPlaidState();
 }
 
-class _AddAccountsScreenState extends ConsumerState<AddAccountsScreen> {
+class _ConnectPlaidState extends ConsumerState<ConnectPlaid> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -62,7 +62,7 @@ class _AddAccountsScreenState extends ConsumerState<AddAccountsScreen> {
             width: size.width - 48,
             child: OutlinedButton(
               onPressed: () => model.openLink(context),
-              style: CustomButtonTheme.outline1,
+              style: ButtonStyles.outline1,
               child: model.isLoading
                   ? const CircularProgressIndicator(
                       strokeWidth: 1.5,

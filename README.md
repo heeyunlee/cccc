@@ -8,7 +8,7 @@
   - [**Introduction**](#introduction)
   - [**Features**](#features)
     - [Link Bank Accounts and Fetch Transactions Data](#link-bank-accounts-and-fetch-transactions-data)
-    - [Scan Receipt Image Using Google ML and Python](#scan-receipt-image-using-google-ml-and-python)
+    - [Scan Receipt Image Using Google ML Kit, Google Cloud Functions with Python, and ImagePicker](#scan-receipt-image-using-google-ml-kit-google-cloud-functions-with-python-and-imagepicker)
   - [**Architecture**](#architecture)
 
 
@@ -31,7 +31,7 @@ This project uses the following technologies:
 
 For this feature, I used 
 
-### Scan Receipt Image Using Google ML and Python
+### Scan Receipt Image Using Google ML Kit, Google Cloud Functions with Python, and ImagePicker
 
    Android                 |           iOS           |
 :-------------------------:|:-----------------------:|
@@ -47,10 +47,11 @@ lib/
 │───models/
 │───routes/
 │───services/
-│───theme/
+│───styles/
 │───view/
 │───view_models/
-└───widgets/
+│───widgets/
+└───main.dart
 ```
 
 - constants: constant values such as urls, keys, etc
@@ -58,7 +59,7 @@ lib/
 - models: custom classes and enums
 - routes: for routing within the app
 - services: for using Firebase Authentication, Cloud Firestore, and Functions
-- theme: app-level ThemeData, TextStyle, buttonTheme, and Color Palette
+- styles: app-level ThemeData, TextStyles, ButtonStyles, and Color Palette
 - view: `Scaffold`-level ui components
 - view_models: view model for each view scaffolds
 - widgets: widgets that are used in view

@@ -1,6 +1,6 @@
 import 'package:cccc/models/plaid/account.dart';
-import 'package:cccc/theme/text_styles.dart';
-import 'package:cccc/view/account_detail_screen.dart';
+import 'package:cccc/styles/text_styles.dart';
+import 'package:cccc/view/account_detail.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -19,7 +19,7 @@ class AccountsListTile extends StatelessWidget {
     final current = f.format(account.balance.current);
 
     return ListTile(
-      onTap: () => AccountDetailScreen.show(context, account),
+      onTap: () => AccountDetail.show(context, account),
       leading: CircleAvatar(
         backgroundColor: Colors.blueGrey,
         child: Text(

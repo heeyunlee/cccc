@@ -1,9 +1,9 @@
 import 'package:cccc/constants/constants.dart';
-import 'package:cccc/theme/text_styles.dart';
-import 'package:cccc/theme/theme_colors.dart';
+import 'package:cccc/styles/text_styles.dart';
+import 'package:cccc/styles/theme_colors.dart';
 import 'package:flutter/material.dart';
 
-class CustomButtonTheme {
+class ButtonStyles {
   static final outline1 = ButtonStyle(
     side: MaterialStateProperty.resolveWith<BorderSide>(
       (Set<MaterialState> states) {

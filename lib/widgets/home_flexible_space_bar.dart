@@ -1,3 +1,4 @@
+import 'package:cccc/styles/decorations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -31,30 +32,12 @@ class _HomeFlexibleSpaceBarState extends ConsumerState<HomeFlexibleSpaceBar> {
             children: [
               Container(
                 height: size.height * 0.1,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.black,
-                      Colors.transparent,
-                    ],
-                  ),
-                ),
+                decoration: Decorations.blackToTransGradient,
               ),
               const Spacer(),
               Container(
                 height: size.height * 0.5,
-                decoration: const BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.transparent,
-                      Colors.black,
-                    ],
-                  ),
-                ),
+                decoration: Decorations.transToBlackGradient,
               ),
             ],
           ),

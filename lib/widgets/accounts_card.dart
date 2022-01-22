@@ -1,5 +1,5 @@
 import 'package:cccc/models/plaid/account.dart';
-import 'package:cccc/theme/text_styles.dart';
+import 'package:cccc/styles/text_styles.dart';
 import 'package:cccc/view_models/home_screen_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,9 +35,12 @@ class AccountsCard extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomStreamBuilder<List<Account?>>(
+                // TODO: add errorWidget and loadingWidget
+                errorWidget: Container(),
+                loadingWidget: Container(),
                 stream: model.accountsStream,
-                builder: (context, data) {
-                  if (data.isEmpty) {
+                builder: (context, accounts) {
+                  if (accounts == null || accounts.isEmpty) {
                     return Column(
                       children: [
                         SizedBox(
@@ -83,7 +86,7 @@ class AccountsCard extends ConsumerWidget {
                   } else {
                     return Column(
                       children: [
-                        ...model.accountsByType(data).entries.map(
+                        ...model.accountsByType(accounts).entries.map(
                           (entry) {
                             return AccountsExpansionTile(
                               accountType: entry.key,

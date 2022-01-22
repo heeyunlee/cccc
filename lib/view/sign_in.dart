@@ -1,13 +1,13 @@
 import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/theme/custom_button_theme.dart';
-import 'package:cccc/theme/text_styles.dart';
+import 'package:cccc/styles/button_styles.dart';
+import 'package:cccc/styles/text_styles.dart';
 import 'package:cccc/view_models/sign_in_screen_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
-class SignInScreen extends ConsumerWidget {
-  const SignInScreen({Key? key}) : super(key: key);
+class SignIn extends ConsumerWidget {
+  const SignIn({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,8 +27,11 @@ class SignInScreen extends ConsumerWidget {
             SizedBox(
               width: size.width,
               height: size.width,
-              child: const Center(
-                child: Text('CCCC', style: TextStyles.h4),
+              child: Center(
+                child: Image.asset(
+                  'assets/pictures/cccc_logo.png',
+                  width: size.width / 3,
+                ),
               ),
             ),
             const Spacer(),
@@ -36,7 +39,7 @@ class SignInScreen extends ConsumerWidget {
               onPressed: model.isLoading
                   ? null
                   : () => model.signInWithGoogle(context, ref),
-              style: CustomButtonTheme.outline1,
+              style: ButtonStyles.outline1,
               child: SizedBox(
                 height: 48,
                 width: size.width - 64,
@@ -62,7 +65,7 @@ class SignInScreen extends ConsumerWidget {
               onPressed: model.isLoading
                   ? null
                   : () => model.signInAnonymously(context, ref),
-              style: CustomButtonTheme.text2,
+              style: ButtonStyles.text2,
               child: SizedBox(
                 height: 48,
                 width: size.width - 64,

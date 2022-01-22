@@ -1,7 +1,7 @@
-import 'package:cccc/theme/custom_button_theme.dart';
+import 'package:cccc/styles/button_styles.dart';
 import 'package:flutter/material.dart';
 
-import '../view/add_accounts_screen.dart';
+import '../view/connect_plaid.dart';
 
 class AddAccountButton extends StatelessWidget {
   const AddAccountButton({Key? key}) : super(key: key);
@@ -13,8 +13,8 @@ class AddAccountButton extends StatelessWidget {
         horizontal: 16,
       ),
       child: TextButton(
-        style: CustomButtonTheme.text2,
-        onPressed: () => AddAccountsScreen.show(context),
+        style: ButtonStyles.text2,
+        onPressed: () => ConnectPlaid.show(context),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [

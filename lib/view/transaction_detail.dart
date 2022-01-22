@@ -2,10 +2,11 @@ import 'package:cccc/models/enum/payment_channel.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/theme/custom_button_theme.dart';
-import 'package:cccc/theme/text_styles.dart';
-import 'package:cccc/theme/theme_colors.dart';
-import 'package:cccc/view/scan_receipt_screen.dart';
+import 'package:cccc/styles/button_styles.dart';
+import 'package:cccc/styles/decorations.dart';
+import 'package:cccc/styles/text_styles.dart';
+import 'package:cccc/styles/theme_colors.dart';
+import 'package:cccc/view/scan_receipt.dart';
 import 'package:cccc/view_models/transaction_detail_screen_model.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/receipt_widget.dart';
@@ -15,8 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class TransactionDetailScreen extends ConsumerWidget {
-  const TransactionDetailScreen({
+class TransactionDetail extends ConsumerWidget {
+  const TransactionDetail({
     Key? key,
     required this.transaction,
   }) : super(key: key);
@@ -52,16 +53,7 @@ class TransactionDetailScreen extends ConsumerWidget {
                   background: Stack(
                     children: [
                       Container(
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                            colors: [
-                              theme.primaryColor,
-                              Colors.black,
-                            ],
-                          ),
-                        ),
+                        decoration: Decorations.transactionDetail(context),
                       ),
                       Align(
                         alignment: Alignment.bottomCenter,
@@ -130,6 +122,9 @@ class TransactionDetailScreen extends ConsumerWidget {
                         ],
                       ),
                       CustomStreamBuilder<Account?>(
+                        // TODO: add errorWidget and loadingWidget
+                        errorWidget: Container(),
+                        loadingWidget: Container(),
                         stream: model.acocuntStream,
                         builder: (context, data) {
                           return ListTile(
@@ -281,10 +276,7 @@ class TransactionDetailScreen extends ConsumerWidget {
       return Container(
         height: 160,
         width: size.width - 32,
-        decoration: BoxDecoration(
-          border: Border.all(color: Colors.white24, width: 1),
-          borderRadius: BorderRadius.circular(8),
-        ),
+        decoration: Decorations.white24Radius8,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -297,11 +289,11 @@ class TransactionDetailScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 16),
               TextButton(
-                onPressed: () => ScanReceiptScreen.show(
+                onPressed: () => ScanReceipt.show(
                   context,
                   transaction: transaction,
                 ),
-                style: CustomButtonTheme.text1Primary,
+                style: ButtonStyles.text1Primary,
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: const [

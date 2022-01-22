@@ -2,13 +2,13 @@ import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/routes/adaptive_page_route.dart';
 import 'package:cccc/routes/route_names.dart';
-import 'package:cccc/view/account_detail_screen.dart';
-import 'package:cccc/view/add_accounts_screen.dart';
-import 'package:cccc/view/home_screen.dart';
-import 'package:cccc/view/scan_receipt_screen.dart';
-import 'package:cccc/view/settings_screen.dart';
-import 'package:cccc/view/transaction_detail_screen.dart';
-import 'package:cccc/view/transactions_screen.dart';
+import 'package:cccc/view/account_detail.dart';
+import 'package:cccc/view/connect_plaid.dart';
+import 'package:cccc/view/home.dart';
+import 'package:cccc/view/scan_receipt.dart';
+import 'package:cccc/view/settings.dart';
+import 'package:cccc/view/transaction_detail.dart';
+import 'package:cccc/view/all_transactions.dart';
 import 'package:flutter/material.dart';
 
 class CustomRouter {
@@ -19,21 +19,21 @@ class CustomRouter {
           rootNavigator: true,
           maintainState: true,
           settings: settings,
-          builder: (context) => const HomeScreen(),
+          builder: (context) => const Home(),
         );
       case RouteNames.addAccounts:
         return adaptiveRoute(
           rootNavigator: true,
           maintainState: true,
           settings: settings,
-          builder: (context) => const AddAccountsScreen(),
+          builder: (context) => const ConnectPlaid(),
         );
       case RouteNames.settings:
         return adaptiveRoute(
           rootNavigator: true,
           maintainState: true,
           settings: settings,
-          builder: (context) => const SettingsScreen(),
+          builder: (context) => const Settings(),
         );
       case RouteNames.transactions:
         final mapArgs = settings.arguments as List<Transaction>;
@@ -41,7 +41,7 @@ class CustomRouter {
         return adaptiveRoute(
           rootNavigator: false,
           maintainState: true,
-          builder: (context) => TransactionsScreen(transactions: mapArgs),
+          builder: (context) => AllTransactions(transactions: mapArgs),
           settings: settings,
         );
       case RouteNames.transaction:
@@ -50,7 +50,7 @@ class CustomRouter {
         return adaptiveRoute(
           rootNavigator: false,
           maintainState: true,
-          builder: (context) => TransactionDetailScreen(transaction: args),
+          builder: (context) => TransactionDetail(transaction: args),
           settings: settings,
         );
       case RouteNames.account:
@@ -59,7 +59,7 @@ class CustomRouter {
         return adaptiveRoute(
           rootNavigator: false,
           maintainState: true,
-          builder: (context) => AccountDetailScreen(account: args),
+          builder: (context) => AccountDetail(account: args),
           settings: settings,
         );
       case RouteNames.scanReceipts:
@@ -68,7 +68,7 @@ class CustomRouter {
         return adaptiveRoute(
           rootNavigator: true,
           maintainState: true,
-          builder: (context) => ScanReceiptScreen(transaction: args),
+          builder: (context) => ScanReceipt(transaction: args),
           settings: settings,
         );
 

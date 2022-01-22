@@ -2,7 +2,7 @@ name: cccc
 description: This is a description
 publish_to: "none"
 
-version: 0.0.2
+version: 0.0.10
 
 environment:
   sdk: ">=2.15.1 <3.0.0"
@@ -85,3 +85,4 @@ flutter:
           style: italic
   assets:
     - assets/svg/
+    - assets/pictures/

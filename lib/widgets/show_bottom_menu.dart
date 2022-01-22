@@ -1,4 +1,4 @@
-import 'package:cccc/theme/text_styles.dart';
+import 'package:cccc/styles/text_styles.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 

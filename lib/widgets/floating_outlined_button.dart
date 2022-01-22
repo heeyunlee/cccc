@@ -1,6 +1,7 @@
+import 'package:cccc/styles/decorations.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cccc/theme/custom_button_theme.dart';
+import 'package:cccc/styles/button_styles.dart';
 
 class FloatingOutlinedButton extends StatelessWidget {
   const FloatingOutlinedButton({
@@ -15,30 +16,15 @@ class FloatingOutlinedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final padding = MediaQuery.of(context).padding;
 
     return Container(
-      height: 80 + padding.bottom,
+      height: 80,
       width: size.width,
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.transparent,
-            Colors.black87,
-          ],
-        ),
-      ),
+      decoration: Decorations.grey900Gradient,
       child: Padding(
-        padding: EdgeInsets.only(
-          top: 16,
-          left: 16,
-          right: 16,
-          bottom: 16 + padding.bottom,
-        ),
+        padding: const EdgeInsets.all(16),
         child: OutlinedButton(
-          style: CustomButtonTheme.outline1,
+          style: ButtonStyles.outline1,
           onPressed: onPressed,
           child: Text(buttonName),
         ),

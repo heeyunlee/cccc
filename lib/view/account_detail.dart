@@ -1,15 +1,16 @@
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/routes/route_names.dart';
-import 'package:cccc/theme/text_styles.dart';
+import 'package:cccc/styles/decorations.dart';
+import 'package:cccc/styles/text_styles.dart';
 import 'package:cccc/view_models/account_detail_screen_model.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/transaction_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AccountDetailScreen extends ConsumerWidget {
-  const AccountDetailScreen({
+class AccountDetail extends ConsumerWidget {
+  const AccountDetail({
     Key? key,
     required this.account,
   }) : super(key: key);
@@ -40,16 +41,7 @@ class AccountDetailScreen extends ConsumerWidget {
               background: Stack(
                 children: [
                   Container(
-                    decoration: const BoxDecoration(
-                      gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                          Colors.lightGreenAccent,
-                          Colors.black,
-                        ],
-                      ),
-                    ),
+                    decoration: Decorations.accountDetail(context),
                   ),
                   Align(
                     alignment: Alignment.bottomCenter,
@@ -94,8 +86,11 @@ class AccountDetailScreen extends ConsumerWidget {
                     color: Colors.white12,
                     child: CustomStreamBuilder<List<Transaction?>>(
                       stream: model.transactionsStream,
+                      // TODO: add loading and error widget
+                      loadingWidget: Container(),
+                      errorWidget: Container(),
                       builder: (context, data) {
-                        if (data.isNotEmpty) {
+                        if (data != null && data.isNotEmpty) {
                           return ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
