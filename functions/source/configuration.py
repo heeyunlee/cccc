@@ -4,15 +4,17 @@ from plaid.api import plaid_api
 
 from google.cloud import firestore
 
-f = open('private_keys.json')
-data = json.load(f)
-f.close()
+with open('private_keys.json') as f:
+    data = json.load(f)
+    f.close()
 
 configuration = plaid.Configuration(
     host=plaid.Environment.Development,
+    # host=plaid.Environment.Sandbox,
     api_key={
         'clientId': data['client_id'],
         'secret': data['secret_development'],
+        # 'secret': data['secret_sandbox'],
     }
 )
 

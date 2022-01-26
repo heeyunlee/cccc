@@ -5,16 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
 
-final addAccountsScreenModelProvider = ChangeNotifierProvider.autoDispose(
+final connectPlaidModelProvider = ChangeNotifierProvider.autoDispose(
   (ref) {
     final functions = ref.watch(cloudFunctionsProvider);
 
-    return AddAccountsScreenModel(functions: functions);
+    return ConnectPlaidModel(functions: functions);
   },
 );
 
-class AddAccountsScreenModel with ChangeNotifier {
-  AddAccountsScreenModel({
+class ConnectPlaidModel with ChangeNotifier {
+  ConnectPlaidModel({
     required this.functions,
   });
 
@@ -27,20 +27,33 @@ class AddAccountsScreenModel with ChangeNotifier {
     notifyListeners();
 
     try {
-      final linkToken = await functions.getLinkToken();
+      final response = await functions.getLinkToken();
+      final linkToken = response['link_token'] as String?;
 
       if (linkToken != null) {
+        logger.d('Got `link_token`. Will open Link');
         final linkTokenConfiguration = LinkTokenConfiguration(token: linkToken);
 
         PlaidLink.open(configuration: linkTokenConfiguration);
+      } else {
+        logger.e('Error Response. $response');
+        final errorCode = response['error_code'];
+
+        showAdaptiveDialog(
+          context,
+          title: 'Error',
+          content:
+              'An Error Occurred. An error code is "$errorCode". Please try again.',
+          defaultActionText: 'OK',
+        );
       }
     } catch (e) {
       logger.e(e);
 
       showAdaptiveDialog(
         context,
-        title: 'title',
-        content: 'content',
+        title: 'An Error Occurred',
+        content: 'Could not open a Plaid Link. Please try again.',
         defaultActionText: 'OK',
       );
     }
@@ -49,15 +62,19 @@ class AddAccountsScreenModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void onSuccessCallback(String publicToken, LinkSuccessMetadata metadata) {
+  Future<void> onSuccessCallback(
+    String publicToken,
+    LinkSuccessMetadata metadata,
+  ) async {
     logger.d('''
         Successful Callback: $publicToken, 
         metadata: ${metadata.description()}
         ''');
 
     final accountIds = metadata.accounts.map((account) => account.id).toList();
+    logger.d('Account IDs got: \n$accountIds');
 
-    functions.exchangePublicToken(publicToken, accountIds);
+    await functions.exchangeAndUpdate(publicToken, accountIds);
   }
 
   void onEventCallback(String event, LinkEventMetadata metadata) {

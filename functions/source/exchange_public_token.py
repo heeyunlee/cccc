@@ -1,58 +1,50 @@
 import json
+from typing import Any, Dict
 
-import flask
-from flask import jsonify, make_response
+from plaid import ApiException
 from plaid.model.item_public_token_exchange_request import \
     ItemPublicTokenExchangeRequest
 from plaid.model.item_public_token_exchange_response import \
     ItemPublicTokenExchangeResponse
+from plaid.model.products import Products
+from plaid.model.sandbox_public_token_create_request import \
+    SandboxPublicTokenCreateRequest
+from plaid.model.sandbox_public_token_create_response import \
+    SandboxPublicTokenCreateResponse
 
-from source.configuration import firestore_client, plaid_client
+from source.configuration import plaid_client
 
 
-def exchange_public_token(request: flask.Request) -> dict:
+def exchange_public_token(is_sandbox: bool, request_dict: Dict[str, Any]) -> Dict[str, Any]:
     try:
-        data = request.get_data()
-        print(f'data is {data}')
+        # Get `public_token`
+        if is_sandbox:
+            pt_request = SandboxPublicTokenCreateRequest(
+                institution_id='ins_3',
+                initial_products=[Products('transactions')],
+            )
 
-        data_decoded = data.decode('UTF-8')
-        data_dict = json.loads(data_decoded)
-        public_token = data_dict['public_token']
-        uid = data_dict['uid']
-        account_ids: list = data_dict['account_ids']
+            pt_response: SandboxPublicTokenCreateResponse = plaid_client.sandbox_public_token_create(
+                pt_request
+            )
 
-        print(f'Account IDs are {account_ids}')
+            public_token = pt_response.public_token
+        else:
+            public_token: str = request_dict.get('public_token')
 
-        request = ItemPublicTokenExchangeRequest(public_token=public_token)
-        response: ItemPublicTokenExchangeResponse = plaid_client.item_public_token_exchange(
-            request
+        # Make Request to exchange
+        exchange_request = ItemPublicTokenExchangeRequest(
+            public_token=public_token
         )
-        print(f'response is: {response.to_dict()}')
+        print(f'exchange request: \n{exchange_request}')
 
-        affected_doc = firestore_client.collection('users').document(uid)
-        user_doct: list = affected_doc.get().to_dict()
-        old_accounts_ids = user_doct['accountsIds']
-        print(f'old_accounts_ids is: {old_accounts_ids}')
-
-        new_account_ids = account_ids + old_accounts_ids
-
-        access_token = response.access_token
-        item_id = response.item_id
-        request_id = response.request_id
-
-        affected_doc.update({
-            'plaidAccessToken': access_token,
-            'plaidItemId': item_id,
-            'plaidRequestId': request_id,
-            'accountIds': new_account_ids,
-        })
-
-        success_response = make_response(
-            jsonify('Successfully updated user doc'), 200
+        exchange_response: ItemPublicTokenExchangeResponse = plaid_client.item_public_token_exchange(
+            exchange_request
         )
+        exchange_response_dict = exchange_response.to_dict()
+        print(f'exchange response dict: \n{exchange_response_dict}')
 
-        return success_response
-    except:
-        error_response = make_response(jsonify('An Error Occurred'), 404)
-
-        return error_response
+        return exchange_response_dict
+    except ApiException as e:
+        exceptions: dict = json.loads(e.body)
+        return exceptions

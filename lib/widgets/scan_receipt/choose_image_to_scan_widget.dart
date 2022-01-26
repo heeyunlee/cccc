@@ -48,7 +48,7 @@ class ChooseImageToScanWidget extends ConsumerWidget {
             leading: const Icon(Icons.collections),
             title: const Text('Gallery'),
           ),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
         ],
       ),
     );

@@ -67,15 +67,6 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
     final textElements = textLines.expand((e) => e.elements).toList();
     final textElementsMap = textElements.map((e) => e.toMap).toList();
 
-    // print(textElements.map((e) => e.toString()));
-
-    // final textsWithOffsets = {
-    //   for (final element in textElements)
-    //     element.text: element.cornerPoints.map((e) => [e.dx, e.dy]).toList(),
-    // };
-
-    // logger.d('Texts With Offset: $textsWithOffsets');
-
     logger.d('Text Elements = ${textElementsMap.toString()}');
 
     return textElementsMap;

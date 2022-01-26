@@ -63,10 +63,7 @@ class SignInViewModel with ChangeNotifier {
 
         final user = User(
           uid: uid,
-          plaidAccessToken: null,
-          plaidItemId: null,
-          plaidRequestId: null,
-          accountsIds: [],
+          accountIds: [],
         );
 
         final database = ref.watch(databaseProvider(uid));
@@ -91,19 +88,23 @@ class SignInViewModel with ChangeNotifier {
         final database = ref.watch(databaseProvider(uid));
         final oldUserData = await database.getUser(uid);
 
-        final newUserData = {
-          'uid': uid,
-          'lastLoginDate': now,
-          'accountsIds': oldUserData?.accountsIds ?? [],
-        };
+        final newUserData = oldUserData?.copyWith(
+              lastLoginDate: now,
+            ) ??
+            User(
+              uid: uid,
+              accountIds: [],
+              lastLoginDate: now,
+              lastPlaidSyncTime: null,
+            );
 
         if (oldUserData != null) {
           await database.updateUser(
             oldUserData,
-            newUserData,
+            newUserData.toMap(),
           );
         } else {
-          await database.setUser(User.fromMap(newUserData));
+          await database.setUser(newUserData);
         }
       },
     );

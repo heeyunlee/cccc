@@ -273,39 +273,3 @@ def process_receipt_texts(request: flask.Request):
         print(f'process_receipt_texts function ended with error {e}')
 
         return make_response(jsonify('An Error Occurred'), 404)
-
-# %% [markdown]
-# Test
-
-# %%
-# result = recognize_text(raw_texts, map_with_position)
-
-# prices_dict_list: list = result['prices_dict_list']
-# max_price: float or None = result['max_price']
-# prices: list = result['prices']
-# date: datetime.datetime = result['date']
-
-# prices_combination = find_combination(max_price, prices)
-# prices_dict_list_filtered = [x for x in prices_dict_list if float(x['price']) in prices_combination]
-
-# descriptions = find_description(map_with_position, prices_dict_list_filtered)
-
-# receipt_id = str(uuid.uuid4())
-
-# if prices_dict_list_filtered != None:
-#     items = create_items(receipt_id,descriptions, prices_combination)
-# else:
-#     items = create_items(receipt_id, descriptions, prices)
-
-# total: dict = {
-#     'name': 'Total',
-#     'transactionItemId': str(uuid.uuid4()),
-#     'amount': max_price,
-#     'isoCurrencyCode': 'USD',
-#     'receiptId': receipt_id,
-#     'type': 'subtotal',
-# }
-
-# items.append(total)
-
-# print(items)

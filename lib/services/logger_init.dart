@@ -2,9 +2,9 @@ import 'package:logger/logger.dart';
 
 PrefixPrinter prefixPrinter = PrefixPrinter(
   PrettyPrinter(
-    methodCount: 1, // number of method calls to be displayed
-    errorMethodCount: 5, // number of method calls if stacktrace is provided
-    lineLength: 100, // width of the output
+    methodCount: 2, // number of method calls to be displayed
+    errorMethodCount: 8, // number of method calls if stacktrace is provided
+    lineLength: 120, // width of the output
     printTime: true, // Should each log print contain a timestamp
   ),
   debug: '[CCCC][D]',

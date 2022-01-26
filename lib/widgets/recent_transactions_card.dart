@@ -20,9 +20,18 @@ class RecentTransactionsCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return CustomStreamBuilder<List<Transaction?>>(
-      // TODO: add errorWidget and loadingWidget
-      errorWidget: Container(),
-      loadingWidget: Container(),
+      errorBuilder: (context, error) => SizedBox(
+        height: 200,
+        width: double.maxFinite,
+        child: Text('An Error Occurred. Error code: ${error.toString()}'),
+      ),
+      loadingWidget: const SizedBox(
+        height: 200,
+        width: double.maxFinite,
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
       stream: model.transactionsStream,
       builder: (context, transactions) {
         return Column(

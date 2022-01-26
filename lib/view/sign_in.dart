@@ -28,10 +28,12 @@ class SignIn extends ConsumerWidget {
               width: size.width,
               height: size.width,
               child: Center(
-                child: Image.asset(
-                  'assets/pictures/cccc_logo.png',
-                  width: size.width / 3,
-                ),
+                child: model.isLoading
+                    ? const CircularProgressIndicator()
+                    : Image.asset(
+                        'assets/pictures/cccc_logo.png',
+                        width: size.width / 3,
+                      ),
               ),
             ),
             const Spacer(),

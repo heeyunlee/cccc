@@ -22,6 +22,11 @@ class Themes {
 
   static const listTile = ListTileThemeData(
     iconColor: Colors.white,
+    contentPadding: EdgeInsets.symmetric(
+      vertical: 8,
+      horizontal: 16,
+    ),
+    dense: true,
   );
 
   static const appBar = AppBarTheme(
@@ -35,23 +40,13 @@ class Themes {
   );
 
   static const bottomSheet = BottomSheetThemeData(
-    // backgroundColor: Colors.white,
-    // backgroundColor: ThemeColors.grey900,
     backgroundColor: Colors.transparent,
-    // backgroundColor: Colors.white,
-    // modalBackgroundColor: Colors.white30,
-    // modalBackgroundColor: Colors.black,
     elevation: 0,
-    // shape: RoundedRectangleBorder(
-    //   borderRadius: BorderRadius.vertical(
-    //     top: Radius.circular(16),
-    //   ),
-    // ),
   );
 
-  static final card = CardTheme(
+  static const card = CardTheme(
     shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.all(Radius.circular(8)),
     ),
   );
 

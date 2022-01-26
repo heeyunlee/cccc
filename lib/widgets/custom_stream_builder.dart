@@ -6,25 +6,28 @@ class CustomStreamBuilder<T> extends StatelessWidget {
     Key? key,
     required this.stream,
     required this.builder,
-    required this.errorWidget,
     this.initialData,
     required this.loadingWidget,
+    required this.errorBuilder,
   }) : super(key: key);
 
+  /// [Stream] for the [StreamBuilder]
   final Stream<T> stream;
+
+  /// Initial data for the [StreamBuilder]
   final T? initialData;
+
+  /// A builder function to be used when the `snapshot.hasData` is `true`, and
+  /// [ConnectionState] is [ConnectionState.active].
   final Widget Function(BuildContext context, T? data) builder;
 
-  /// A widget to be shown when snapshot returns error.
+  /// A builder function to be used when the `snapshot.hasError` is
+  /// `true`
   ///
-  /// Default is [EmptyContent] widget with errorOccuredMessage and error.
-  ///
-  final Widget errorWidget;
+  final Widget Function(BuildContext context, Object? error) errorBuilder;
 
   /// A widget to be shown when sapshot connection state is [ConnectionState.none],
   /// [ConnectionState.waiting], or [ConnectionState.done].
-  ///
-  /// Default widget is [CircularProgressIndicator] with color of `Theme.of(context).primaryColor`
   ///
   final Widget loadingWidget;
 
@@ -37,7 +40,7 @@ class CustomStreamBuilder<T> extends StatelessWidget {
         if (snapshot.hasError) {
           logger.e('An error on the stream: \n${snapshot.error}');
 
-          return errorWidget;
+          return errorBuilder(context, snapshot.error);
         } else {
           switch (snapshot.connectionState) {
             case ConnectionState.none:

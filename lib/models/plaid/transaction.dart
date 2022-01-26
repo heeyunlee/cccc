@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:cccc/extensions/enum_extension.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:cccc/extensions/string_extension.dart';
@@ -265,7 +266,7 @@ class Transaction {
     final String? isoCurrencyCode = json['iso_currency_code'] as String?;
     final String? unofficialCurrencyCode =
         json['unofficial_currency_code'] as String?;
-    final DateTime date = DateTime.parse(json['date'] as String);
+    final DateTime date = (json['date'] as Timestamp).toDate();
     final bool pending = json['pending'] as bool;
     final String transactionId = json['transaction_id'] as String;
     final String? merchantName = json['merchant_name'] as String?;
@@ -275,13 +276,13 @@ class Transaction {
 
     final DateTime? authorizedDate = json['authorized_date'] == null
         ? null
-        : DateTime.parse(json['authorized_date'] as String);
+        : (json['authorized_date'] as Timestamp).toDate();
     final DateTime? authorizedDatetime = json['authorized_datetime'] == null
         ? null
-        : DateTime.parse(json['authorized_datetime'] as String);
+        : (json['authorized_datetime'] as Timestamp).toDate();
     final DateTime? datetime = json['datetime'] == null
         ? null
-        : DateTime.parse(json['datetime'] as String);
+        : (json['datetime'] as Timestamp).toDate();
     final String? transactionCode = json['transaction_code'] as String?;
 
     final PersonalFinanceCategory? personalFinanceCategory =
@@ -340,15 +341,15 @@ class Transaction {
       'amount': amount,
       'iso_currency_code': isoCurrencyCode,
       'unofficial_currency_code': unofficialCurrencyCode,
-      'date': date.toIso8601String(),
+      'date': date,
       'pending': pending,
       'transaction_id': transactionId,
       'merchant_name': merchantName,
       'check_number': checkNumber,
       'payment_channel': enumToString(paymentChannel),
-      'authorized_date': authorizedDate?.toIso8601String(),
-      'authorized_datetime': authorizedDatetime?.toIso8601String(),
-      'datetime': datetime?.toIso8601String(),
+      'authorized_date': authorizedDate,
+      'authorized_datetime': authorizedDatetime,
+      'datetime': datetime,
       'transaction_code': transactionCode,
       'personal_finance_category': personalFinanceCategory?.toJson(),
       'is_food_category': isFoodCategory,

@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:cccc/extensions/enum_extension.dart';
-import 'package:cccc/models/enum/account_type.dart';
 import 'package:cccc/extensions/string_extension.dart';
+import 'package:cccc/models/enum/account_type.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'balance.dart';
 
@@ -19,6 +20,7 @@ class Account {
     required this.type,
     this.subtype,
     this.verificationStatus,
+    required this.lastSyncedTime,
   });
 
   /// Plaid’s unique identifier for the account. This value will not change
@@ -125,6 +127,9 @@ class Account {
   /// `manually_verified`, `verification_expired`, `verification_failed`
   final String? verificationStatus;
 
+  /// Last synced [DateTime]
+  final DateTime? lastSyncedTime;
+
   Account copyWith({
     String? accountId,
     Balance? balance,
@@ -134,6 +139,7 @@ class Account {
     AccountType? type,
     String? subtype,
     String? verificationStatus,
+    DateTime? lastSyncedTime,
   }) {
     return Account(
       accountId: accountId ?? this.accountId,
@@ -144,19 +150,21 @@ class Account {
       type: type ?? this.type,
       subtype: subtype ?? this.subtype,
       verificationStatus: verificationStatus ?? this.verificationStatus,
+      lastSyncedTime: lastSyncedTime ?? this.lastSyncedTime,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'accountId': accountId,
+      'account_id': accountId,
       'balance': balance.toMap(),
       'mask': mask,
       'name': name,
-      'officialName': officialName,
+      'official_name': officialName,
       'type': enumToString(type),
       'subtype': subtype,
-      'verificationStatus': verificationStatus,
+      'verification_status': verificationStatus,
+      'last_synced_time': lastSyncedTime,
     };
   }
 
@@ -169,6 +177,9 @@ class Account {
     final AccountType type = (map['type'] as String).toEnum(AccountType.values);
     final String? subtype = map['subtype'];
     final String? verificationStatus = map['verification_status'];
+    final DateTime? lastSyncedTime = map['last_synced_time'] != null
+        ? (map['last_synced_time'] as Timestamp).toDate()
+        : null;
 
     return Account(
       accountId: accountId,
@@ -179,6 +190,7 @@ class Account {
       type: type,
       subtype: subtype,
       verificationStatus: verificationStatus,
+      lastSyncedTime: lastSyncedTime,
     );
   }
 
@@ -190,7 +202,7 @@ class Account {
 
   @override
   String toString() {
-    return 'Account(accountId: $accountId, balance: $balance, mask: $mask, name: $name, officialName: $officialName, type: $type, subtype: $subtype, verificationStatus: $verificationStatus)';
+    return 'Account(accountId: $accountId, balance: $balance, mask: $mask, name: $name, officialName: $officialName, type: $type, subtype: $subtype, verificationStatus: $verificationStatus, lastSyncedTime: $lastSyncedTime)';
   }
 
   @override
@@ -205,7 +217,8 @@ class Account {
         other.officialName == officialName &&
         other.type == type &&
         other.subtype == subtype &&
-        other.verificationStatus == verificationStatus;
+        other.verificationStatus == verificationStatus &&
+        other.lastSyncedTime == lastSyncedTime;
   }
 
   @override
@@ -217,6 +230,7 @@ class Account {
         officialName.hashCode ^
         type.hashCode ^
         subtype.hashCode ^
-        verificationStatus.hashCode;
+        verificationStatus.hashCode ^
+        lastSyncedTime.hashCode;
   }
 }

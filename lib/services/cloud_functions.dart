@@ -1,5 +1,3 @@
-import 'package:cccc/constants/cloud_functions_keys.dart';
-import 'package:cccc/constants/keys.dart';
 import 'package:cccc/models/receipt_response.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/models/user.dart';
@@ -8,6 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'cloud_functions_uris.dart';
 import 'firebase_auth.dart';
 import 'firestore_database.dart';
 
@@ -28,97 +27,64 @@ class CloudFunctions {
   final FirebaseAuthService auth;
   final FirestoreDatabase database;
 
-  static Uri createLinkTokenUri = Uri(
-    scheme: 'https',
-    host: Keys.cloudFunctionHost,
-    path: CloudFunctionsKeys.createLinkToken,
-  );
-
-  static Uri exchangePublicTokenUri = Uri(
-    scheme: 'https',
-    host: Keys.cloudFunctionHost,
-    path: CloudFunctionsKeys.exchangePublicToken,
-  );
-
-  static Uri getTransactionsUri = Uri(
-    scheme: 'https',
-    host: Keys.cloudFunctionHost,
-    path: CloudFunctionsKeys.getTransactions,
-  );
-
-  static Uri updateTransactionsWithImage = Uri(
-    scheme: 'https',
-    host: Keys.cloudFunctionHost,
-    path: CloudFunctionsKeys.updateTransactionsWithImage,
-  );
-
-  static Uri processReceiptTextsUri = Uri(
-    scheme: 'https',
-    host: Keys.cloudFunctionHost,
-    path: CloudFunctionsKeys.processReceiptTexts,
-  );
-
-  Future<String?> getLinkToken() async {
+  Future<Map<String, dynamic>> getLinkToken() async {
     final uid = auth.currentUser!.uid;
 
     final response = await http.post(
-      createLinkTokenUri,
+      CloudFunctionsURIs.createLinkToken,
       body: json.encode({
         'uid': uid,
       }),
     );
 
-    final data = json.decode(response.body);
-    final linkToken = data['link_token'] as String;
+    final responseBody = json.decode(response.body) as Map<String, dynamic>;
+    logger.d('response body: $responseBody');
 
-    return linkToken;
+    return responseBody;
   }
 
-  void exchangePublicToken(String publicToken, List<String> accountIds) async {
+  Future<void> exchangeAndUpdate(
+    String publicToken,
+    List<String> accountIds,
+  ) async {
     final uid = auth.currentUser!.uid;
 
     final response = await http.post(
-      exchangePublicTokenUri,
+      CloudFunctionsURIs.exchangePublicTokenAndUpdateAccounts,
       body: json.encode({
         'uid': uid,
         'public_token': publicToken,
         'account_ids': accountIds,
+        'date': DateTime.now().toString(),
       }),
     );
 
-    logger.d('Response: ${response.body}');
+    logger.d('exchangeAndUpdate reponse: ${response.body}');
   }
 
-  Future<void> getTransactions(BuildContext context, User user) async {
-    logger.d('`fetchTransactionsData` function called');
+  Future<void> transactionsRefresh(BuildContext context, User user) async {
+    logger.d('`transactionsRefresh` function called');
 
-    if (user.plaidAccessToken != null) {
-      logger.d('plaidAccessToken exists');
+    final response = await http.post(
+      CloudFunctionsURIs.transactionsRefresh,
+      body: json.encode({
+        'uid': user.uid,
+      }),
+    );
 
-      final now = DateTime.now();
+    logger.d('''
+    Response: 
+    headers: ${response.headers}
+    statusCode: ${response.statusCode}
+    body: ${response.body}
+    ''');
 
-      final startDate =
-          user.lastPlaidSyncTime ?? now.subtract(const Duration(days: 60));
+    if (response.statusCode == 200) {
+      final updatedUserData = {
+        'lastPlaidSyncTime': DateTime.now(),
+      };
 
-      final response = await http.post(
-        getTransactionsUri,
-        body: json.encode({
-          'uid': user.uid,
-          'start_date': startDate.toString(),
-          'end_date': DateTime(now.year, now.month, now.day).toString(),
-        }),
-      );
-      logger.d('Response: ${response.body}');
-
-      if (response.statusCode == 200) {
-        final updatedUserData = {
-          'lastPlaidSyncTime': DateTime.now(),
-        };
-
-        await database.updateUser(user, updatedUserData);
-      }
-    } else {
-      await Future.delayed(const Duration(seconds: 2));
+      await database.updateUser(user, updatedUserData);
     }
   }
 
@@ -132,7 +98,7 @@ class CloudFunctions {
       logger.d('plaidAccessToken exists');
 
       final response = await http.post(
-        updateTransactionsWithImage,
+        CloudFunctionsURIs.updateTransactionsWithImage,
         body: json.encode({
           'url': url,
         }),
@@ -152,7 +118,7 @@ class CloudFunctions {
       logger.d('[rawTexts] exists \n$rawTexts');
 
       final response = await http.post(
-        processReceiptTextsUri,
+        CloudFunctionsURIs.processReceiptTexts,
         body: json.encode({
           'raw_texts': rawTexts,
           'texts_with_offsets': textsWithOffsets,
@@ -174,4 +140,6 @@ class CloudFunctions {
       logger.d('raw text was null');
     }
   }
+
+  Future<void> getBalances() async {}
 }

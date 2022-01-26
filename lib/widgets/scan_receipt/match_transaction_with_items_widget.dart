@@ -32,9 +32,10 @@ class MatchTransactionWithItemsWidget extends ConsumerWidget {
       ),
       body: CustomStreamBuilder<List<Transaction?>>(
         stream: model.transactionsStream!,
-        // TODO: add errorWidget and loadingWidget
-        errorWidget: Container(),
-        loadingWidget: Container(),
+        errorBuilder: (context, error) => Container(),
+        loadingWidget: const Center(
+          child: CircularProgressIndicator(),
+        ),
         builder: (context, transactions) {
           if (transactions != null && transactions.isNotEmpty) {
             return SingleChildScrollView(

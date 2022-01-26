@@ -1,4 +1,5 @@
-import 'package:cccc/view_models/add_accounts_screen_model.dart';
+import 'package:cccc/services/logger_init.dart';
+import 'package:cccc/view_models/connect_plaid_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
@@ -23,7 +24,7 @@ class _ConnectPlaidState extends ConsumerState<ConnectPlaid> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final model = ref.watch(addAccountsScreenModelProvider);
+    final model = ref.watch(connectPlaidModelProvider);
 
     PlaidLink.onSuccess(model.onSuccessCallback);
     PlaidLink.onEvent(model.onEventCallback);
@@ -32,7 +33,9 @@ class _ConnectPlaidState extends ConsumerState<ConnectPlaid> {
 
   @override
   Widget build(BuildContext context) {
-    final model = ref.watch(addAccountsScreenModelProvider);
+    logger.d('[ConnectPlaid] screen building...');
+
+    final model = ref.watch(connectPlaidModelProvider);
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -48,7 +51,8 @@ class _ConnectPlaidState extends ConsumerState<ConnectPlaid> {
             Text(
               '''Lorem ipsum dolor sit amet, consectetur sadipiscing elit. Mauris in consectetur enim. Sed blandit lorem tempus lectus tincidunt, eget vestibulum nulla v
                   \niverra. Donec vel magna ac ante dignissim pulvinar. Morbi a auctor metus. 
-                  \nNullam purus lacus, pharetra id metus interdum, sollicitudin tempus eros ''',
+                  \nNullam purus lacus, pharetra id metus interdum, sollicitudin tempus eros 
+              ''',
             ),
           ],
         ),

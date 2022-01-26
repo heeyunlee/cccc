@@ -42,6 +42,7 @@ class CheckItemsWidget extends ConsumerWidget {
               ),
               const SizedBox(height: 24),
               ReceiptWidget(
+                enableEdit: true,
                 date: model.receiptResponse!.date,
                 name: model.receiptResponse!.name,
                 color: theme.primaryColor.withOpacity(0.24),

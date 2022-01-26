@@ -1,4 +1,5 @@
 import 'package:cccc/services/firebase_auth.dart';
+import 'package:cccc/view/auth_state_error.dart';
 import 'package:cccc/view/home.dart';
 import 'package:cccc/view/sign_in.dart';
 import 'package:cccc/view/splash.dart';
@@ -16,9 +17,8 @@ class AuthStatesChangesStreamBuilder extends ConsumerWidget {
 
     return CustomStreamBuilder<fire_auth.User?>(
       stream: auth.authStateChanges(),
-      // TODO: add errorWidget and loadingWidget
       loadingWidget: const Splash(),
-      errorWidget: const Text('An Errror Occurred'),
+      errorBuilder: (context, error) => AuthStateError(error: error),
       builder: (context, user) {
         return AnimatedSwitcher(
           duration: const Duration(milliseconds: 400),

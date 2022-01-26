@@ -86,9 +86,27 @@ class AccountDetail extends ConsumerWidget {
                     color: Colors.white12,
                     child: CustomStreamBuilder<List<Transaction?>>(
                       stream: model.transactionsStream,
-                      // TODO: add loading and error widget
-                      loadingWidget: Container(),
-                      errorWidget: Container(),
+                      loadingWidget: const SizedBox(
+                        height: 200,
+                        width: double.infinity,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ),
+                      errorBuilder: (context, error) => SizedBox(
+                        height: 200,
+                        width: double.infinity,
+                        child: Row(
+                          children: [
+                            const Icon(Icons.error, color: Colors.red),
+                            const SizedBox(width: 8),
+                            Text(
+                              'An Error Occurred. Error code: ${error.toString()}',
+                              maxLines: 1,
+                            ),
+                          ],
+                        ),
+                      ),
                       builder: (context, data) {
                         if (data != null && data.isNotEmpty) {
                           return ListView.builder(

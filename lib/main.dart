@@ -49,6 +49,12 @@ class MyApp extends StatelessWidget {
       ),
     );
 
+    // Make Android fullscreen
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.edgeToEdge,
+      overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
+    );
+
     // Init debugging for Debug and Profile mode
     if (kDebugMode || kProfileMode) {
       initLogger(Level.debug);

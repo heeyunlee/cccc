@@ -58,9 +58,9 @@ class HomeScreenModel with ChangeNotifier {
     return map;
   }
 
-  Future<void> fetchData(BuildContext context, User user) async {
+  Future<void> transactionsRefresh(BuildContext context, User user) async {
     try {
-      functions.getTransactions(context, user);
+      await functions.transactionsRefresh(context, user);
     } on http.Response catch (response) {
       if (response.statusCode == 404) {
         logger.e(response);

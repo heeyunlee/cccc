@@ -121,35 +121,26 @@ class TransactionDetail extends ConsumerWidget {
                           _buildItemsWidget(context),
                         ],
                       ),
-                      CustomStreamBuilder<Account?>(
-                        // TODO: add errorWidget and loadingWidget
-                        errorWidget: Container(),
-                        loadingWidget: Container(),
-                        stream: model.acocuntStream,
-                        builder: (context, data) {
-                          return ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                              vertical: 8,
-                              horizontal: 16,
-                            ),
-                            onTap: () {},
-                            leading: const Icon(Icons.account_balance),
-                            title: const Text(
-                              'Account',
-                              style: TextStyles.caption,
-                            ),
-                            trailing: Text(
-                              model.accountName(data),
+                      ListTile(
+                        onTap: () {},
+                        leading: const Icon(Icons.account_balance),
+                        title: const Text('Account', style: TextStyles.caption),
+                        trailing: CustomStreamBuilder<Account?>(
+                          stream: model.acocuntStream,
+                          errorBuilder: (context, error) => Text(
+                            'An Error Occurred. Error Code: ${error.toString()}',
+                            style: TextStyles.body2Bold,
+                          ),
+                          loadingWidget: const CircularProgressIndicator(),
+                          builder: (context, account) {
+                            return Text(
+                              model.accountName(account),
                               style: TextStyles.body2Bold,
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       ),
                       ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 16,
-                        ),
                         onTap: () {},
                         leading: const Icon(Icons.storefront_sharp),
                         title: const Text(
@@ -162,10 +153,6 @@ class TransactionDetail extends ConsumerWidget {
                         ),
                       ),
                       ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 16,
-                        ),
                         onTap: () {},
                         leading: const Icon(Icons.today),
                         title: const Text(
@@ -178,10 +165,6 @@ class TransactionDetail extends ConsumerWidget {
                         ),
                       ),
                       ListTile(
-                        contentPadding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 16,
-                        ),
                         leading: const Icon(Icons.category),
                         title: const Text(
                           'Category ID',
@@ -198,10 +181,10 @@ class TransactionDetail extends ConsumerWidget {
                         collapsedIconColor: Colors.white,
                         textColor: Colors.white,
                         collapsedTextColor: Colors.white,
-                        tilePadding: const EdgeInsets.symmetric(
-                          vertical: 8,
-                          horizontal: 16,
-                        ),
+                        // tilePadding: const EdgeInsets.symmetric(
+                        //   vertical: 8,
+                        //   horizontal: 16,
+                        // ),
                         expandedAlignment: Alignment.topLeft,
                         childrenPadding:
                             const EdgeInsets.symmetric(horizontal: 24),
@@ -217,10 +200,10 @@ class TransactionDetail extends ConsumerWidget {
                       ),
                       if (transaction.paymentChannel == PaymentChannel.inStore)
                         ExpansionTile(
-                          tilePadding: const EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 16,
-                          ),
+                          // tilePadding: const EdgeInsets.symmetric(
+                          //   vertical: 8,
+                          //   horizontal: 16,
+                          // ),
                           iconColor: Colors.white,
                           collapsedIconColor: Colors.white,
                           textColor: Colors.white,
@@ -241,10 +224,10 @@ class TransactionDetail extends ConsumerWidget {
                         ),
                       if (model.isFood)
                         const ExpansionTile(
-                          tilePadding: EdgeInsets.symmetric(
-                            vertical: 8,
-                            horizontal: 16,
-                          ),
+                          // tilePadding: EdgeInsets.symmetric(
+                          //   vertical: 8,
+                          //   horizontal: 16,
+                          // ),
                           iconColor: Colors.white,
                           collapsedIconColor: Colors.white,
                           textColor: Colors.white,

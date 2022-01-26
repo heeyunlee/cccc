@@ -11,12 +11,14 @@ class ReceiptWidget extends StatelessWidget {
     this.date,
     this.name,
     this.color,
+    this.enableEdit = false,
   }) : super(key: key);
 
   final List<TransactionItem> transactionItems;
   final DateTime? date;
   final String? name;
   final Color? color;
+  final bool? enableEdit;
 
   @override
   Widget build(BuildContext context) {
@@ -26,8 +28,9 @@ class ReceiptWidget extends StatelessWidget {
       color: color,
       margin: const EdgeInsets.all(24),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
           if (name != null) Text(name!),
           if (name != null) const SizedBox(height: 16),
           if (date != null)
@@ -57,7 +60,7 @@ class ReceiptWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SizedBox(
-                          width: size.width - 164,
+                          width: size.width - 180,
                           child: Text(
                             _itemName(item),
                             maxLines: 1,

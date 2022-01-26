@@ -35,9 +35,17 @@ class AccountsCard extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomStreamBuilder<List<Account?>>(
-                // TODO: add errorWidget and loadingWidget
-                errorWidget: Container(),
-                loadingWidget: Container(),
+                errorBuilder: (context, error) => SizedBox(
+                  height: 120,
+                  child: Text(
+                    'An Error Occurred. Error Code: ${error.toString()}',
+                  ),
+                ),
+                loadingWidget: const SizedBox(
+                  height: 120,
+                  width: double.maxFinite,
+                  child: Center(child: CircularProgressIndicator()),
+                ),
                 stream: model.accountsStream,
                 builder: (context, accounts) {
                   if (accounts == null || accounts.isEmpty) {

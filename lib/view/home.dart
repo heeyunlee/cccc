@@ -28,22 +28,29 @@ class Home extends ConsumerWidget {
       extendBody: true,
       extendBodyBehindAppBar: true,
       body: CustomStreamBuilder<User?>(
-        // TODO: add errorWidget and loadingWidget
-        errorWidget: Container(),
-        loadingWidget: Container(),
+        errorBuilder: (context, error) => Center(
+          child: Text('An Error Occurred. Error code: ${error.toString()}'),
+        ),
+        loadingWidget: const Center(child: CircularProgressIndicator()),
         stream: model.userStream,
         builder: (context, user) {
-          if (kIsWeb) {
-            return _customScrollWidget(context, user!, model);
-          } else {
-            if (Platform.isIOS) {
-              return _customScrollWidget(context, user!, model);
+          if (user != null) {
+            if (kIsWeb) {
+              return _customScrollWidget(context, user, model);
             } else {
-              return RefreshIndicator(
-                onRefresh: () => model.fetchData(context, user!),
-                child: _customScrollWidget(context, user!, model),
-              );
+              if (Platform.isIOS) {
+                return _customScrollWidget(context, user, model);
+              } else {
+                return RefreshIndicator(
+                  onRefresh: () => model.transactionsRefresh(context, user),
+                  child: _customScrollWidget(context, user, model),
+                );
+              }
             }
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
         },
       ),
@@ -61,7 +68,7 @@ class Home extends ConsumerWidget {
       slivers: [
         if (!kIsWeb && Platform.isIOS)
           CupertinoSliverRefreshControl(
-            onRefresh: () => model.fetchData(context, user),
+            onRefresh: () => model.transactionsRefresh(context, user),
             builder: (context, _, __, ___, ____) {
               return Shimmer.fromColors(
                 highlightColor: Colors.green,
