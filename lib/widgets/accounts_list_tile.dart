@@ -1,9 +1,8 @@
 import 'package:cccc/models/plaid/account.dart';
+import 'package:cccc/styles/formatter.dart';
 import 'package:cccc/styles/text_styles.dart';
 import 'package:cccc/view/account_detail.dart';
 import 'package:flutter/material.dart';
-
-import 'package:intl/intl.dart';
 
 class AccountsListTile extends StatelessWidget {
   const AccountsListTile({
@@ -15,9 +14,6 @@ class AccountsListTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final f = NumberFormat(',###', 'en_US');
-    final current = f.format(account.balance.current);
-
     return ListTile(
       onTap: () => AccountDetail.show(context, account),
       leading: CircleAvatar(
@@ -26,10 +22,6 @@ class AccountsListTile extends StatelessWidget {
           account.name[0],
           style: TextStyles.body2,
         ),
-      ),
-      contentPadding: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
       ),
       title: Text(
         account.name,
@@ -44,7 +36,7 @@ class AccountsListTile extends StatelessWidget {
           vertical: 8,
         ),
         child: Text(
-          '\$ $current',
+          Formatter.currency(account.balance.current, 'en_US'),
           style: TextStyles.h6W900,
         ),
       ),

@@ -74,5 +74,5 @@
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
 # Private Keys
-**/lib/constants/keys.dart
+**/lib/constants/cloud_function_host.dart
 **/lib/firebase_options.dart

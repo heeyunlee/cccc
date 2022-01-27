@@ -69,7 +69,7 @@ class _ScanReceiptBottomSheetState
       case ScanReceiptState.loading:
         return padding.bottom + 192;
       case ScanReceiptState.error:
-        return 290;
+        return padding.bottom + 268;
       case ScanReceiptState.completed:
         return 270;
     }

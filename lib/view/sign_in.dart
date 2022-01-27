@@ -29,7 +29,7 @@ class SignIn extends ConsumerWidget {
               height: size.width,
               child: Center(
                 child: model.isLoading
-                    ? const CircularProgressIndicator()
+                    ? const CircularProgressIndicator.adaptive()
                     : Image.asset(
                         'assets/pictures/cccc_logo.png',
                         width: size.width / 3,
@@ -68,13 +68,7 @@ class SignIn extends ConsumerWidget {
                   ? null
                   : () => model.signInAnonymously(context, ref),
               style: ButtonStyles.text2,
-              child: SizedBox(
-                height: 48,
-                width: size.width - 64,
-                child: const Center(
-                  child: Text('Sign in Anonymously'),
-                ),
-              ),
+              child: const Text('Sign in Anonymously'),
             ),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom + 48,
