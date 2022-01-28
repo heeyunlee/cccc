@@ -27,11 +27,11 @@ class CloudFunctions {
   final FirebaseAuthService auth;
   final FirestoreDatabase database;
 
-  Future<Map<String, dynamic>> getLinkToken() async {
+  Future<Map<String, dynamic>> linkTokenCreate() async {
     final uid = auth.currentUser!.uid;
 
     final response = await http.post(
-      CloudFunctionsURIs.createLinkToken,
+      CloudFunctionsURIs.linkTokenCreate,
       body: json.encode({
         'uid': uid,
       }),
@@ -43,23 +43,21 @@ class CloudFunctions {
     return responseBody;
   }
 
-  Future<void> exchangeAndUpdate(
-    String publicToken,
-    List<String> accountIds,
-  ) async {
+  Future<Map<String, dynamic>> exchangeAndUpdate(String publicToken) async {
     final uid = auth.currentUser!.uid;
 
     final response = await http.post(
-      CloudFunctionsURIs.exchangePublicTokenAndUpdateAccounts,
+      CloudFunctionsURIs.linkAndConnect,
       body: json.encode({
         'uid': uid,
         'public_token': publicToken,
-        'account_ids': accountIds,
-        'date': DateTime.now().toString(),
       }),
     );
 
-    logger.d('exchangeAndUpdate reponse: ${response.body}');
+    final responseBody = json.decode(response.body) as Map<String, dynamic>;
+    logger.d('response body: $responseBody');
+
+    return responseBody;
   }
 
   Future<void> transactionsRefresh(BuildContext context, User user) async {

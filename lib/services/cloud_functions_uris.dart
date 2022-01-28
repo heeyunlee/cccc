@@ -2,16 +2,16 @@ import 'package:cccc/constants/cloud_functions_keys.dart';
 import 'package:cccc/constants/cloud_function_host.dart';
 
 class CloudFunctionsURIs {
-  static Uri createLinkToken = Uri(
+  static Uri linkTokenCreate = Uri(
     scheme: 'https',
     host: CloudFunctionHost.host,
-    path: CloudFunctionsKeys.createLinkToken,
+    path: CloudFunctionsKeys.linkTokenCreate,
   );
 
-  static Uri exchangePublicTokenAndUpdateAccounts = Uri(
+  static Uri linkAndConnect = Uri(
     scheme: 'https',
     host: CloudFunctionHost.host,
-    path: CloudFunctionsKeys.exchangePublicTokenAndUpdateAccounts,
+    path: CloudFunctionsKeys.linkAndConnect,
   );
 
   // transactionRefresh URI

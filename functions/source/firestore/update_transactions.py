@@ -1,23 +1,25 @@
 from datetime import date, datetime
 from typing import Any, Dict, List, Union
 
-from google.cloud.firestore import DocumentReference
-
+from google.cloud.firestore import CollectionReference
 from source.configuration import firestore_client
 
 
 def update_transactions(uid: str, transactions: List[Dict[str, Any]]):
     try:
+        updated_transactions_length = 0
         user_doc = firestore_client.collection('users').document(uid)
-        transactions_collection = user_doc.collection('transactions')
+        transactions_collection: CollectionReference = user_doc.collection(
+            'transactions')
 
         for transaction in transactions:
-            transaction_id: Union[str, None] = transaction.get(
-                'transaction_id')
-            transaction_doc: DocumentReference = transactions_collection.document(
-                transaction_id
-            )
+            transaction_id = transaction.get('transaction_id')
+            transaction_doc = transactions_collection.document(transaction_id)
             transaction_snapshot = transaction_doc.get()
+            pending = transaction_snapshot.get('pending')
+
+            if transaction_snapshot.exists and not pending:
+                continue
 
             old_date: date = transaction.get('date')
             new_date = datetime(old_date.year, old_date.month, old_date.day)
@@ -26,23 +28,21 @@ def update_transactions(uid: str, transactions: List[Dict[str, Any]]):
                 'authorized_date')
 
             if authorized_date is not None:
-                new_authorized_date = datetime(
+                authorized_date = datetime(
                     authorized_date.year, authorized_date.month, authorized_date.day)
-            else:
-                new_authorized_date = None
 
             transaction.update({
                 'date': new_date,
-                'authorized_date': new_authorized_date,
+                'authorized_date': authorized_date,
             })
 
             if transaction_snapshot.exists:
-                write_result = transaction_doc.update(transaction)
-                update_time = write_result.update_time
+                transaction_doc.update(transaction)
             else:
-                write_result = transaction_doc.create(transaction)
-                update_time = write_result.update_time
+                transaction_doc.create(transaction)
 
-        return {'status': 200, 'last_update_time': update_time}
+            updated_transactions_length += 1
+
+        return {'status': 200, 'message': 'successfully updated transactions data', 'updated_transactions_length': updated_transactions_length}
     except Exception as e:
         return {'status': 404, 'error_message': str(e)}

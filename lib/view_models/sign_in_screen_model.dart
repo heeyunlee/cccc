@@ -60,10 +60,11 @@ class SignInViewModel with ChangeNotifier {
         await auth.signInAnonymously();
 
         final uid = auth.currentUser!.uid;
+        final now = DateTime.now();
 
         final user = User(
           uid: uid,
-          accountIds: [],
+          lastLoginDate: now,
         );
 
         final database = ref.watch(databaseProvider(uid));
@@ -91,12 +92,7 @@ class SignInViewModel with ChangeNotifier {
         final newUserData = oldUserData?.copyWith(
               lastLoginDate: now,
             ) ??
-            User(
-              uid: uid,
-              accountIds: [],
-              lastLoginDate: now,
-              lastPlaidSyncTime: null,
-            );
+            User(uid: uid, lastLoginDate: now);
 
         if (oldUserData != null) {
           await database.updateUser(

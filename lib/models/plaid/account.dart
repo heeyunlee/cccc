@@ -1,9 +1,10 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:cccc/extensions/enum_extension.dart';
 import 'package:cccc/extensions/string_extension.dart';
 import 'package:cccc/models/enum/account_type.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'balance.dart';
 
@@ -11,7 +12,7 @@ import 'balance.dart';
 /// transactions are being returned. Each transaction can be mapped to its
 /// corresponding account via the `account_id` field.
 class Account {
-  Account({
+  const Account({
     required this.accountId,
     required this.balance,
     this.mask,
@@ -20,7 +21,8 @@ class Account {
     required this.type,
     this.subtype,
     this.verificationStatus,
-    required this.lastSyncedTime,
+    this.accountLastSyncedTime,
+    this.institutionId,
   });
 
   /// Plaid’s unique identifier for the account. This value will not change
@@ -127,8 +129,11 @@ class Account {
   /// `manually_verified`, `verification_expired`, `verification_failed`
   final String? verificationStatus;
 
-  /// Last synced [DateTime]
-  final DateTime? lastSyncedTime;
+  /// [DateTime] of when account was last synced
+  final DateTime? accountLastSyncedTime;
+
+  /// Institution ID
+  final String? institutionId;
 
   Account copyWith({
     String? accountId,
@@ -139,7 +144,8 @@ class Account {
     AccountType? type,
     String? subtype,
     String? verificationStatus,
-    DateTime? lastSyncedTime,
+    DateTime? accountLastSyncedTime,
+    String? institutionId,
   }) {
     return Account(
       accountId: accountId ?? this.accountId,
@@ -150,7 +156,9 @@ class Account {
       type: type ?? this.type,
       subtype: subtype ?? this.subtype,
       verificationStatus: verificationStatus ?? this.verificationStatus,
-      lastSyncedTime: lastSyncedTime ?? this.lastSyncedTime,
+      accountLastSyncedTime:
+          accountLastSyncedTime ?? this.accountLastSyncedTime,
+      institutionId: institutionId ?? this.institutionId,
     );
   }
 
@@ -164,7 +172,8 @@ class Account {
       'type': enumToString(type),
       'subtype': subtype,
       'verification_status': verificationStatus,
-      'last_synced_time': lastSyncedTime,
+      'account_last_synced_time': accountLastSyncedTime,
+      'institution_id': institutionId,
     };
   }
 
@@ -177,9 +186,11 @@ class Account {
     final AccountType type = (map['type'] as String).toEnum(AccountType.values);
     final String? subtype = map['subtype'];
     final String? verificationStatus = map['verification_status'];
-    final DateTime? lastSyncedTime = map['last_synced_time'] != null
-        ? (map['last_synced_time'] as Timestamp).toDate()
-        : null;
+    final DateTime? accountLastSyncedTime =
+        map['account_last_synced_time'] != null
+            ? (map['account_last_synced_time'] as Timestamp).toDate()
+            : null;
+    final String? institutionId = map['institution_id'];
 
     return Account(
       accountId: accountId,
@@ -190,7 +201,8 @@ class Account {
       type: type,
       subtype: subtype,
       verificationStatus: verificationStatus,
-      lastSyncedTime: lastSyncedTime,
+      accountLastSyncedTime: accountLastSyncedTime,
+      institutionId: institutionId,
     );
   }
 
@@ -202,7 +214,7 @@ class Account {
 
   @override
   String toString() {
-    return 'Account(accountId: $accountId, balance: $balance, mask: $mask, name: $name, officialName: $officialName, type: $type, subtype: $subtype, verificationStatus: $verificationStatus, lastSyncedTime: $lastSyncedTime)';
+    return 'Account(accountId: $accountId, balance: $balance, mask: $mask, name: $name, officialName: $officialName, type: $type, subtype: $subtype, verificationStatus: $verificationStatus, accountLastSyncedTime: $accountLastSyncedTime, institutionId: $institutionId)';
   }
 
   @override
@@ -218,7 +230,8 @@ class Account {
         other.type == type &&
         other.subtype == subtype &&
         other.verificationStatus == verificationStatus &&
-        other.lastSyncedTime == lastSyncedTime;
+        other.accountLastSyncedTime == accountLastSyncedTime &&
+        other.institutionId == institutionId;
   }
 
   @override
@@ -231,6 +244,7 @@ class Account {
         type.hashCode ^
         subtype.hashCode ^
         verificationStatus.hashCode ^
-        lastSyncedTime.hashCode;
+        accountLastSyncedTime.hashCode ^
+        institutionId.hashCode;
   }
 }

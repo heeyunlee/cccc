@@ -1,78 +1,95 @@
 import json
+from datetime import datetime, timedelta
+from typing import Dict, List, Union
 
 import flask
 from flask import jsonify, make_response
-from plaid import ApiException
-from plaid.model.transactions_get_response import TransactionsGetResponse
 
-from source.configuration import plaid_client
-from source.create_transactions_get_request import \
-    create_transactions_get_request
-from source.get_linked_account_ids import get_linked_account_ids
-from source.update_accounts import update_accounts
-from source.update_transactions import update_transactions
+from source.balance.accounts_balance_get import accounts_balance_get
+from source.firestore.get_access_tokens import get_access_tokens
+from source.firestore.update_accounts import update_accounts
+from source.firestore.update_transactions import update_transactions
+from source.transactions.transactions_get import transactions_get
 
 
-def transactions_refresh(request: flask.Request or dict):
+def transactions_refresh(request: flask.Request):
+    # TODO: ^change the type of request to `flask.Request`
 
-    get_account_ids = get_linked_account_ids(request)
+    # TODO: uncomment below for release
+    # Parsing data from request to get `uid`
+    data = request.data
+    data_dict: dict = json.loads(data)
+    uid: Union[str, None] = data_dict.get('uid')
 
-    account_ids = get_account_ids.get('account_ids')
-    print(f'Account IDs {account_ids}')
+    now = datetime.now()
+    end_date = now.date()
+    start_date = (now - timedelta(60)).date()
 
-    user_doc = get_account_ids.get('user_doc')
-    uid = get_account_ids.get('uid')
+    # Get stored access_tokens
+    access_tokens_response = get_access_tokens(uid)
+    access_tokens: Union[List[str], None] = access_tokens_response.get(
+        'acess_tokens'
+    )
+    print(f'access_tokens: {access_tokens}')
 
-    if account_ids is None:
-        return make_response(jsonify(error=get_account_ids.get('error')), 404)
+    if access_tokens is None:
+        return access_tokens_response
 
-    print(f'account_ids {account_ids}')
+    for access_token in access_tokens:
+        transacitons_get_response = transactions_get(
+            access_token=access_token,
+            start_date=start_date,
+            end_date=end_date,
+        )
 
-    fetched_tranactions = 0
-    fetched_accounts = 0
+        # Get Transactions data and update Firestore transactions collection
+        transactions: Union[List[Dict], None] = transacitons_get_response.get(
+            'transactions')
 
-    for account_id in account_ids:
-        transactions_get_request = create_transactions_get_request(
-            user_doc, account_id)
-        print(f'request {transactions_get_request}')
+        if transactions is None:
+            error_code = transacitons_get_response.get('error_code')
+            error_message = transacitons_get_response.get('error_message')
+            print(f'Error code: {error_code}')
+            print(f'Error message: {error_message}')
 
-        try:
-            transactions_get_response: TransactionsGetResponse = plaid_client.transactions_get(
-                transactions_get_request
-            )
-            response_dict = transactions_get_response.to_dict()
+            # TODO: uncomment below for release
+            return make_response(jsonify(status=error_code, error_message=error_message), 404)
 
-            #### Update or Create Transactions Data ####
-            transactions = response_dict.get('transactions')
-            print(f'Retrieved {len(transactions)} transactions')
-            fetched_tranactions += len(transactions)
+        print(f'Fetched {len(transactions)} transaction(s)')
+        update_transactions_result = update_transactions(uid, transactions)
+        print(f'update_transactions_result: {update_transactions_result}')
 
-            accounts = response_dict.get('accounts')
-            fetched_accounts += len(accounts)
-            print(f'Retrieved {len(accounts)} Accounts')
+        # Get /accounts/balance/get and update Firestore accounts collection
+        balances_get_response = accounts_balance_get(access_token)
+        accounts: Union[List[Dict],
+                        None] = balances_get_response.get('accounts')
 
-            #### Update transactions ####
-            update_transactions_result = update_transactions(uid, transactions)
-            print(f'Update Transactions: {update_transactions_result}')
+        if accounts is None:
+            error_code = balances_get_response.get('error_code')
+            error_message = balances_get_response.get('error_message')
+            print(f'Error code: {error_code}')
+            print(f'Error message: {error_message}')
 
-            #### Update accounts ####
-            update_accounts_result = update_accounts(uid, accounts)
-            print(f'Update Accounts: {update_accounts_result}')
+            # TODO: uncomment below for release
+            return make_response(jsonify(status=error_code, error_message=error_message), 404)
 
-            transactions_status = update_transactions_result.get('status')
-            accounts_status = update_accounts_result.get('status')
-            exceptions = None
+        item: Union[Dict, None] = balances_get_response.get('item')
+        institution_id: Union[str, None] = item.get('institution_id')
+        update_account_result = update_accounts(uid, institution_id, accounts)
+        print(f'update_account_result: {update_account_result}')
 
-        except ApiException as e:
-            exceptions: dict = json.loads(e.body)
-            transactions_status, accounts_status = 404
+        # Get the status of these two firestore updates, and return
+        update_transactions_status = update_transactions_result.get('status')
+        update_account_result_status = update_account_result.get('status')
+        print(f'''
+            update_transactions_status: {update_transactions_status}
+            update_account_result_status: {update_account_result_status}
+        ''')
 
-    result = {
-        'transactions_status': transactions_status,
-        'accounts_status': accounts_status,
-        'fetched_transactions': fetched_tranactions,
-        'fetched_accounts': fetched_accounts,
-        'exceptions': exceptions,
-    }
+    # TODO: uncomment below for release
+    result = jsonify(
+        update_transactions_status=update_transactions_status,
+        update_account_result_status=update_account_result_status,
+    )
 
-    return make_response(result, accounts_status)
+    return make_response(result)

@@ -27,7 +27,7 @@ class ConnectPlaidModel with ChangeNotifier {
     notifyListeners();
 
     try {
-      final response = await functions.getLinkToken();
+      final response = await functions.linkTokenCreate();
       final linkToken = response['link_token'] as String?;
 
       if (linkToken != null) {
@@ -37,13 +37,13 @@ class ConnectPlaidModel with ChangeNotifier {
         PlaidLink.open(configuration: linkTokenConfiguration);
       } else {
         logger.e('Error Response. $response');
-        final errorCode = response['error_code'];
+        final errorMessage = response['error_message'];
 
         showAdaptiveDialog(
           context,
           title: 'Error',
           content:
-              'An Error Occurred. An error code is "$errorCode". Please try again.',
+              'An Error Occurred. An error code is "$errorMessage". Please try again.',
           defaultActionText: 'OK',
         );
       }
@@ -71,10 +71,8 @@ class ConnectPlaidModel with ChangeNotifier {
         metadata: ${metadata.description()}
         ''');
 
-    final accountIds = metadata.accounts.map((account) => account.id).toList();
-    logger.d('Account IDs got: \n$accountIds');
-
-    await functions.exchangeAndUpdate(publicToken, accountIds);
+    final response = await functions.exchangeAndUpdate(publicToken);
+    logger.d('function response: \n$response');
   }
 
   void onEventCallback(String event, LinkEventMetadata metadata) {

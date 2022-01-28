@@ -3,26 +3,23 @@ from typing import Any, Dict, List, Union
 
 from google.cloud.firestore_v1.collection import CollectionReference
 from plaid.model.account_balance import AccountBalance
-
 from source.configuration import firestore_client
 
 
-def update_accounts(uid: str, accounts: List[dict]) -> Dict[str, Any]:
+def update_accounts(uid: str, ins_id: str, accounts: List[dict]) -> Dict[str, Any]:
     try:
         user_doc = firestore_client.collection('users').document(uid)
         accounts_ref: CollectionReference = user_doc.collection('accounts')
 
         # Update Accounts in `Accounts` collections
         for account in accounts:
-            print(f'account {account}')
 
             # Update Accounts Collections
             account_id: str = account.get('account_id')
-            print(f'accountId {account_id}')
+            print(f'accountId: {account_id}')
 
             account_doc_ref = accounts_ref.document(account_id)
             account_snapshot = account_doc_ref.get()
-            print(f'account_snapshot {account_snapshot}')
 
             balances: Union[AccountBalance, None] = account.get('balances')
 
@@ -41,19 +38,18 @@ def update_accounts(uid: str, accounts: List[dict]) -> Dict[str, Any]:
                 'subtype': str(account.get('subtype')),
                 'type': str(account.get('type')),
                 'verification_status': account.get('verification_status'),
-                'last_synced_time': datetime.now()
+                'account_last_synced_time': datetime.now(),
+                'institution_id': ins_id,
             }
 
             if account_snapshot.exists:
-                write_result = account_doc_ref.update(data)
-                update_time = write_result.update_time
+                account_doc_ref.update(data)
             else:
-                write_result = account_doc_ref.set(data)
-                update_time = write_result.update_time
+                account_doc_ref.set(data)
 
             result = {
                 'status': 200,
-                'last_update_time': update_time,
+                'message': 'successfully updated accounts data',
             }
 
         return result
