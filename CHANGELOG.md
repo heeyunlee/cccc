@@ -8,6 +8,7 @@
 - Update Cloud Function that is called to reload transactions data
 - Create test for `Formatter` class
 - Create Plaid's `Institution` class, including all the other classes and enums required to make one
+- Refactor `functions/sources` folder
 
 ## [0.0.9] Jan 15th, 2022
 ### New Features & Screens
