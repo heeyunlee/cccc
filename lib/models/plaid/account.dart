@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:cccc/extensions/enum_extension.dart';
 import 'package:cccc/extensions/string_extension.dart';
+import 'package:cccc/models/enum/account_connection_state.dart';
+import 'package:cccc/models/enum/account_subtype.dart';
 import 'package:cccc/models/enum/account_type.dart';
 
 import 'balance.dart';
@@ -22,7 +24,8 @@ class Account {
     this.subtype,
     this.verificationStatus,
     this.accountLastSyncedTime,
-    this.institutionId,
+    required this.institutionId,
+    required this.accountConnectionState,
   });
 
   /// Plaid’s unique identifier for the account. This value will not change
@@ -98,7 +101,8 @@ class Account {
   /// `overdraft`, `line of credit`, `student`, `cash management`, `keogh`,
   /// `mutual fund`, `recurring`, `rewards`, `safe deposit`, `sarsep`,
   /// `payroll`, `null`
-  final String? subtype;
+  // final String? subtype;
+  final AccountSubtype? subtype;
 
   /// The current verification status of an Auth Item initiated through
   /// Automated or Manual micro-deposits.  Returned for Auth Items only.
@@ -133,7 +137,10 @@ class Account {
   final DateTime? accountLastSyncedTime;
 
   /// Institution ID
-  final String? institutionId;
+  final String institutionId;
+
+  /// Account Connection State: healthy, error, or diactivated
+  final AccountConnectionState accountConnectionState;
 
   Account copyWith({
     String? accountId,
@@ -142,10 +149,11 @@ class Account {
     String? name,
     String? officialName,
     AccountType? type,
-    String? subtype,
+    AccountSubtype? subtype,
     String? verificationStatus,
     DateTime? accountLastSyncedTime,
     String? institutionId,
+    AccountConnectionState? accountConnectionState,
   }) {
     return Account(
       accountId: accountId ?? this.accountId,
@@ -159,6 +167,8 @@ class Account {
       accountLastSyncedTime:
           accountLastSyncedTime ?? this.accountLastSyncedTime,
       institutionId: institutionId ?? this.institutionId,
+      accountConnectionState:
+          accountConnectionState ?? this.accountConnectionState,
     );
   }
 
@@ -170,10 +180,11 @@ class Account {
       'name': name,
       'official_name': officialName,
       'type': enumToString(type),
-      'subtype': subtype,
+      'subtype': subtype?.string,
       'verification_status': verificationStatus,
       'account_last_synced_time': accountLastSyncedTime,
       'institution_id': institutionId,
+      'account_connection_state': accountConnectionState,
     };
   }
 
@@ -184,13 +195,18 @@ class Account {
     final String name = map['name'];
     final String? officialName = map['official_name'];
     final AccountType type = (map['type'] as String).toEnum(AccountType.values);
-    final String? subtype = map['subtype'];
+    final AccountSubtype? subtype = map['subtype'] != null
+        ? (map['subtype'] as String).accountSubtype
+        : null;
     final String? verificationStatus = map['verification_status'];
     final DateTime? accountLastSyncedTime =
         map['account_last_synced_time'] != null
             ? (map['account_last_synced_time'] as Timestamp).toDate()
             : null;
-    final String? institutionId = map['institution_id'];
+    final String institutionId = map['institution_id'];
+    final AccountConnectionState accountConnectionState =
+        (map['account_connection_state'] as String)
+            .toEnum(AccountConnectionState.values);
 
     return Account(
       accountId: accountId,
@@ -203,6 +219,7 @@ class Account {
       verificationStatus: verificationStatus,
       accountLastSyncedTime: accountLastSyncedTime,
       institutionId: institutionId,
+      accountConnectionState: accountConnectionState,
     );
   }
 
@@ -214,7 +231,7 @@ class Account {
 
   @override
   String toString() {
-    return 'Account(accountId: $accountId, balance: $balance, mask: $mask, name: $name, officialName: $officialName, type: $type, subtype: $subtype, verificationStatus: $verificationStatus, accountLastSyncedTime: $accountLastSyncedTime, institutionId: $institutionId)';
+    return 'Account(accountId: $accountId, balance: $balance, mask: $mask, name: $name, officialName: $officialName, type: $type, subtype: $subtype, verificationStatus: $verificationStatus, accountLastSyncedTime: $accountLastSyncedTime, institutionId: $institutionId, accountConnectionState: $accountConnectionState)';
   }
 
   @override
@@ -231,7 +248,8 @@ class Account {
         other.subtype == subtype &&
         other.verificationStatus == verificationStatus &&
         other.accountLastSyncedTime == accountLastSyncedTime &&
-        other.institutionId == institutionId;
+        other.institutionId == institutionId &&
+        other.accountConnectionState == accountConnectionState;
   }
 
   @override
@@ -245,6 +263,7 @@ class Account {
         subtype.hashCode ^
         verificationStatus.hashCode ^
         accountLastSyncedTime.hashCode ^
-        institutionId.hashCode;
+        institutionId.hashCode ^
+        accountConnectionState.hashCode;
   }
 }

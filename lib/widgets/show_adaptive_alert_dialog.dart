@@ -10,7 +10,7 @@ Future<bool?> showAdaptiveDialog(
   required String content,
   required String defaultActionText,
   String? cancelAcitionText,
-  Function? onPressed,
+  // Function? onPressed,
   bool isCancelDefault = false,
   bool isDefaultDefault = true,
 }) {

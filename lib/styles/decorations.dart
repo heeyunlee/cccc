@@ -2,16 +2,22 @@ import 'package:cccc/styles/theme_colors.dart';
 import 'package:flutter/material.dart';
 
 class Decorations {
-  static BoxDecoration accountDetail(BuildContext context) => BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Theme.of(context).colorScheme.secondary,
-            Colors.black,
-          ],
-        ),
-      );
+  static BoxDecoration gradientFromHexString(String? hex) {
+    final hexCode = hex?.substring(1) ?? '000000';
+    final fullHexCode = 'FF' + hexCode;
+    final hexCodeInt = int.parse(fullHexCode, radix: 16);
+
+    return BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          Color(hexCodeInt),
+          Colors.black,
+        ],
+      ),
+    );
+  }
 
   static BoxDecoration transactionDetail(BuildContext context) => BoxDecoration(
         gradient: LinearGradient(
@@ -63,4 +69,14 @@ class Decorations {
       ],
     ),
   );
+
+  static const blueGreyCircle = BoxDecoration(
+    shape: BoxShape.circle,
+    color: Colors.blueGrey,
+  );
+
+  static BoxDecoration colorCircle(int value) => BoxDecoration(
+        shape: BoxShape.circle,
+        color: Color(value),
+      );
 }

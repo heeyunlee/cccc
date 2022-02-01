@@ -1,18 +1,18 @@
 from typing import Any, Dict
 
-from google.cloud.firestore import DocumentReference
-from source.configuration import firestore_client
+from google.cloud import firestore
+from google.cloud.firestore import CollectionReference
 
 
 def get_access_tokens(uid: str) -> Dict[str, Any]:
-    user_doc = firestore_client.collection('users').document(uid)
-    user_secrets_doc: DocumentReference = user_doc.collection(
-        'secrets').document(uid)
-    user_secrets_snapshot = user_secrets_doc.get()
+    try:
+        client = firestore.Client()
+        user_doc = client.collection('users').document(uid)
+        secrets_ref: CollectionReference = user_doc.collection('secrets')
+        plaid_secrets_ref = secrets_ref.document('plaid')
+        plaid_secrets_dict = plaid_secrets_ref.get().to_dict()
+        access_tokens = plaid_secrets_dict.get('access_tokens')
 
-    if not user_secrets_snapshot.exists:
-        return {'status': 400, 'error_message': 'access token does not exists'}
-
-    access_tokens = user_secrets_snapshot.to_dict().get('plaid_access_tokens')
-
-    return {'status': 200, 'acess_tokens': access_tokens}
+        return {'status': 200, 'acess_tokens': access_tokens}
+    except Exception as e:
+        return {'status': 404, 'error_message': str(e)}

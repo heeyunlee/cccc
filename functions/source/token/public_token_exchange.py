@@ -21,20 +21,15 @@ from source.configuration import plaid_client
 '''
 
 
-def public_token_exchange(public_token: Union[str, None]) -> Dict[str, Any]:
+def public_token_exchange(public_token: str) -> Dict[str, Any]:
     try:
-
-        if public_token is None:
-            return {'error_code': 404, 'error_message': 'public_token is None'}
-
-        # Make Request to exchange public_token_to_access_token
+        # Make Request to exchange `public_token` to `access_token`
         request = ItemPublicTokenExchangeRequest(public_token)
         response: ItemPublicTokenExchangeResponse = plaid_client.item_public_token_exchange(
-            request)
-        response_dict = response.to_dict()
-        print(f'exchange response dict: \n{response_dict}')
+            request
+        )
 
-        return response_dict
+        return response.to_dict()
     except ApiException as e:
         exceptions: dict = json.loads(e.body)
         return exceptions

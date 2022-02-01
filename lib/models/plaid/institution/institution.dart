@@ -62,7 +62,7 @@ class Institution {
   /// list is provided for the purpose of looking up institutions by routing
   /// number. It is not comprehensive and should never be used as a complete
   /// list of routing numbers for an institution.
-  final List<int> routingNumbers;
+  final List<String> routingNumbers;
 
   /// Indicates that the institution has an OAuth login flow. This is
   /// primarily relevant to institutions with European country codes.
@@ -98,7 +98,7 @@ class Institution {
     String? url,
     String? primaryColor,
     String? logo,
-    List<int>? routingNumbers,
+    List<String>? routingNumbers,
     bool? oauth,
     PlaidInstitutionStatus? status,
     PaymentInitiationMetadata? paymentInitiationMetadata,
@@ -121,7 +121,7 @@ class Institution {
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, Object?> toMap() {
     return {
       'institution_id': institutionId,
       'name': name,
@@ -148,7 +148,7 @@ class Institution {
       url: map['url'],
       primaryColor: map['primary_color'],
       logo: map['logo'],
-      routingNumbers: List<int>.from(map['routing_numbers']),
+      routingNumbers: List<String>.from(map['routing_numbers']),
       oauth: map['oauth'] ?? false,
       status: map['status'] != null
           ? PlaidInstitutionStatus.fromMap(map['status'])

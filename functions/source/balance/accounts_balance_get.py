@@ -1,11 +1,8 @@
 import json
-from typing import Dict, Any
 
 from plaid import ApiException
 from plaid.model.accounts_balance_get_request import AccountsBalanceGetRequest
-from plaid.model.accounts_balance_get_request_options import AccountsBalanceGetRequestOptions
 from plaid.model.accounts_get_response import AccountsGetResponse
-
 from source.configuration import plaid_client
 
 ''' Retrieve real-time balance data

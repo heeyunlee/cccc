@@ -7,8 +7,7 @@ from plaid.model.sandbox_public_token_create_request import \
     SandboxPublicTokenCreateRequest
 from plaid.model.sandbox_public_token_create_response import \
     SandboxPublicTokenCreateResponse
-
-from source.test_configuration import plaid_client
+from tests.test_configuration import plaid_client
 
 ''' Create a test Item
 

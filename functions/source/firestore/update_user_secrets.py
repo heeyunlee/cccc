@@ -1,28 +1,32 @@
-from typing import Any, Dict, List
+from typing import Any, Dict
 
 from google.cloud.firestore import CollectionReference
-from source.configuration import firestore_client
+from google.cloud import firestore
 
 
-def update_user_secrets(uid: str, access_token: str) -> Dict[str, Any]:
+def update_user_secrets(uid: str, access_token: str, institution_id: str) -> Dict[str, Any]:
     try:
-        user_doc = firestore_client.collection('users').document(uid)
+        client = firestore.Client()
+        user_doc = client.collection('users').document(uid)
         secrets_collection: CollectionReference = user_doc.collection(
             'secrets')
-        user_secret_doc_ref = secrets_collection.document(uid)
-        user_secret_doc_snapshot = user_secret_doc_ref.get()
+        plaid_secret_doc_ref = secrets_collection.document('plaid')
+        plaid_secret_snapshot = plaid_secret_doc_ref.get()
 
-        if user_secret_doc_snapshot.exists:
-            secret_doc = user_secret_doc_snapshot.to_dict()
-            access_tokens: List[str] = secret_doc.get('plaid_access_tokens')
-            print(f'old access tokens: {access_tokens}')
+        new_access_token_dict = {institution_id: access_token}
 
-            access_tokens.append(access_token)
-            print(f'new access tokens {access_tokens}')
+        if plaid_secret_snapshot.exists:
+            secret_doc = plaid_secret_snapshot.to_dict()
+            access_token_dict: Dict[str, str] = secret_doc.get('access_tokens')
+            print(f'old access tokens: {access_token_dict}')
 
-            user_secret_doc_ref.update({'plaid_access_tokens': access_tokens})
+            access_token_dict[institution_id] = access_token
+            print(f'new access tokens {access_token_dict}')
+
+            plaid_secret_doc_ref.update({'access_tokens': access_token_dict})
         else:
-            user_secret_doc_ref.create({'plaid_access_tokens': [access_token]})
+            plaid_secret_doc_ref.create(
+                {'access_tokens': new_access_token_dict})
 
         result = {
             'status': 200,
@@ -33,7 +37,7 @@ def update_user_secrets(uid: str, access_token: str) -> Dict[str, Any]:
     except Exception as e:
         result = {
             'status': 404,
-            'error': str(e),
+            'message': str(e),
         }
 
         return result

@@ -1,3 +1,4 @@
+import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/services/cloud_functions.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
@@ -5,18 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
 
-final connectPlaidModelProvider = ChangeNotifierProvider.autoDispose(
-  (ref) {
-    final functions = ref.watch(cloudFunctionsProvider);
-
-    return ConnectPlaidModel(functions: functions);
-  },
+final accountDetailBottomSheetModelProvider =
+    ChangeNotifierProvider.autoDispose(
+  (ref) => AccountDetailBottomSheetModel(
+    functions: ref.watch(cloudFunctionsProvider),
+  ),
 );
 
-class ConnectPlaidModel with ChangeNotifier {
-  ConnectPlaidModel({
-    required this.functions,
-  });
+class AccountDetailBottomSheetModel with ChangeNotifier {
+  AccountDetailBottomSheetModel({required this.functions});
 
   final CloudFunctions functions;
 
@@ -28,11 +26,15 @@ class ConnectPlaidModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> openLink(BuildContext context) async {
+  Future<void> openLinkUpdateMode(
+    BuildContext context, {
+    required Account account,
+  }) async {
     toggleLoading();
 
     try {
-      final response = await functions.createLinkToken();
+      final response =
+          await functions.createLinkTokenUpdateMode(account.institutionId);
       final linkToken = response['link_token'] as String?;
 
       if (linkToken != null) {
@@ -78,13 +80,14 @@ class ConnectPlaidModel with ChangeNotifier {
         ''');
     final institutionId = metadata.institution.id;
 
-    final response = await functions.linkAndConnect(
+    final response = await functions.linkAndConnectUpdateMode(
       publicToken,
       institutionId,
     );
+
     toggleLoading();
 
-    logger.d('function response: \n$response');
+    logger.d('Response: $response');
   }
 
   void onEventCallback(String event, LinkEventMetadata metadata) {

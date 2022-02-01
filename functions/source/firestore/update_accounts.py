@@ -1,56 +1,75 @@
 from datetime import datetime
 from typing import Any, Dict, List, Union
 
+from google.cloud import firestore
 from google.cloud.firestore_v1.collection import CollectionReference
 from plaid.model.account_balance import AccountBalance
-from source.configuration import firestore_client
 
 
-def update_accounts(uid: str, ins_id: str, accounts: List[dict]) -> Dict[str, Any]:
+def update_accounts(uid: str, institution_id: str, accounts: Union[List[Dict], None]) -> Dict[str, Any]:
+
     try:
-        user_doc = firestore_client.collection('users').document(uid)
-        accounts_ref: CollectionReference = user_doc.collection('accounts')
+        client = firestore.Client()
+        user_doc = client.collection('users').document(uid)
+        accounts_collections: CollectionReference = user_doc.collection(
+            'accounts')
 
-        # Update Accounts in `Accounts` collections
-        for account in accounts:
+        if accounts is None:
+            accounts_query = accounts_collections.where(
+                'institution_id', '==', institution_id)
+            accounts_stream = accounts_query.stream()
 
-            # Update Accounts Collections
-            account_id: str = account.get('account_id')
-            print(f'accountId: {account_id}')
+            for account in accounts_stream:
+                account_doc = account.to_dict()
+                account_id = account_doc.get('account_id')
+                account_ref = accounts_collections.document(account_id)
+                data = {
+                    'account_connection_state': 'error',
+                }
 
-            account_doc_ref = accounts_ref.document(account_id)
-            account_snapshot = account_doc_ref.get()
+                account_ref.update(data)
+        else:
+            # Update Accounts in `Accounts` collections
+            for account in accounts:
 
-            balances: Union[AccountBalance, None] = account.get('balances')
+                # Update Accounts Collections
+                account_id: str = account.get('account_id')
+                print(f'accountId: {account_id}')
 
-            data = {
-                'account_id': account.get('account_id'),
-                'balances': {
-                    'available': balances.get('available'),
-                    'current': balances.get('current'),
-                    'iso_currency_code': balances.get('iso_currency_code'),
-                    'limit': balances.get('limit'),
-                    'unofficial_currency_code': balances.get('unofficial_currency_code'),
-                },
-                'mask': account.get('mask'),
-                'name': account.get('name'),
-                'official_name': account.get('official_name'),
-                'subtype': str(account.get('subtype')),
-                'type': str(account.get('type')),
-                'verification_status': account.get('verification_status'),
-                'account_last_synced_time': datetime.now(),
-                'institution_id': ins_id,
-            }
+                account_doc_ref = accounts_collections.document(account_id)
+                account_snapshot = account_doc_ref.get()
 
-            if account_snapshot.exists:
-                account_doc_ref.update(data)
-            else:
-                account_doc_ref.set(data)
+                balances: Union[AccountBalance, None] = account.get('balances')
 
-            result = {
-                'status': 200,
-                'message': 'successfully updated accounts data',
-            }
+                data = {
+                    'account_id': account.get('account_id'),
+                    'balances': {
+                        'available': balances.get('available'),
+                        'current': balances.get('current'),
+                        'iso_currency_code': balances.get('iso_currency_code'),
+                        'limit': balances.get('limit'),
+                        'unofficial_currency_code': balances.get('unofficial_currency_code'),
+                    },
+                    'mask': account.get('mask'),
+                    'name': account.get('name'),
+                    'official_name': account.get('official_name'),
+                    'subtype': str(account.get('subtype')),
+                    'type': str(account.get('type')),
+                    'verification_status': account.get('verification_status'),
+                    'account_last_synced_time': datetime.now(),
+                    'institution_id': institution_id,
+                    'account_connection_state': 'healthy'
+                }
+
+                if account_snapshot.exists:
+                    account_doc_ref.update(data)
+                else:
+                    account_doc_ref.set(data)
+
+                result = {
+                    'status': 200,
+                    'message': 'successfully updated accounts data',
+                }
 
         return result
     except Exception as e:

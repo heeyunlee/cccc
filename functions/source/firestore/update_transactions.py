@@ -2,15 +2,18 @@ from datetime import date, datetime
 from typing import Any, Dict, List, Union
 
 from google.cloud.firestore import CollectionReference
-from source.configuration import firestore_client
+from google.cloud import firestore
 
 
 def update_transactions(uid: str, transactions: List[Dict[str, Any]]):
     try:
-        updated_transactions_length = 0
-        user_doc = firestore_client.collection('users').document(uid)
+        client = firestore.Client()
+        user_doc = client.collection('users').document(uid)
         transactions_collection: CollectionReference = user_doc.collection(
             'transactions')
+
+        updated = 0
+        created = 0
 
         for transaction in transactions:
             transaction_id = transaction.get('transaction_id')
@@ -38,11 +41,11 @@ def update_transactions(uid: str, transactions: List[Dict[str, Any]]):
 
             if transaction_snapshot.exists:
                 transaction_doc.update(transaction)
+                updated += 1
             else:
                 transaction_doc.create(transaction)
+                created += 1
 
-            updated_transactions_length += 1
-
-        return {'status': 200, 'message': 'successfully updated transactions data', 'updated_transactions_length': updated_transactions_length}
+        return {'status': 200, 'message': f'successfully created {created} and updated {updated} transaction(s)'}
     except Exception as e:
-        return {'status': 404, 'error_message': str(e)}
+        return {'status': 404, 'message': str(e)}

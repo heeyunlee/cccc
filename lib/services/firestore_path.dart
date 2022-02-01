@@ -9,4 +9,7 @@ class FirestorePath {
   static String accounts(String uid) => 'users/$uid/accounts';
   static String account(String uid, String accountId) =>
       'users/$uid/accounts/$accountId';
+
+  static String institution(String institutionId) =>
+      'institutions/$institutionId';
 }

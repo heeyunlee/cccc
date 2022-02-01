@@ -84,6 +84,22 @@ class TextStyles {
     letterSpacing: 0.15,
   );
 
+  static const subtitle1Bold = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.bold,
+    fontSize: 16,
+    color: Colors.white,
+    letterSpacing: 0.15,
+  );
+
+  static const subtitle1BoldWhite70 = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.bold,
+    fontSize: 16,
+    color: Colors.white70,
+    letterSpacing: 0.15,
+  );
+
   static const subtitle2 = TextStyle(
     fontFamily: defaultFont,
     fontWeight: FontWeight.w500,
@@ -140,11 +156,27 @@ class TextStyles {
     letterSpacing: 0.5,
   );
 
+  static const body1White70 = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 16,
+    color: Colors.white70,
+    letterSpacing: 0.5,
+  );
+
   static const body2 = TextStyle(
     fontFamily: defaultFont,
     fontWeight: FontWeight.w400,
     fontSize: 14,
     color: Colors.white,
+    letterSpacing: 0.25,
+  );
+
+  static const body2Red = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+    color: Colors.red,
     letterSpacing: 0.25,
   );
 
@@ -296,6 +328,14 @@ class TextStyles {
     fontWeight: FontWeight.w400,
     fontSize: 10,
     color: Colors.white12,
+    letterSpacing: 1.5,
+  );
+
+  static const overlineWhite54 = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 10,
+    color: Colors.white54,
     letterSpacing: 1.5,
   );
 }

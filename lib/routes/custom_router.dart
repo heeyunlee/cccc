@@ -1,4 +1,5 @@
 import 'package:cccc/models/plaid/account.dart';
+import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/routes/adaptive_page_route.dart';
 import 'package:cccc/routes/route_names.dart';
@@ -54,12 +55,17 @@ class CustomRouter {
           settings: settings,
         );
       case RouteNames.account:
-        final args = settings.arguments as Account;
+        final args = settings.arguments as Map<String, dynamic>;
+        final account = args['account'] as Account;
+        final institution = args['institution'] as Institution?;
 
         return adaptiveRoute(
           rootNavigator: false,
           maintainState: true,
-          builder: (context) => AccountDetail(account: args),
+          builder: (context) => AccountDetail(
+            account: account,
+            institution: institution,
+          ),
           settings: settings,
         );
       case RouteNames.scanReceipts:

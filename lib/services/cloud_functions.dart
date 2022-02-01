@@ -27,11 +27,11 @@ class CloudFunctions {
   final FirebaseAuthService auth;
   final FirestoreDatabase database;
 
-  Future<Map<String, dynamic>> linkTokenCreate() async {
+  Future<Map<String, dynamic>> createLinkToken() async {
     final uid = auth.currentUser!.uid;
 
     final response = await http.post(
-      CloudFunctionsURIs.linkTokenCreate,
+      CloudFunctionsURIs.createLinkToken,
       body: json.encode({
         'uid': uid,
       }),
@@ -43,7 +43,29 @@ class CloudFunctions {
     return responseBody;
   }
 
-  Future<Map<String, dynamic>> exchangeAndUpdate(String publicToken) async {
+  Future<Map<String, dynamic>> createLinkTokenUpdateMode(
+    String institutionId,
+  ) async {
+    final uid = auth.currentUser!.uid;
+
+    final response = await http.post(
+      CloudFunctionsURIs.createLinkTokenUpdateMode,
+      body: json.encode({
+        'uid': uid,
+        'institution_id': institutionId,
+      }),
+    );
+
+    final responseBody = json.decode(response.body) as Map<String, dynamic>;
+    logger.d('response body: $responseBody');
+
+    return responseBody;
+  }
+
+  Future<Map<String, dynamic>> linkAndConnect(
+    String publicToken,
+    String institutionId,
+  ) async {
     final uid = auth.currentUser!.uid;
 
     final response = await http.post(
@@ -51,6 +73,7 @@ class CloudFunctions {
       body: json.encode({
         'uid': uid,
         'public_token': publicToken,
+        'institution_id': institutionId,
       }),
     );
 
@@ -60,7 +83,28 @@ class CloudFunctions {
     return responseBody;
   }
 
-  Future<void> transactionsRefresh(BuildContext context, User user) async {
+  Future<Map<String, dynamic>> linkAndConnectUpdateMode(
+    String publicToken,
+    String institutionId,
+  ) async {
+    final uid = auth.currentUser!.uid;
+
+    final response = await http.post(
+      CloudFunctionsURIs.linkAndConnectUpdateMode,
+      body: json.encode({
+        'uid': uid,
+        'public_token': publicToken,
+        'institution_id': institutionId,
+      }),
+    );
+
+    final responseBody = json.decode(response.body) as Map<String, dynamic>;
+    logger.d('response body: $responseBody');
+
+    return responseBody;
+  }
+
+  Future<http.Response> transactionsRefresh(User user) async {
     logger.d('`transactionsRefresh` function called');
 
     final response = await http.post(
@@ -83,6 +127,10 @@ class CloudFunctions {
       };
 
       await database.updateUser(user, updatedUserData);
+
+      return response;
+    } else {
+      return response;
     }
   }
 
@@ -138,6 +186,4 @@ class CloudFunctions {
       logger.d('raw text was null');
     }
   }
-
-  Future<void> getBalances() async {}
 }

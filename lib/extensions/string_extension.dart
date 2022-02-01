@@ -1,4 +1,5 @@
 import 'package:cccc/extensions/enum_extension.dart';
+import 'package:cccc/models/enum/account_subtype.dart';
 import 'package:cccc/models/enum/plaid_institution_health_incident_status.dart';
 import 'package:cccc/models/enum/plaid_institution_refresh_interval.dart';
 import 'package:cccc/models/enum/plaid_product.dart';
@@ -7,21 +8,36 @@ import 'package:cccc/models/enum/standing_order_interval.dart';
 extension CapExtension on String {
   String get title {
     final split = this.split(' ');
-    final iter = split.map((e) => e[0].toUpperCase() + e.substring(1));
+    final iter = split.map(
+      (e) => e[0].toUpperCase() + e.substring(1).toLowerCase(),
+    );
 
     return iter.join(' ');
   }
 
-  T toEnum<T>(List<T> values) {
+  String get lowerCamelCase {
     if (contains(' ')) {
       final camel = split(' ').sublist(1).map((e) => e.title).join();
-      final lower = split(' ')[0];
+      final lower = split(' ')[0].toLowerCase();
       final lowerCamel = lower + camel;
 
-      return values.firstWhere((e) => lowerCamel == enumToString(e));
+      return lowerCamel;
+    } else if (contains('_')) {
+      final camel = split('_').sublist(1).map((e) => e.title).join();
+      final lower = split('_')[0].toLowerCase();
+      final lowerCamel = lower + camel;
+
+      return lowerCamel;
     } else {
-      return values.firstWhere((e) => this == enumToString(e));
+      final firstLetter = this[0].toLowerCase();
+      final remainderLetters = substring(1);
+
+      return firstLetter + remainderLetters;
     }
+  }
+
+  T toEnum<T>(List<T> values) {
+    return values.firstWhere((e) => lowerCamelCase == enumToString(e));
   }
 }
 
@@ -107,6 +123,27 @@ extension StandingOrderIntervalFromString on String {
         return StandingOrderInterval.monthly;
       default:
         return StandingOrderInterval.weekly;
+    }
+  }
+}
+
+extension AccountSubtypeFromString on String {
+  AccountSubtype get accountSubtype {
+    switch (this) {
+      case '401a':
+        return AccountSubtype.i401a;
+      case '401k':
+        return AccountSubtype.i401k;
+      case '403B':
+        return AccountSubtype.i403B;
+      case '457b':
+        return AccountSubtype.i457b;
+      case '529':
+        return AccountSubtype.i529;
+      case 'non-taxable brokerage account':
+        return AccountSubtype.nonTaxableBrokerageAccount;
+      default:
+        return toEnum(AccountSubtype.values);
     }
   }
 }

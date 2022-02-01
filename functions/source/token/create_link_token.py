@@ -8,7 +8,6 @@ from plaid.model.country_code import CountryCode
 from plaid.model.link_token_create_request_user import \
     LinkTokenCreateRequestUser
 from plaid.model.products import Products
-
 from source.configuration import plaid_client
 
 ''' Create Link Token
@@ -24,11 +23,10 @@ from source.configuration import plaid_client
 '''
 
 
-def link_token_create(request: flask.Request) -> Dict[str, Any]:
+def create_link_token(request: flask.Request) -> Dict[str, Any]:
 
     # Get UID from request
-    data = request.data
-    data_dict: dict = json.loads(data)
+    data_dict: dict = json.loads(request.data)
     uid: Union[str, None] = data_dict.get('uid')
 
     if uid is None:
@@ -51,9 +49,7 @@ def link_token_create(request: flask.Request) -> Dict[str, Any]:
         )
         print(f'link_token_create response: \n{response}')
 
-        response_dict = response.to_dict()
-
-        return response_dict
+        return response.to_dict()
     except ApiException as e:
         exceptions: dict = json.loads(e.body)
 

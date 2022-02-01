@@ -1,6 +1,6 @@
 import 'package:cccc/models/enum/account_type.dart';
 import 'package:cccc/models/plaid/account.dart';
-import 'package:cccc/widgets/accounts_list_tile.dart';
+import 'package:cccc/widgets/account_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class AccountsExpansionTile extends StatelessWidget {
@@ -32,7 +32,7 @@ class AccountsExpansionTile extends StatelessWidget {
           itemBuilder: (context, index) {
             final account = accounts[index]!;
 
-            return AccountsListTile(account: account);
+            return AccountListTile(account: account);
           },
         ),
       ],

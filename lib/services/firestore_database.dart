@@ -1,4 +1,5 @@
 import 'package:cccc/models/plaid/account.dart';
+import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/models/user.dart';
 import 'package:cccc/services/firestore_path.dart';
@@ -48,7 +49,7 @@ class FirestoreDatabase {
 
   Stream<User?> userStream() => _service.documentStream(
         path: FirestorePath.user(uid!),
-        fromBuilder: (json, id) => User.fromMap(json!),
+        fromBuilder: (json) => User.fromMap(json!),
         toBuilder: (model) => model.toMap(),
       );
 
@@ -85,6 +86,19 @@ class FirestoreDatabase {
     );
   }
 
+  Stream<List<Transaction?>> accountTransactionsLimitStream(String accountId) {
+    return _service.whereCollectionWithLimitStream<Transaction>(
+      path: FirestorePath.transactions(uid!),
+      fromBuilder: (json, id) => Transaction.fromMap(json!),
+      toBuilder: (model) => model.toMap(),
+      orderByField: 'date',
+      descending: true,
+      where: 'account_id',
+      isEqualTo: accountId,
+      limit: 6,
+    );
+  }
+
   Stream<List<Transaction?>> transactionsSpecificAmount(num amount) {
     return _service.whereCollectionStream<Transaction>(
       path: FirestorePath.transactions(uid!),
@@ -108,8 +122,16 @@ class FirestoreDatabase {
   Stream<Account?> accountStream(String accountId) {
     return _service.documentStream<Account>(
       path: FirestorePath.account(uid!, accountId),
-      fromBuilder: (json, id) => Account.fromMap(json!),
+      fromBuilder: (json) => Account.fromMap(json!),
       toBuilder: (model) => model.toMap(),
+    );
+  }
+
+  Stream<Institution?> institutionStream(String institutionId) {
+    return _service.documentStream<Institution?>(
+      path: FirestorePath.institution(institutionId),
+      fromBuilder: (json) => json != null ? Institution.fromMap(json) : null,
+      toBuilder: (model) => model!.toMap(),
     );
   }
 }

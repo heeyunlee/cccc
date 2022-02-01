@@ -1,7 +1,17 @@
 # Change Log
 
-## [0.0.10]
+## [0.0.11]
 ### New Features & Screens
+- Add a Google Cloud Functions that fixes `ITEM_LOGIN_REQUIRED` error from Plaid Link
+  
+### Bug Fix & Refactor
+- Add a `DateTime` extension that creates a timeago string
+- Create `enumToTitle` extension for general type
+- Also create `lowerCamelCase` extension for String that creates a lowerCamelCase from different types of sentences
+
+## [0.0.10]: Jan. 28th, 2022
+### New Features & Screens
+- Show logo image for `AccountListTile`
 
 ### Bug Fix & Refactor
 - Refactor some code
@@ -9,6 +19,7 @@
 - Create test for `Formatter` class
 - Create Plaid's `Institution` class, including all the other classes and enums required to make one
 - Refactor `functions/sources` folder
+- Add `enumExtension` and `stringExtension`
 
 ## [0.0.9] Jan 15th, 2022
 ### New Features & Screens
@@ -86,7 +97,8 @@
 
 ### Bug Fix & Refactor
 
-[0.0.10]: https://github.com/heeyunlee/cccc
+[0.0.11]: https://github.com/heeyunlee/cccc
+[0.0.10]: https://github.com/heeyunlee/cccc/commit/d33697280ac20257cd13f409835d8559533ac8b4
 [0.0.9]: https://github.com/heeyunlee/cccc/commit/168154fd54fee57a68a75c2b2339068c9a5cf21f
 [0.0.8]: https://github.com/heeyunlee/cccc/commit/424609ca970fcc04657240673cd7a3ddf38c7bdc
 [0.0.7]: https://github.com/heeyunlee/cccc/commit/e3d944be91e599146db2ef94a64112858fad7760

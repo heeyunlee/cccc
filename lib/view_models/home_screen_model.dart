@@ -60,7 +60,17 @@ class HomeScreenModel with ChangeNotifier {
 
   Future<void> transactionsRefresh(BuildContext context, User user) async {
     try {
-      await functions.transactionsRefresh(context, user);
+      final response = await functions.transactionsRefresh(user);
+
+      if (response.statusCode == 404) {
+        showAdaptiveDialog(
+          context,
+          title: 'Refresh Error',
+          content:
+              'We could not refresh the data. Please re-authenticate your account using the Plaid Link',
+          defaultActionText: 'OK',
+        );
+      }
     } on http.Response catch (response) {
       if (response.statusCode == 404) {
         logger.e(response);
