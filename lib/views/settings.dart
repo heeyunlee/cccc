@@ -1,7 +1,9 @@
 import 'package:cccc/constants/image_assets.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/firebase_auth.dart';
+import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/text_styles.dart';
+import 'package:cccc/views/linked_accounts.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -17,6 +19,8 @@ class Settings extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    logger.d('[Settings] screen building...');
+
     final auth = ref.watch(authProvider);
 
     return Scaffold(
@@ -25,6 +29,10 @@ class Settings extends ConsumerWidget {
       ),
       body: Column(
         children: [
+          ListTile(
+            onTap: () => LinkedAccounts.show(context),
+            title: const Text('Linked Accounts'),
+          ),
           ListTile(
             onTap: () {
               showAboutDialog(

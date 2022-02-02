@@ -1,20 +1,17 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import 'package:cccc/models/enum/payment_channel.dart';
 import 'package:cccc/models/plaid/account.dart';
+import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/styles/button_styles.dart';
-import 'package:cccc/styles/decorations.dart';
-import 'package:cccc/styles/text_styles.dart';
-import 'package:cccc/styles/theme_colors.dart';
-import 'package:cccc/view/scan_receipt.dart';
+import 'package:cccc/styles/styles.dart';
 import 'package:cccc/view_models/transaction_detail_screen_model.dart';
+import 'package:cccc/views/scan_receipt.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/receipt_widget.dart';
 import 'package:cccc/widgets/transaction_detail_title.dart';
-import 'package:flutter/material.dart';
-
-import 'package:cccc/models/plaid/transaction.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class TransactionDetail extends ConsumerWidget {
   const TransactionDetail({
@@ -236,6 +233,7 @@ class TransactionDetail extends ConsumerWidget {
                           title: Text('Menu', style: TextStyles.caption),
                           children: [],
                         ),
+                      SizedBox(height: MediaQuery.of(context).padding.bottom),
                     ],
                   ),
                 ),

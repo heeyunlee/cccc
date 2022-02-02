@@ -1,21 +1,17 @@
 import 'dart:convert';
 
-import 'package:cccc/styles/decorations.dart';
 import 'package:flutter/material.dart';
 
-import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
-import 'package:cccc/styles/text_styles.dart';
+import 'package:cccc/styles/styles.dart';
 
-class AccountCircleAvatar extends StatelessWidget {
-  const AccountCircleAvatar({
+class InstitutionCircleAvatar extends StatelessWidget {
+  const InstitutionCircleAvatar({
     Key? key,
-    required this.account,
     required this.institution,
     this.diameter = 32,
   }) : super(key: key);
 
-  final Account account;
   final Institution? institution;
   final double? diameter;
 
@@ -27,7 +23,7 @@ class AccountCircleAvatar extends StatelessWidget {
         height: diameter,
         decoration: Decorations.blueGreyCircle,
         child: Center(
-          child: Text(account.name[0], style: TextStyles.body2),
+          child: Text(institution?.name[0] ?? 'I', style: TextStyles.body2),
         ),
       );
     }

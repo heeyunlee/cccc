@@ -88,7 +88,7 @@ class _ScanReceiptBottomSheetState
       case ScanReceiptState.checkTransaction:
         return const MatchTransactionWithItemsWidget();
       case ScanReceiptState.loading:
-        return const Center(child: CircularProgressIndicator());
+        return const Center(child: CircularProgressIndicator.adaptive());
       case ScanReceiptState.error:
         return ChooseImageToScanWidget(
           title: Row(

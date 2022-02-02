@@ -1,3 +1,4 @@
+import 'package:cccc/models/enum/account_connection_state.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/models/plaid/transaction.dart';
@@ -54,11 +55,36 @@ class AccountDetailScreenModel with ChangeNotifier {
     return database.institutionStream(account.institutionId);
   }
 
-  String? get lastSyncedDate {
+  String get lastSyncedDate {
     final accountLastSyncedTime = account.accountLastSyncedTime;
 
     if (accountLastSyncedTime != null) {
-      return accountLastSyncedTime.timeago;
+      return 'Last synced ${accountLastSyncedTime.timeago}';
+    } else {
+      return 'Last synced time not available';
+    }
+  }
+
+  Icon get connectionStateIcon {
+    switch (account.accountConnectionState) {
+      case AccountConnectionState.healthy:
+        return const Icon(
+          Icons.check_circle_outline,
+          color: Colors.green,
+          size: 16,
+        );
+      case AccountConnectionState.error:
+        return const Icon(
+          Icons.error_outline,
+          color: Colors.red,
+          size: 16,
+        );
+      case AccountConnectionState.diactivated:
+        return const Icon(
+          Icons.do_not_disturb,
+          color: Colors.grey,
+          size: 16,
+        );
     }
   }
 }

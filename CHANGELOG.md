@@ -3,6 +3,7 @@
 ## [0.0.11]
 ### New Features & Screens
 - Add a Google Cloud Functions that fixes `ITEM_LOGIN_REQUIRED` error from Plaid Link
+- Add a `LinkedAccounts` screen where user can see all the linked accounts grouped by `institution_id`
   
 ### Bug Fix & Refactor
 - Add a `DateTime` extension that creates a timeago string

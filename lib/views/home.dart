@@ -1,19 +1,21 @@
 import 'dart:io';
 
-import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/models/user.dart';
-import 'package:cccc/view/scan_receipt.dart';
-import 'package:cccc/view_models/home_screen_model.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shimmer/shimmer.dart';
+
+import 'package:cccc/models/user.dart';
+import 'package:cccc/services/logger_init.dart';
+import 'package:cccc/view_models/home_screen_model.dart';
+import 'package:cccc/views/scan_receipt.dart';
+import 'package:cccc/views/settings.dart';
 import 'package:cccc/widgets/recent_transactions_card.dart';
-import 'package:cccc/view/settings.dart';
+
 import '../widgets/accounts_card.dart';
 import '../widgets/custom_stream_builder.dart';
 import '../widgets/home_flexible_space_bar.dart';
-import 'package:shimmer/shimmer.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 class Home extends ConsumerWidget {
   const Home({Key? key}) : super(key: key);

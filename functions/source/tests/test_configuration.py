@@ -12,12 +12,12 @@ with open(private_keys_path) as f:
     f.close()
 
 configuration = plaid.Configuration(
-    # host=plaid.Environment.Sandbox,
-    host=plaid.Environment.Development,
+    host=plaid.Environment.Sandbox,
+    # host=plaid.Environment.Development,
     api_key={
         'clientId': data.get('client_id'),
-        # 'secret': data.get('secret_sandbox'),
-        'secret': data.get('secret_development'),
+        'secret': data.get('secret_sandbox'),
+        # 'secret': data.get('secret_development'),
     }
 )
 

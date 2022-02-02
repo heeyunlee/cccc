@@ -180,6 +180,14 @@ class TextStyles {
     letterSpacing: 0.25,
   );
 
+  static const body2RedAccent = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+    color: Colors.redAccent,
+    letterSpacing: 0.25,
+  );
+
   static const body2Bold = TextStyle(
     fontFamily: defaultFont,
     fontWeight: FontWeight.bold,
@@ -252,6 +260,14 @@ class TextStyles {
     letterSpacing: 0.4,
   );
 
+  static const captionRed = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 12,
+    color: Colors.red,
+    letterSpacing: 0.4,
+  );
+
   static const captionBold = TextStyle(
     fontFamily: defaultFont,
     fontWeight: FontWeight.bold,
@@ -288,6 +304,14 @@ class TextStyles {
     fontWeight: FontWeight.bold,
     fontSize: 12,
     color: Colors.white38,
+    letterSpacing: 0.4,
+  );
+
+  static const captionWhite54 = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 12,
+    color: Colors.white54,
     letterSpacing: 0.4,
   );
 
@@ -336,6 +360,14 @@ class TextStyles {
     fontWeight: FontWeight.w400,
     fontSize: 10,
     color: Colors.white54,
+    letterSpacing: 1.5,
+  );
+
+  static const overlineWhite70 = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 10,
+    color: Colors.white70,
     letterSpacing: 1.5,
   );
 }

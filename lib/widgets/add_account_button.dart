@@ -1,7 +1,7 @@
 import 'package:cccc/styles/button_styles.dart';
 import 'package:flutter/material.dart';
 
-import '../view/connect_plaid.dart';
+import '../views/connect_plaid.dart';
 
 class AddAccountButton extends StatelessWidget {
   const AddAccountButton({Key? key}) : super(key: key);

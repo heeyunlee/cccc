@@ -7,7 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'custom_stream_builder.dart';
 import 'transaction_list_tile.dart';
-import '../view/all_transactions.dart';
+import '../views/all_transactions.dart';
 
 class RecentTransactionsCard extends ConsumerWidget {
   const RecentTransactionsCard({

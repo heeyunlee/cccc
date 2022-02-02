@@ -27,6 +27,7 @@ class Themes {
       horizontal: 16,
     ),
     dense: true,
+    style: ListTileStyle.list,
   );
 
   static const appBar = AppBarTheme(
@@ -45,6 +46,9 @@ class Themes {
   );
 
   static const card = CardTheme(
+    color: ThemeColors.grey900,
+    margin: EdgeInsets.all(16),
+    clipBehavior: Clip.hardEdge,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(8)),
     ),

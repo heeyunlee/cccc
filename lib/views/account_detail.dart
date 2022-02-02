@@ -107,14 +107,12 @@ class _AccountDetailState extends ConsumerState<AccountDetail>
             ),
             actions: [
               IconButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) => AccountDetailBottomSheet(
-                      account: widget.account,
-                    ),
-                  );
-                },
+                onPressed: () => showModalBottomSheet(
+                  context: context,
+                  builder: (context) => AccountDetailBottomSheet(
+                    account: widget.account,
+                  ),
+                ),
                 icon: const Icon(Icons.more_vert),
               ),
             ],
@@ -141,7 +139,7 @@ class _AccountDetailState extends ConsumerState<AccountDetail>
                           const SizedBox(height: 8),
                           Text(
                             model.currentAmount,
-                            style: TextStyles.h5W900,
+                            style: TextStyles.h4W900,
                           ),
                           const SizedBox(height: 8),
                           Row(
@@ -155,22 +153,23 @@ class _AccountDetailState extends ConsumerState<AccountDetail>
                                 ),
                               ),
                               const SizedBox(width: 16),
-                              AccountCircleAvatar(
-                                account: widget.account,
+                              InstitutionCircleAvatar(
                                 institution: widget.institution,
                                 diameter: 20,
-                              )
+                              ),
                             ],
                           ),
                           const SizedBox(height: 4),
                           Row(
                             children: [
                               Text(
-                                'Last synced ${model.lastSyncedDate}',
+                                model.lastSyncedDate,
                                 style: TextStyles.overlineWhite54,
                               ),
+                              const SizedBox(width: 8),
+                              model.connectionStateIcon,
                             ],
-                          )
+                          ),
                         ],
                       ),
                     ),

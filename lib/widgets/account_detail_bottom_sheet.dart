@@ -1,10 +1,10 @@
-import 'package:cccc/models/enum/account_connection_state.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/styles/styles.dart';
+import 'package:cccc/views/linked_accounts.dart';
 import 'package:cccc/view_models/account_detail_bottom_sheet_model.dart';
+import 'package:cccc/widgets/account_connection_state_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:plaid_flutter/plaid_flutter.dart';
 
 import 'bottom_sheet_card.dart';
 
@@ -24,17 +24,11 @@ class AccountDetailBottomSheet extends ConsumerStatefulWidget {
 class _AccountDetailBottomSheetState
     extends ConsumerState<AccountDetailBottomSheet> {
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final model = ref.watch(accountDetailBottomSheetModelProvider);
-
-    PlaidLink.onSuccess(model.onSuccessCallback);
-    PlaidLink.onEvent(model.onEventCallback);
-    PlaidLink.onExit(model.onExitCallback);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final model = ref.watch(
+      accountDetailBottomSheetModelProvider(widget.account),
+    );
+
     return BottomSheetCard(
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -45,46 +39,41 @@ class _AccountDetailBottomSheetState
             Flexible(
               child: Padding(
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 32,
+                  horizontal: 16,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     FittedBox(
-                      child: Text(
-                        widget.account.name,
-                        style: TextStyles.subtitle2,
+                      child: Row(
+                        children: [
+                          Text(
+                            model.name,
+                            style: TextStyles.subtitle2,
+                          ),
+                          const SizedBox(width: 8),
+                          AccountConnectionStateIcon(account: model.account),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    RichText(
-                      text: TextSpan(
-                        children: [
-                          const TextSpan(text: 'Connection State:  '),
-                          TextSpan(
-                            text: widget.account.accountConnectionState.name,
-                            style: TextStyles.captionNoColor
-                                .copyWith(color: Colors.red),
-                          )
-                        ],
-                        style: TextStyles.caption,
-                      ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'There is an error with connecting the account. Please reauthenticate to fix the issue',
+                      style: TextStyles.captionWhite54,
+                      maxLines: 2,
                     ),
                   ],
                 ),
               ),
             ),
             const SizedBox(height: 16),
-            if (widget.account.accountConnectionState ==
-                AccountConnectionState.error)
+            if (model.connectionIsError)
               ListTile(
                 visualDensity: VisualDensity.compact,
                 leading: const Icon(Icons.build, size: 20),
                 title: const Text('Fix the account connectivity issue'),
-                onTap: () => ref
-                    .read(accountDetailBottomSheetModelProvider)
-                    .openLinkUpdateMode(context, account: widget.account),
+                onTap: () => LinkedAccounts.show(context),
               ),
             ListTile(
               visualDensity: VisualDensity.compact,

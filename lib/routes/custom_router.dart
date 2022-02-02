@@ -3,13 +3,14 @@ import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/routes/adaptive_page_route.dart';
 import 'package:cccc/routes/route_names.dart';
-import 'package:cccc/view/account_detail.dart';
-import 'package:cccc/view/connect_plaid.dart';
-import 'package:cccc/view/home.dart';
-import 'package:cccc/view/scan_receipt.dart';
-import 'package:cccc/view/settings.dart';
-import 'package:cccc/view/transaction_detail.dart';
-import 'package:cccc/view/all_transactions.dart';
+import 'package:cccc/views/account_detail.dart';
+import 'package:cccc/views/connect_plaid.dart';
+import 'package:cccc/views/home.dart';
+import 'package:cccc/views/linked_accounts.dart';
+import 'package:cccc/views/scan_receipt.dart';
+import 'package:cccc/views/settings.dart';
+import 'package:cccc/views/transaction_detail.dart';
+import 'package:cccc/views/all_transactions.dart';
 import 'package:flutter/material.dart';
 
 class CustomRouter {
@@ -75,6 +76,13 @@ class CustomRouter {
           rootNavigator: true,
           maintainState: true,
           builder: (context) => ScanReceipt(transaction: args),
+          settings: settings,
+        );
+      case RouteNames.linkedAccounts:
+        return adaptiveRoute(
+          rootNavigator: true,
+          maintainState: true,
+          builder: (context) => const LinkedAccounts(),
           settings: settings,
         );
 

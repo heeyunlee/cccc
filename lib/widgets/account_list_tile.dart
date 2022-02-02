@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/styles/formatter.dart';
 import 'package:cccc/styles/text_styles.dart';
-import 'package:cccc/view/account_detail.dart';
+import 'package:cccc/views/account_detail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'account_circle_avatar.dart';
 import 'package:cccc/models/enum/account_subtype.dart';
@@ -39,10 +39,7 @@ class AccountListTile extends ConsumerWidget {
           account: account,
           institution: institution,
         ),
-        leading: AccountCircleAvatar(
-          account: account,
-          institution: institution,
-        ),
+        leading: InstitutionCircleAvatar(institution: institution),
         title: Text(
           account.officialName ?? account.name,
           style: TextStyles.body2,

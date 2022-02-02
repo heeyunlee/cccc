@@ -1,8 +1,8 @@
 import 'package:cccc/services/firebase_auth.dart';
-import 'package:cccc/view/auth_state_error.dart';
-import 'package:cccc/view/home.dart';
-import 'package:cccc/view/sign_in.dart';
-import 'package:cccc/view/splash.dart';
+import 'package:cccc/views/auth_state_error.dart';
+import 'package:cccc/views/sign_in.dart';
+import 'package:cccc/views/splash.dart';
+import 'package:cccc/views/home.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fire_auth;
 import 'package:flutter/material.dart';
