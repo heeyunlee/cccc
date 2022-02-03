@@ -7,3 +7,4 @@
 #   $ gcloud topic gcloudignore
 #
 .gcloudignore
+tests

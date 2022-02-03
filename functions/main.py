@@ -6,3 +6,4 @@ from source.process_receipts_texts_v2 import process_receipt_texts
 from source.token.create_link_token import create_link_token
 from source.token.create_link_token_update_mode import create_link_token_update_mode
 from source.transactions_refresh import transactions_refresh
+from source.unlink_account import unlink_account

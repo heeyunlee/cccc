@@ -43,4 +43,10 @@ class CloudFunctionsURIs {
     host: CloudFunctionHost.host,
     path: CloudFunctionsKeys.createLinkTokenUpdateMode,
   );
+
+  static Uri unlinkAccount = Uri(
+    scheme: 'https',
+    host: CloudFunctionHost.host,
+    path: CloudFunctionsKeys.unlinkAccount,
+  );
 }

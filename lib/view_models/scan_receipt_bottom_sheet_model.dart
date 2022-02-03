@@ -112,7 +112,6 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
         final textsWithOffsets = _getTextsWithOffsets(recognisedText);
 
         final response = await functions.processReceiptTexts(
-          context,
           rawTexts: recognisedText.text.replaceAll('\n', ', '),
           textsWithOffsets: textsWithOffsets,
         );

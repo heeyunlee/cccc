@@ -7,7 +7,7 @@ from plaid.api import plaid_api
 from plaid.model.country_code import CountryCode
 from plaid.model.link_token_create_request_user import LinkTokenCreateRequestUser
 from source.configuration import plaid_client
-from source.firestore.get_access_token_to_update import get_access_token_to_update
+from source.firestore.get_access_token_for_institution import get_access_token_for_institution
 
 
 def create_link_token_update_mode(request: flask.Request) -> Dict[str, Any]:
@@ -22,11 +22,11 @@ def create_link_token_update_mode(request: flask.Request) -> Dict[str, Any]:
     if (uid and institution_id) is None:
         return {'status': 404, 'error_message': 'Either access_token, uid, institution_id was None. Please send the data correctly'}
 
-    access_token_response = get_access_token_to_update(uid, institution_id)
-    access_token = access_token_response.get('access_token')
+    response = get_access_token_for_institution(uid, institution_id)
+    access_token = response.get('access_token')
 
     if access_token is None:
-        return {'status': 404, 'error_message': access_token_response.get('error_message')}
+        return response
 
     try:
         # Create Link Token Request

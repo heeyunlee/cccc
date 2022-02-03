@@ -236,6 +236,22 @@ class TextStyles {
     letterSpacing: 1.25,
   );
 
+  static const button1Red = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+    color: Colors.red,
+    letterSpacing: 1.25,
+  );
+
+  static const button1Red300 = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w500,
+    fontSize: 14,
+    color: ThemeColors.red300,
+    letterSpacing: 1.25,
+  );
+
   static const button2 = TextStyle(
     fontFamily: defaultFont,
     fontWeight: FontWeight.w500,

@@ -6,4 +6,5 @@ class CloudFunctionsKeys {
   static const transactionsRefresh = '/transactions_refresh';
   static const updateTransactionsWithImage = '/update_transaction_with_image';
   static const processReceiptTexts = '/process_receipt_texts';
+  static const unlinkAccount = '/unlink_account';
 }

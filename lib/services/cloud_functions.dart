@@ -1,7 +1,6 @@
 import 'package:cccc/models/receipt_response.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/models/user.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -134,10 +133,7 @@ class CloudFunctions {
     }
   }
 
-  Future<void> updateTransactionsData(
-    BuildContext context,
-    String? url,
-  ) async {
+  Future<void> updateTransactionsData(String? url) async {
     logger.d('`updateTransactionsData` function called');
 
     if (url != null) {
@@ -153,8 +149,7 @@ class CloudFunctions {
     }
   }
 
-  Future<ReceiptResponse?> processReceiptTexts(
-    BuildContext context, {
+  Future<ReceiptResponse?> processReceiptTexts({
     String? rawTexts,
     required List<Map<String, dynamic>> textsWithOffsets,
   }) async {
@@ -185,5 +180,19 @@ class CloudFunctions {
     } else {
       logger.d('raw text was null');
     }
+  }
+
+  Future<http.Response> unlinkAccount(String? institutionId) async {
+    final response = await http.post(
+      CloudFunctionsURIs.unlinkAccount,
+      body: json.encode({
+        'uid': auth.currentUser!.uid,
+        'institution_id': institutionId,
+      }),
+    );
+
+    logger.d('unlinkAccount response: ${response.body}');
+
+    return response;
   }
 }

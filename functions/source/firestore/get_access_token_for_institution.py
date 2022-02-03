@@ -4,7 +4,7 @@ from google.cloud import firestore
 from google.cloud.firestore import CollectionReference
 
 
-def get_access_token_to_update(uid: str, institution_id: str):
+def get_access_token_for_institution(uid: str, institution_id: str):
     try:
         client = firestore.Client()
         user_ref = client.collection('users').document(uid)

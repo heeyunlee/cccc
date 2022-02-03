@@ -136,6 +136,28 @@ class ButtonStyles {
     ),
   );
 
+  static final text1Red = ButtonStyle(
+    padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
+    textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+      (Set<MaterialState> states) {
+        if (states.any(kInteractiveStates.contains)) {
+          return TextStyles.button1Red300;
+        }
+
+        return TextStyles.button1Red;
+      },
+    ),
+    foregroundColor: MaterialStateProperty.resolveWith<Color>(
+      (Set<MaterialState> states) {
+        if (states.any(kInteractiveStates.contains)) {
+          return ThemeColors.red300;
+        }
+
+        return Colors.red;
+      },
+    ),
+  );
+
   static final text2 = ButtonStyle(
     padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
     textStyle: MaterialStateProperty.resolveWith<TextStyle>(

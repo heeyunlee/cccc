@@ -46,4 +46,6 @@ class ThemeColors {
   static const analogousSecondary050 = Color(0xffe0f3f7);
 
   static const grey900 = Color(0xff212121);
+
+  static const red300 = Color(0xffe57373);
 }

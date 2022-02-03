@@ -1,7 +1,6 @@
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/accounts_institution.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
-import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/styles.dart';
 import 'package:cccc/widget_model/institution_card_model.dart';
 import 'package:cccc/widgets/account_list_tile_compact.dart';
@@ -66,18 +65,17 @@ class _InstitutionCardState extends ConsumerState<InstitutionCard> {
             ),
             trailing: IconButton(
               onPressed: () async {
-                final actionSheetResult = await showCustomActionSheet<String?>(
+                final actionSheetResult = await showCustomActionSheet<bool?>(
                   context,
                   actionsCount: 1,
                   actionColors: [Colors.red],
                   actionIconData: [Icons.link_off],
                   actionStrings: ['Unlink'],
-                  actionResults: ['Unlink'],
+                  actionResults: [true],
                 );
 
-                if (actionSheetResult == 'Unlink') {
-                  // TODO: add Plaid unlink function here
-                  logger.d('Unlink google cloud function shoud go here');
+                if (actionSheetResult == true) {
+                  await model.unlinkAccount(context);
                 }
               },
               icon: const Icon(

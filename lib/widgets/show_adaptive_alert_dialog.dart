@@ -9,10 +9,9 @@ Future<bool?> showAdaptiveDialog(
   required String title,
   required String content,
   required String defaultActionText,
+  bool isDefaultDestructiveAction = false,
   String? cancelAcitionText,
-  // Function? onPressed,
-  bool isCancelDefault = false,
-  bool isDefaultDefault = true,
+  bool isCancelDestructiveAction = false,
 }) {
   if (!Platform.isIOS) {
     return showDialog<bool>(
@@ -23,12 +22,17 @@ Future<bool?> showAdaptiveDialog(
         actions: <Widget>[
           if (cancelAcitionText != null)
             TextButton(
-              style: ButtonStyles.text1,
+              style: isCancelDestructiveAction
+                  ? ButtonStyles.text1Red
+                  : ButtonStyles.text1,
               onPressed: () => Navigator.of(context).pop(false),
               child: Text(cancelAcitionText),
             ),
+          const SizedBox(width: 8),
           TextButton(
-            style: ButtonStyles.text1Primary,
+            style: isDefaultDestructiveAction
+                ? ButtonStyles.text1Red
+                : ButtonStyles.text1Primary,
             onPressed: () => Navigator.of(context).pop(true),
             child: Text(defaultActionText),
           ),
@@ -45,14 +49,14 @@ Future<bool?> showAdaptiveDialog(
         if (cancelAcitionText != null)
           CupertinoDialogAction(
             onPressed: () => Navigator.of(context).pop(false),
-            isDefaultAction: isCancelDefault,
-            isDestructiveAction: !isCancelDefault,
+            isDefaultAction: !isCancelDestructiveAction,
+            isDestructiveAction: isCancelDestructiveAction,
             child: Text(cancelAcitionText),
           ),
         CupertinoDialogAction(
           onPressed: () => Navigator.of(context).pop(true),
-          isDefaultAction: isDefaultDefault,
-          isDestructiveAction: !isDefaultDefault,
+          isDefaultAction: !isDefaultDestructiveAction,
+          isDestructiveAction: isDefaultDestructiveAction,
           child: Text(defaultActionText),
         ),
       ],

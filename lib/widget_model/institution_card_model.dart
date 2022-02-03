@@ -125,4 +125,37 @@ class InstitutionCardModel with ChangeNotifier {
 
     _toggleLoading();
   }
+
+  Future<void> unlinkAccount(BuildContext context) async {
+    final institutionId = institution?.institutionId;
+
+    final confirmUnlinking = await showAdaptiveDialog(
+      context,
+      title: 'Unlink this institution?',
+      content:
+          'All the accounts associated with this institution will be permanently deleted, as well as all the transactions. You will NOT be able to undo this',
+      defaultActionText: 'Delete',
+      isDefaultDestructiveAction: true,
+      cancelAcitionText: 'Cancel',
+    );
+
+    if (confirmUnlinking ?? false) {
+      logger.d('Confirmed to unlink. Calling the function now');
+
+      final response = await functions.unlinkAccount(institutionId);
+
+      final status = response.statusCode;
+
+      switch (status) {
+        case 404:
+          showAdaptiveDialog(
+            context,
+            title: 'Error',
+            content:
+                'An Error occurred during unlinking the institution. Please try again',
+            defaultActionText: 'OK',
+          );
+      }
+    }
+  }
 }

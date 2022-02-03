@@ -80,7 +80,7 @@ class CustomRouter {
         );
       case RouteNames.linkedAccounts:
         return adaptiveRoute(
-          rootNavigator: true,
+          rootNavigator: false,
           maintainState: true,
           builder: (context) => const LinkedAccounts(),
           settings: settings,
