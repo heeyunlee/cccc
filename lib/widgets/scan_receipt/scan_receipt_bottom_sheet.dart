@@ -4,8 +4,6 @@ import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/text_styles.dart';
 import 'package:cccc/view_models/scan_receipt_bottom_sheet_model.dart';
 import 'package:cccc/widgets/bottom_sheet_card.dart';
-import 'package:cccc/widgets/floating_outlined_button.dart';
-import 'package:cccc/widgets/scan_receipt/check_receipt_image_widget.dart';
 import 'package:cccc/widgets/scan_receipt/scan_receipt_completed_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,15 +36,16 @@ class _ScanReceiptBottomSheetState
       height: _getHeight(),
       alignment: Alignment.topCenter,
       child: BottomSheetCard(
-        child: Stack(
-          alignment: Alignment.bottomCenter,
-          children: [
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              child: _buildChild(),
-            ),
-            _buildButton(),
-          ],
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: _buildAppBar(),
+          body: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 200),
+            child: _buildChild(),
+          ),
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          floatingActionButton: _buildFAB(),
         ),
       ),
     );
@@ -60,12 +59,10 @@ class _ScanReceiptBottomSheetState
     switch (model.state) {
       case ScanReceiptState.start:
         return padding.bottom + 192;
-      case ScanReceiptState.checkImage:
-        return size.height * 0.8;
-      case ScanReceiptState.checkTexts:
-        return size.height * 0.85;
-      case ScanReceiptState.checkTransaction:
-        return size.height * 0.85;
+      case ScanReceiptState.editItems:
+        return size.height * 0.9;
+      case ScanReceiptState.chooseTransaction:
+        return size.height * 0.9;
       case ScanReceiptState.loading:
         return padding.bottom + 192;
       case ScanReceiptState.error:
@@ -75,17 +72,47 @@ class _ScanReceiptBottomSheetState
     }
   }
 
+  PreferredSizeWidget? _buildAppBar() {
+    final model = ref.watch(scanReceiptBottomSheetModelProvider);
+
+    switch (model.state) {
+      case ScanReceiptState.start:
+      case ScanReceiptState.error:
+        return AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.close),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+          centerTitle: true,
+          title: const Text('Choose Source'),
+        );
+      case ScanReceiptState.editItems:
+      case ScanReceiptState.chooseTransaction:
+        return AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () => ref
+                .read(scanReceiptBottomSheetModelProvider)
+                .toggleState(ScanReceiptState.start),
+          ),
+          centerTitle: true,
+          title: const Text('Review the retrieved data'),
+        );
+      case ScanReceiptState.loading:
+      case ScanReceiptState.completed:
+        return null;
+    }
+  }
+
   Widget _buildChild() {
     final model = ref.watch(scanReceiptBottomSheetModelProvider);
 
     switch (model.state) {
       case ScanReceiptState.start:
         return const ChooseImageToScanWidget();
-      case ScanReceiptState.checkImage:
-        return const CheckReceiptImageWidget();
-      case ScanReceiptState.checkTexts:
+      case ScanReceiptState.editItems:
         return CheckItemsWidget(transaction: widget.transaction);
-      case ScanReceiptState.checkTransaction:
+      case ScanReceiptState.chooseTransaction:
         return const MatchTransactionWithItemsWidget();
       case ScanReceiptState.loading:
         return const Center(child: CircularProgressIndicator.adaptive());
@@ -107,24 +134,21 @@ class _ScanReceiptBottomSheetState
     }
   }
 
-  Widget _buildButton() {
+  Widget _buildFAB() {
     final model = ref.watch(scanReceiptBottomSheetModelProvider);
 
     switch (model.state) {
       case ScanReceiptState.start:
         return const SizedBox.shrink();
-      case ScanReceiptState.checkImage:
-        return FloatingOutlinedButton(
-          buttonName: 'Continue',
-          onPressed: () => model.getTransactionitems(context),
+      case ScanReceiptState.editItems:
+        return FloatingActionButton.extended(
+          onPressed: () => ref
+              .read(scanReceiptBottomSheetModelProvider)
+              .showMatchingTransaction(context,
+                  transaction: widget.transaction),
+          label: const Text('Continue'),
         );
-      case ScanReceiptState.checkTexts:
-        return FloatingOutlinedButton(
-          buttonName: 'Continue',
-          onPressed: () => model.showMatchingTransaction(context,
-              transaction: widget.transaction),
-        );
-      case ScanReceiptState.checkTransaction:
+      case ScanReceiptState.chooseTransaction:
         return const SizedBox.shrink();
       case ScanReceiptState.loading:
         return const SizedBox.shrink();

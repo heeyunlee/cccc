@@ -91,6 +91,7 @@ extension EnumToString on AccountSubtype {
       case AccountSubtype.nonTaxableBrokerageAccount:
         return 'non-taxable brokerage account';
       default:
+        // return name;
         return enumToString(this);
     }
   }

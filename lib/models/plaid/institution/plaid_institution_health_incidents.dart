@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'plaid_institution_incident_updates.dart';
 
 /// Details of recent health incidents associated with the institution.
@@ -49,8 +51,8 @@ class PlaidInstitutionHealthIncidents {
 
   factory PlaidInstitutionHealthIncidents.fromMap(Map<String, dynamic> map) {
     return PlaidInstitutionHealthIncidents(
-      startDate: DateTime.fromMillisecondsSinceEpoch(map['start_date']),
-      endDate: DateTime.fromMillisecondsSinceEpoch(map['end_date']),
+      startDate: (map['start_date'] as Timestamp).toDate().toUtc(),
+      endDate: (map['end_date'] as Timestamp).toDate().toUtc(),
       title: map['title'] ?? '',
       incidentUpdates:
           PlaidInstitutionIncidentUpdates.fromMap(map['incident_updates']),

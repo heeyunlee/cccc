@@ -1,31 +1,36 @@
 import 'package:cccc/models/plaid/transaction.dart';
+import 'package:cccc/services/firebase_auth.dart';
+import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/widgets/transaction_list_tile.dart';
+import 'package:cccc/view_models/all_transactions_model.dart';
+import 'package:cccc/widgets/custom_stream_builder.dart';
+import 'package:cccc/widgets/ordered_transactions_list_view.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cccc/routes/route_names.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AllTransactions extends StatelessWidget {
+class AllTransactions extends ConsumerStatefulWidget {
   const AllTransactions({
     Key? key,
-    required this.transactions,
   }) : super(key: key);
 
-  final List<Transaction?> transactions;
-
-  static void show(
-    BuildContext context, {
-    required List<Transaction?> transactions,
-  }) {
-    Navigator.of(context).pushNamed(
-      RouteNames.transactions,
-      arguments: transactions,
-    );
+  static void show(BuildContext context) {
+    Navigator.of(context).pushNamed(RouteNames.transactions);
   }
 
   @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _AllTransactionsState();
+}
+
+class _AllTransactionsState extends ConsumerState<AllTransactions> {
+  @override
   Widget build(BuildContext context) {
     logger.d('[Transactions] Screen building...');
+
+    final auth = ref.watch(authProvider);
+    final database = ref.watch(databaseProvider(auth.currentUser!.uid));
 
     return Scaffold(
       body: CustomScrollView(
@@ -38,16 +43,20 @@ class AllTransactions extends StatelessWidget {
             title: Text('Transactions'),
           ),
           SliverToBoxAdapter(
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              padding: const EdgeInsets.only(
-                bottom: 48,
-              ),
-              itemCount: transactions.length,
-              itemBuilder: (context, index) => TransactionListTile(
-                transaction: transactions[index]!,
-              ),
+            child: CustomStreamBuilder<List<Transaction?>>(
+              stream: database.transactionsStream(),
+              loadingWidget: Container(),
+              // loadingWidget: const CircularProgressIndicator.adaptive(),
+              errorBuilder: (context, error) => Container(),
+              builder: (context, transactions) {
+                if (transactions == null) {
+                  return Container();
+                }
+
+                return OrderedTransactionsListView(
+                  model: ref.watch(allTransactionsModelProvider(transactions)),
+                );
+              },
             ),
           ),
         ],

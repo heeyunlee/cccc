@@ -42,7 +42,8 @@ class PlaidItemStatus {
 
   factory PlaidItemStatus.fromMap(Map<String, dynamic> map) {
     return PlaidItemStatus(
-      lastStatusChange: (map['last_status_change'] as Timestamp).toDate(),
+      lastStatusChange:
+          (map['last_status_change'] as Timestamp).toDate().toUtc(),
       breakdown: PlaidStatusBreakdown.fromMap(map['breakdown']),
     );
   }

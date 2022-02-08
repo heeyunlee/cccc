@@ -6,27 +6,17 @@ from google.cloud import firestore
 
 def update_user_secrets(uid: str, access_token: str, institution_id: str) -> Dict[str, Any]:
     try:
-        client = firestore.Client()
-        user_doc = client.collection('users').document(uid)
+        firestore_client = firestore.Client()
+        user_doc = firestore_client.collection('users').document(uid)
         secrets_collection: CollectionReference = user_doc.collection(
-            'secrets')
-        plaid_secret_doc_ref = secrets_collection.document('plaid')
-        plaid_secret_snapshot = plaid_secret_doc_ref.get()
+            'plaid_secrets')
+        institution_secret_ref = secrets_collection.document(institution_id)
+        institution_secret_snapshot = institution_secret_ref.get()
 
-        new_access_token_dict = {institution_id: access_token}
-
-        if plaid_secret_snapshot.exists:
-            secret_doc = plaid_secret_snapshot.to_dict()
-            access_token_dict: Dict[str, str] = secret_doc.get('access_tokens')
-            print(f'old access tokens: {access_token_dict}')
-
-            access_token_dict[institution_id] = access_token
-            print(f'new access tokens {access_token_dict}')
-
-            plaid_secret_doc_ref.update({'access_tokens': access_token_dict})
+        if institution_secret_snapshot.exists:
+            institution_secret_ref.update({'access_token': access_token})
         else:
-            plaid_secret_doc_ref.create(
-                {'access_tokens': new_access_token_dict})
+            institution_secret_ref.create({'access_token': access_token})
 
         result = {
             'status': 200,
@@ -35,9 +25,4 @@ def update_user_secrets(uid: str, access_token: str, institution_id: str) -> Dic
 
         return result
     except Exception as e:
-        result = {
-            'status': 404,
-            'message': str(e),
-        }
-
-        return result
+        return {'status': 404, 'error': str(e)}

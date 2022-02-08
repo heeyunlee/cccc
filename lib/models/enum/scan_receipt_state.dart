@@ -2,8 +2,7 @@ enum ScanReceiptState {
   start,
   error,
   loading,
-  checkImage,
-  checkTexts,
-  checkTransaction,
+  editItems,
+  chooseTransaction,
   completed,
 }

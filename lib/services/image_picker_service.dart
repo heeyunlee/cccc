@@ -24,5 +24,6 @@ class ImagePickerService {
     } else {
       logger.d('File was not picked');
     }
+    return null;
   }
 }

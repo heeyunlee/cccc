@@ -165,21 +165,12 @@ class CloudFunctions {
           'texts_with_offsets': textsWithOffsets,
         }),
       );
-      logger.d('Response Body1 : ${response.body}');
 
-      if (response.statusCode == 200) {
-        final a = ReceiptResponse.fromJson(response.body);
-        // final date = response.body;
-        // final list = TransactionItems.fromJson(response.body);
-        logger.d('Response Body2 : \n$a');
-
-        return a;
-      } else {
-        logger.d('Response did not return correctly');
-      }
+      return ReceiptResponse.fromJson(response.body);
     } else {
       logger.d('raw text was null');
     }
+    return null;
   }
 
   Future<http.Response> unlinkAccount(String? institutionId) async {

@@ -46,7 +46,7 @@ class PlaidInstitutionIncidentUpdates {
     return PlaidInstitutionIncidentUpdates(
       description: map['description'] ?? '',
       status: (map['status'] as String).healthIncidentStatus,
-      updatedDate: (map['updated_date'] as Timestamp).toDate(),
+      updatedDate: (map['updated_date'] as Timestamp).toDate().toUtc(),
     );
   }
 

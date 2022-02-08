@@ -50,6 +50,7 @@ class FirestoreService {
           fromFirestore: (json, _) => fromBuilder(json.data(), json.id),
           toFirestore: (model, _) => toBuilder(model),
         );
+
     await reference.update(data);
   }
 

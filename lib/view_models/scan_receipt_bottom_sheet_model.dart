@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cccc/models/enum/scan_receipt_state.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/models/receipt_response.dart';
+import 'package:cccc/models/transaction_item.dart';
 import 'package:cccc/services/cloud_functions.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
@@ -14,6 +15,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cccc/extensions/text_element_extension.dart';
+import 'package:cccc/extensions/list_extension.dart';
 
 final scanReceiptBottomSheetModelProvider = ChangeNotifierProvider.autoDispose(
   (ref) {
@@ -42,14 +44,16 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
   final CloudFunctions functions;
   final FirestoreDatabase database;
 
-  File? get image => _image;
-  ReceiptResponse? get receiptResponse => _receiptResponse;
+  List<DateTime>? get dates => _dates;
+  List<TransactionItem>? get transactionItems => _transactionItems;
+  TransactionItem? get subtotalItem => _subtotalItem;
   Transaction? get transaction => _transaction;
   ScanReceiptState get state => _state;
   Stream<List<Transaction?>>? get transactionsStream => _transactionsStream;
 
-  File? _image;
-  ReceiptResponse? _receiptResponse;
+  List<DateTime>? _dates;
+  List<TransactionItem>? _transactionItems;
+  TransactionItem? _subtotalItem;
   Transaction? _transaction;
   ScanReceiptState _state = ScanReceiptState.start;
   Stream<List<Transaction?>>? _transactionsStream;
@@ -72,7 +76,40 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
     return textElementsMap;
   }
 
-  Future<void> chooseImage(
+  Future<ReceiptResponse?> _extractTexts(File imageFile) async {
+    logger.d('File exists. Start using [GoogleMlKit]');
+
+    final textDetector = GoogleMlKit.vision.textDetector();
+    final inputImage = InputImage.fromFile(imageFile);
+    final recognisedText = await textDetector.processImage(inputImage);
+    final textsWithOffsets = _getTextsWithOffsets(recognisedText);
+    final response = await functions.processReceiptTexts(
+      rawTexts: recognisedText.text.replaceAll('\n', ', '),
+      textsWithOffsets: textsWithOffsets,
+    );
+
+    return response;
+  }
+
+  void onItemNameChanged(String value, int index) {
+    final itemToUpdate = _transactionItems![index];
+    final newItem = itemToUpdate.copyWith(name: value);
+    _transactionItems![index] = newItem;
+  }
+
+  void onItemAmountChanged(String value, int index) {
+    final itemToUpdate = _transactionItems![index];
+    final newItem = itemToUpdate.copyWith(amount: int.tryParse(value));
+    _transactionItems![index] = newItem;
+
+    final newSubtotal = _transactionItems!.map((e) => e.amount).toList().sum;
+
+    _subtotalItem = _subtotalItem!.copyWith(amount: newSubtotal);
+
+    notifyListeners();
+  }
+
+  Future<void> chooseImageAndExtractTexts(
     BuildContext context, {
     required ImageSource source,
   }) async {
@@ -82,8 +119,21 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
       final file = await imagePicker.pickImage(source);
 
       if (file != null) {
-        _image = file;
-        toggleState(ScanReceiptState.checkImage);
+        final receiptResponse = await _extractTexts(file);
+
+        if (receiptResponse != null) {
+          _subtotalItem = receiptResponse.transactionItems?.last;
+
+          receiptResponse.transactionItems!.removeLast();
+          _transactionItems = receiptResponse.transactionItems;
+          _dates = receiptResponse.dates;
+
+          logger.d('Dates $_dates');
+
+          toggleState(ScanReceiptState.editItems);
+        } else {
+          toggleState(ScanReceiptState.error);
+        }
       } else {
         toggleState(ScanReceiptState.start);
       }
@@ -97,81 +147,21 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
     }
   }
 
-  Future<ReceiptResponse?> _extractTexts(BuildContext context) async {
-    try {
-      toggleState(ScanReceiptState.loading);
-
-      if (_image != null) {
-        logger.d('File exists. Start using [GoogleMlKit]');
-
-        final textDetector = GoogleMlKit.vision.textDetector();
-        final inputImage = InputImage.fromFile(_image!);
-        final recognisedText = await textDetector.processImage(inputImage);
-        logger.d('[recognisedText] function ended');
-
-        final textsWithOffsets = _getTextsWithOffsets(recognisedText);
-
-        final response = await functions.processReceiptTexts(
-          rawTexts: recognisedText.text.replaceAll('\n', ', '),
-          textsWithOffsets: textsWithOffsets,
-        );
-
-        logger.d('Items $response');
-
-        return response;
-      } else {
-        toggleState(ScanReceiptState.error);
-
-        // showAdaptiveDialog(
-        //   context,
-        //   title: 'An Error Occurred',
-        //   content: 'Image file was not added properly. Please try again.',
-        //   defaultActionText: 'OK',
-        // );
-      }
-    } catch (e) {
-      toggleState(ScanReceiptState.error);
-
-      // showAdaptiveDialog(
-      //   context,
-      //   title: 'Something went wrong',
-      //   content: e.toString(),
-      //   defaultActionText: 'OK',
-      // );
-    }
-  }
-
-  Future<void> getTransactionitems(BuildContext context) async {
-    final response = await _extractTexts(context);
-
-    if (response != null) {
-      _receiptResponse = response;
-
-      toggleState(ScanReceiptState.checkTexts);
-    } else {
-      toggleState(ScanReceiptState.error);
-
-      logger.d('Could not fetch items');
-    }
-  }
-
   Future<void> showMatchingTransaction(
     BuildContext context, {
     Transaction? transaction,
   }) async {
-    final index = _receiptResponse!.transactionItems!.length - 1;
-    final maxItem = _receiptResponse!.transactionItems![index];
-    final maxAmount = maxItem.amount;
+    final subtotal = _subtotalItem!.amount;
 
     if (transaction != null) {
       final transactionAmount = transaction.amount;
 
-      if (transactionAmount == maxAmount) {
+      if (transactionAmount == subtotal) {
         toggleState(ScanReceiptState.loading);
 
         _transaction = transaction;
 
-        await _updateTransationData(context);
+        await _updateTransactionItems(context);
       } else {
         showAdaptiveDialog(
           context,
@@ -183,10 +173,10 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
         toggleState(ScanReceiptState.start);
       }
     } else {
-      final transactionStream = database.transactionsSpecificAmount(maxAmount);
+      final transactionStream = database.transactionsSpecificAmount(subtotal);
       _transactionsStream = transactionStream;
 
-      toggleState(ScanReceiptState.checkTransaction);
+      toggleState(ScanReceiptState.chooseTransaction);
     }
   }
 
@@ -196,19 +186,24 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
   }) async {
     _transaction = transaction;
 
-    await _updateTransationData(context);
+    await _updateTransactionItems(context);
   }
 
-  Future<void> _updateTransationData(BuildContext context) async {
-    if (_transaction != null) {
-      final updatedTransaction = _transaction!
-          .copyWith(transactionItems: _receiptResponse!.transactionItems)
-          .toMap();
+  Future<void> _updateTransactionItems(BuildContext context) async {
+    try {
+      final newTransaction = _transaction!.copyWith(
+        transactionItems: _transactionItems,
+      );
 
-      // Update Transactions
-      await database.updateTransaction(_transaction!, updatedTransaction);
-
-      toggleState(ScanReceiptState.completed);
+      await database.updateTransaction(_transaction!, newTransaction.toMap());
+      Navigator.of(context).pop();
+    } catch (e) {
+      showAdaptiveDialog(
+        context,
+        title: 'Something went wrong',
+        content: e.toString(),
+        defaultActionText: 'OK',
+      );
     }
   }
 }

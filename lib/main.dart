@@ -67,13 +67,16 @@ class MyApp extends StatelessWidget {
       title: 'CCCC: Credit Card Calorie Counter',
       home: const AuthStatesChangesStreamBuilder(),
       theme: ThemeData(
-        brightness: Brightness.dark,
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSwatch(
+          primarySwatch: Themes.primarySwatch,
+          brightness: Brightness.dark,
+        ),
         dividerColor: Colors.transparent,
         primaryColor: ThemeColors.primary500,
         scaffoldBackgroundColor: Colors.black,
         textTheme: Themes.text,
         listTileTheme: Themes.listTile,
-        primarySwatch: Themes.primarySwatch,
         appBarTheme: Themes.appBar,
         bottomSheetTheme: Themes.bottomSheet,
         cardTheme: Themes.card,

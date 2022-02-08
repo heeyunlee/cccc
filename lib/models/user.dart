@@ -42,10 +42,10 @@ class User {
     final String uid = map['uid'] as String;
     final DateTime? lastPlaidSyncTime = map['lastPlaidSyncTime'] == null
         ? null
-        : (map['lastPlaidSyncTime'] as Timestamp).toDate();
+        : (map['lastPlaidSyncTime'] as Timestamp).toDate().toUtc();
     final DateTime? lastLoginDate = map['lastLoginDate'] == null
         ? null
-        : (map['lastLoginDate'] as Timestamp).toDate();
+        : (map['lastLoginDate'] as Timestamp).toDate().toUtc();
     final String? favoriteAccountId = map['favoriteAccountId'];
 
     return User(

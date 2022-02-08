@@ -44,6 +44,22 @@ class TextStyles {
     letterSpacing: 0.25,
   );
 
+  static const h4W900Green = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w900,
+    fontSize: 34,
+    color: Colors.green,
+    letterSpacing: 0.25,
+  );
+
+  static const h4W900White38 = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w900,
+    fontSize: 34,
+    color: Colors.white38,
+    letterSpacing: 0.25,
+  );
+
   static const h5 = TextStyle(
     fontFamily: defaultFont,
     fontWeight: FontWeight.w400,
@@ -73,6 +89,14 @@ class TextStyles {
     fontWeight: FontWeight.w900,
     fontSize: 20,
     color: Colors.white,
+    letterSpacing: 0.15,
+  );
+
+  static const h6W900White70 = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w900,
+    fontSize: 20,
+    color: Colors.white70,
     letterSpacing: 0.15,
   );
 
@@ -169,6 +193,14 @@ class TextStyles {
     fontWeight: FontWeight.w400,
     fontSize: 14,
     color: Colors.white,
+    letterSpacing: 0.25,
+  );
+
+  static const body2Green = TextStyle(
+    fontFamily: defaultFont,
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+    color: Colors.green,
     letterSpacing: 0.25,
   );
 

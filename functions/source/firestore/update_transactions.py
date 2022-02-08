@@ -7,8 +7,8 @@ from google.cloud import firestore
 
 def update_transactions(uid: str, transactions: List[Dict[str, Any]]):
     try:
-        client = firestore.Client()
-        user_doc = client.collection('users').document(uid)
+        firestore_client = firestore.Client()  # TODO: for release
+        user_doc = firestore_client.collection('users').document(uid)
         transactions_collection: CollectionReference = user_doc.collection(
             'transactions')
 
@@ -39,12 +39,26 @@ def update_transactions(uid: str, transactions: List[Dict[str, Any]]):
                 'authorized_date': authorized_date,
             })
 
-            if transaction_snapshot.exists:
-                transaction_doc.update(transaction)
-                updated += 1
+            pending_transaction_id = transaction.get('pending_transaction_id')
+
+            if pending_transaction_id is not None:
+                transaction_doc = transactions_collection.document(
+                    pending_transaction_id)
+                transaction_snapshot = transaction_doc.get()
+
+                if transaction_snapshot.exists:
+                    transaction_doc.update(transaction)
+                    updated += 1
+                else:
+                    transaction_doc.create(transaction)
+                    created += 1
             else:
-                transaction_doc.create(transaction)
-                created += 1
+                if transaction_snapshot.exists:
+                    transaction_doc.update(transaction)
+                    updated += 1
+                else:
+                    transaction_doc.create(transaction)
+                    created += 1
 
         return {'status': 200, 'message': f'successfully created {created} and updated {updated} transaction(s)'}
     except Exception as e:

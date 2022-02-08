@@ -5,11 +5,13 @@
 - Add a Google Cloud Functions that fixes `ITEM_LOGIN_REQUIRED` error from Plaid Link
 - Add a `LinkedAccounts` screen where user can see all the linked accounts grouped by `institution_id`
 - Create a Google Cloud Function that deletes accounts, transactions, and other data related to institution when the user unlinks
+- Update `CheckItemsWidget` so that user can modify the `TransactionItem`
   
 ### Bug Fix & Refactor
 - Add a `DateTime` extension that creates a timeago string
 - Create `enumToTitle` extension for general type
 - Also create `lowerCamelCase` extension for String that creates a lowerCamelCase from different types of sentences
+- Update `process_receipt_texts` function to get the better result
 
 ## [0.0.10]: Jan. 28th, 2022
 ### New Features & Screens

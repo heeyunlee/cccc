@@ -19,16 +19,16 @@ class Decorations {
     );
   }
 
-  static BoxDecoration transactionDetail(BuildContext context) => BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Theme.of(context).primaryColor,
-            Colors.black,
-          ],
-        ),
-      );
+  static const transactionDetail = BoxDecoration(
+    gradient: LinearGradient(
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+      colors: [
+        ThemeColors.complementary300,
+        Colors.black,
+      ],
+    ),
+  );
 
   static const white24Radius8 = BoxDecoration(
     border: Border.fromBorderSide(

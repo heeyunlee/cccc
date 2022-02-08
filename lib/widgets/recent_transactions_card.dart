@@ -46,48 +46,36 @@ class RecentTransactionsCard extends ConsumerWidget {
                   const Text('Transactions', style: TextStyles.h6),
                   const Spacer(),
                   TextButton(
-                    onPressed: () => AllTransactions.show(
-                      context,
-                      transactions: transactions ?? [],
-                    ),
+                    onPressed: () => AllTransactions.show(context),
                     style: ButtonStyles.text2,
                     child: const Text('VIEW ALL'),
                   ),
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Card(
-                clipBehavior: Clip.antiAliasWithSaveLayer,
-                color: Colors.white12,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                margin: EdgeInsets.zero,
-                child: (transactions == null || transactions.isEmpty)
-                    ? const SizedBox(
-                        height: 96 * 3,
-                        child: Center(
-                          child: Text(
-                            'No recent transactions',
-                            style: TextStyles.body2,
-                          ),
+            Card(
+              child: (transactions == null || transactions.isEmpty)
+                  ? const SizedBox(
+                      height: 96 * 3,
+                      child: Center(
+                        child: Text(
+                          'No recent transactions',
+                          style: TextStyles.body2,
                         ),
-                      )
-                    : ListView.builder(
-                        padding: EdgeInsets.zero,
-                        physics: const NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        itemCount:
-                            transactions.length > 5 ? 5 : transactions.length,
-                        itemBuilder: (context, index) {
-                          return TransactionListTile(
-                            transaction: transactions[index]!,
-                          );
-                        },
                       ),
-              ),
+                    )
+                  : ListView.builder(
+                      padding: EdgeInsets.zero,
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      itemCount:
+                          transactions.length > 5 ? 5 : transactions.length,
+                      itemBuilder: (context, index) {
+                        return TransactionListTile(
+                          transaction: transactions[index]!,
+                        );
+                      },
+                    ),
             ),
           ],
         );

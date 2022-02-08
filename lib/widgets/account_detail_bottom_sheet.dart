@@ -30,74 +30,69 @@ class _AccountDetailBottomSheetState
     );
 
     return BottomSheetCard(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    FittedBox(
-                      child: Row(
-                        children: [
-                          Text(
-                            model.name,
-                            style: TextStyles.subtitle2,
-                          ),
-                          const SizedBox(width: 8),
-                          AccountConnectionStateIcon(account: model.account),
-                        ],
-                      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Flexible(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const SizedBox(height: 24),
+                  FittedBox(
+                    child: Row(
+                      children: [
+                        Text(
+                          model.name,
+                          style: TextStyles.subtitle2,
+                        ),
+                        const SizedBox(width: 8),
+                        AccountConnectionStateIcon(account: model.account),
+                      ],
                     ),
-                    const SizedBox(height: 8),
+                  ),
+                  const SizedBox(height: 8),
+                  if (model.connectionIsError)
                     const Text(
                       'There is an error with connecting the account. Please reauthenticate to fix the issue',
                       style: TextStyles.captionWhite54,
                       maxLines: 2,
                     ),
-                  ],
-                ),
+                ],
               ),
             ),
-            const SizedBox(height: 16),
-            if (model.connectionIsError)
-              ListTile(
-                visualDensity: VisualDensity.compact,
-                leading: const Icon(Icons.build, size: 20),
-                title: const Text('Fix the account connectivity issue'),
-                onTap: () => LinkedAccounts.show(context),
-              ),
+          ),
+          const SizedBox(height: 16),
+          if (model.connectionIsError)
             ListTile(
               visualDensity: VisualDensity.compact,
-              leading: const Icon(Icons.edit, size: 20),
-              title: const Text('Edit'),
-              onTap: () {},
+              leading: const Icon(Icons.build, size: 20),
+              title: const Text('Fix the account connectivity issue'),
+              onTap: () => LinkedAccounts.show(context),
             ),
-            const Divider(color: Colors.white12, indent: 8, endIndent: 8),
-            ListTile(
-              visualDensity: VisualDensity.compact,
-              leading: const Icon(
-                Icons.link_off,
-                size: 20,
-                color: Colors.red,
-              ),
-              title: const Text(
-                'Unlink',
-                style: TextStyles.body2Red,
-              ),
-              onTap: () {},
+          ListTile(
+            visualDensity: VisualDensity.compact,
+            leading: const Icon(Icons.edit, size: 20),
+            title: const Text('Edit'),
+            onTap: () {},
+          ),
+          ListTile(
+            visualDensity: VisualDensity.compact,
+            leading: const Icon(
+              Icons.link_off,
+              size: 20,
+              color: Colors.red,
             ),
-            const SizedBox(height: 4),
-          ],
-        ),
+            title: const Text(
+              'Unlink',
+              style: TextStyles.body2Red,
+            ),
+            onTap: () => LinkedAccounts.show(context),
+          ),
+        ],
       ),
     );
   }

@@ -25,4 +25,5 @@ const Map<String, IconData> kCategoryIdEmojiMap = {
   '17018000': Icons.fitness_center,
   '13005043': Icons.local_cafe,
   '21005000': Icons.account_balance,
+  '19019000': Icons.shopping_bag,
 };

@@ -1,6 +1,6 @@
 import 'package:cccc/constants/constants.dart';
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/styles/text_styles.dart';
+import 'package:cccc/styles/styles.dart';
 import 'package:cccc/views/transaction_detail.dart';
 import 'package:flutter/material.dart';
 
@@ -12,15 +12,32 @@ class TransactionListTile extends StatelessWidget {
     required this.transaction,
     this.enableOnTap = true,
     this.onTap,
+    this.color,
   }) : super(key: key);
 
   final Transaction transaction;
   final bool? enableOnTap;
   final void Function()? onTap;
+  final Color? color;
+
+  String get category {
+    final category = transaction.category;
+
+    if (category == null) {
+      return 'Uncategorized';
+    }
+
+    if (category.length > 1) {
+      return category[1];
+    } else {
+      return category[0];
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      tileColor: color,
       isThreeLine: true,
       minLeadingWidth: 24,
       contentPadding: const EdgeInsets.symmetric(
@@ -50,10 +67,11 @@ class TransactionListTile extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            transaction.category?[0] ?? 'Uncategorized',
+            category,
             style: transaction.pending
                 ? TextStyles.captionWhite38
                 : TextStyles.caption,
+            maxLines: 1,
           ),
           const SizedBox(height: 4),
           Text(
@@ -68,12 +86,18 @@ class TransactionListTile extends StatelessWidget {
       trailing: SizedBox(
         width: 80,
         height: 64,
-        child: Center(
+        child: Align(
+          alignment: Alignment.centerRight,
           child: Text(
-            '\$ ${transaction.amount.toString()}',
+            Formatter.amount(
+              transaction.amount,
+              transaction.isoCurrencyCode ?? 'USD',
+            ),
             style: transaction.pending
                 ? TextStyles.body2White38
-                : TextStyles.body2,
+                : transaction.amount > 0
+                    ? TextStyles.body2
+                    : TextStyles.body2Green,
           ),
         ),
       ),

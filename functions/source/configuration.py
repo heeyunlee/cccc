@@ -13,7 +13,7 @@ configuration = plaid.Configuration(
         'clientId': data.get('client_id'),
         'secret': data.get('secret_development'),
         # 'secret': data.get('secret_sandbox'),
-    }
+    },
 )
 
 api_client = plaid.ApiClient(configuration)

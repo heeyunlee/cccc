@@ -266,7 +266,7 @@ class Transaction {
     final String? isoCurrencyCode = json['iso_currency_code'] as String?;
     final String? unofficialCurrencyCode =
         json['unofficial_currency_code'] as String?;
-    final DateTime date = (json['date'] as Timestamp).toDate();
+    final DateTime date = (json['date'] as Timestamp).toDate().toUtc();
     final bool pending = json['pending'] as bool;
     final String transactionId = json['transaction_id'] as String;
     final String? merchantName = json['merchant_name'] as String?;
@@ -276,13 +276,13 @@ class Transaction {
 
     final DateTime? authorizedDate = json['authorized_date'] == null
         ? null
-        : (json['authorized_date'] as Timestamp).toDate();
+        : (json['authorized_date'] as Timestamp).toDate().toUtc();
     final DateTime? authorizedDatetime = json['authorized_datetime'] == null
         ? null
-        : (json['authorized_datetime'] as Timestamp).toDate();
+        : (json['authorized_datetime'] as Timestamp).toDate().toUtc();
     final DateTime? datetime = json['datetime'] == null
         ? null
-        : (json['datetime'] as Timestamp).toDate();
+        : (json['datetime'] as Timestamp).toDate().toUtc();
     final String? transactionCode = json['transaction_code'] as String?;
 
     final PersonalFinanceCategory? personalFinanceCategory =

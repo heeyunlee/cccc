@@ -2,6 +2,7 @@ import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
+import 'package:cccc/styles/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
@@ -27,15 +28,13 @@ class TransactionDetailScreenModel with ChangeNotifier {
   final Transaction transaction;
   final FirestoreDatabase database;
 
-  String get amount {
-    final f = NumberFormat.simpleCurrency(
-      name: transaction.isoCurrencyCode,
-      decimalDigits: 2,
-    );
-    final amount = f.format(transaction.amount);
+  String get amount => Formatter.amount(
+        transaction.amount,
+        transaction.isoCurrencyCode ?? 'USD',
+      );
 
-    return amount;
-  }
+  TextStyle get amountTextStyle =>
+      transaction.amount > 0 ? TextStyles.h4W900 : TextStyles.h4W900Green;
 
   String get name => transaction.name;
 

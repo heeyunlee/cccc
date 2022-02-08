@@ -201,7 +201,7 @@ class Account {
     final String? verificationStatus = map['verification_status'];
     final DateTime? accountLastSyncedTime =
         map['account_last_synced_time'] != null
-            ? (map['account_last_synced_time'] as Timestamp).toDate()
+            ? (map['account_last_synced_time'] as Timestamp).toDate().toUtc()
             : null;
     final String institutionId = map['institution_id'];
     final AccountConnectionState accountConnectionState =

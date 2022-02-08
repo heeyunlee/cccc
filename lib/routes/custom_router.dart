@@ -38,12 +38,10 @@ class CustomRouter {
           builder: (context) => const Settings(),
         );
       case RouteNames.transactions:
-        final mapArgs = settings.arguments as List<Transaction>;
-
         return adaptiveRoute(
           rootNavigator: false,
           maintainState: true,
-          builder: (context) => AllTransactions(transactions: mapArgs),
+          builder: (context) => const AllTransactions(),
           settings: settings,
         );
       case RouteNames.transaction:

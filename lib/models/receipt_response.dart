@@ -1,50 +1,43 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+
 import 'package:cccc/models/transaction_item.dart';
 
 class ReceiptResponse {
   ReceiptResponse({
     this.transactionItems,
-    this.date,
-    this.name,
+    required this.dates,
   });
 
   final List<TransactionItem>? transactionItems;
-  final DateTime? date;
-  final String? name;
+  final List<DateTime> dates;
 
   ReceiptResponse copyWith({
     List<TransactionItem>? transactionItems,
-    DateTime? date,
-    String? name,
+    List<DateTime>? dates,
   }) {
     return ReceiptResponse(
       transactionItems: transactionItems ?? this.transactionItems,
-      date: date ?? this.date,
-      name: name ?? this.name,
+      dates: dates ?? this.dates,
     );
   }
 
   factory ReceiptResponse.fromMap(Map<String, dynamic> map) {
-    final List<TransactionItem> transactionItems = List<TransactionItem>.from(
-      map['transactionItems'].map((x) => TransactionItem.fromMap(x)),
-    );
-    final DateTime? date =
-        map['date'] == null ? null : DateTime.parse(map['date'] as String);
-    final String? name = map['name'];
-
     return ReceiptResponse(
-      transactionItems: transactionItems,
-      date: date,
-      name: name,
+      transactionItems: map['transactionItems'] != null
+          ? List<TransactionItem>.from(
+              map['transactionItems']?.map((x) => TransactionItem.fromMap(x)))
+          : null,
+      dates:
+          List<DateTime>.from(map['dates']?.map((x) => DateTime.tryParse(x))),
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'transactionItems': transactionItems?.map((x) => x.toMap()).toList(),
-      'date': date?.millisecondsSinceEpoch,
-      'name': name,
+      'dates': dates.map((x) => x.toString()).toList(),
     };
   }
 
@@ -55,7 +48,7 @@ class ReceiptResponse {
 
   @override
   String toString() =>
-      'ReceiptResponse(transactionItems: $transactionItems, date: $date, name: $name)';
+      'ReceiptResponse(transactionItems: $transactionItems, dates: $dates)';
 
   @override
   bool operator ==(Object other) {
@@ -63,10 +56,9 @@ class ReceiptResponse {
 
     return other is ReceiptResponse &&
         listEquals(other.transactionItems, transactionItems) &&
-        other.date == date &&
-        other.name == name;
+        listEquals(other.dates, dates);
   }
 
   @override
-  int get hashCode => transactionItems.hashCode ^ date.hashCode ^ name.hashCode;
+  int get hashCode => transactionItems.hashCode ^ dates.hashCode;
 }

@@ -15,90 +15,76 @@ class MatchTransactionWithItemsWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final padding = MediaQuery.of(context).padding;
-    final theme = Theme.of(context);
     final model = ref.watch(scanReceiptBottomSheetModelProvider);
 
-    return Scaffold(
-      backgroundColor: theme.bottomSheetTheme.backgroundColor,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => ref
-              .read(scanReceiptBottomSheetModelProvider)
-              .toggleState(ScanReceiptState.start),
-        ),
-        centerTitle: true,
-        title: const Text('Match'),
+    return CustomStreamBuilder<List<Transaction?>>(
+      stream: model.transactionsStream!,
+      errorBuilder: (context, error) => Container(),
+      loadingWidget: const Center(
+        child: CircularProgressIndicator(),
       ),
-      body: CustomStreamBuilder<List<Transaction?>>(
-        stream: model.transactionsStream!,
-        errorBuilder: (context, error) => Container(),
-        loadingWidget: const Center(
-          child: CircularProgressIndicator(),
-        ),
-        builder: (context, transactions) {
-          if (transactions != null && transactions.isNotEmpty) {
-            return SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 64),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
-                    child: Text(
-                      'Choose the transaction that matches the scanned receipt',
-                    ),
-                  ),
-                  Card(
-                    margin: const EdgeInsets.all(16),
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      padding: EdgeInsets.zero,
-                      itemCount: transactions.length,
-                      itemBuilder: (context, index) {
-                        final transaction = transactions[index]!;
-
-                        return TransactionListTile(
-                          transaction: transaction,
-                          enableOnTap: true,
-                          onTap: () => ref
-                              .read(scanReceiptBottomSheetModelProvider)
-                              .selectTransaction(context,
-                                  transaction: transaction),
-                        );
-                      },
-                    ),
-                  ),
-                  SizedBox(height: padding.bottom),
-                ],
-              ),
-            );
-          } else {
-            return Column(
+      builder: (context, transactions) {
+        if (transactions != null && transactions.isNotEmpty) {
+          return SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                const Expanded(
-                  child: Center(
-                    child: Padding(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                      child: Text(
-                        'We could not find the matching data. Please scan a different receipt',
-                      ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                  child: Text(
+                    'Choose the transaction that matches the scanned receipt',
+                  ),
+                ),
+                Card(
+                  margin: const EdgeInsets.all(16),
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    padding: EdgeInsets.zero,
+                    itemCount: transactions.length,
+                    itemBuilder: (context, index) {
+                      final transaction = transactions[index]!;
+
+                      return TransactionListTile(
+                        color: Theme.of(context).primaryColor.withOpacity(0.12),
+                        transaction: transaction,
+                        enableOnTap: true,
+                        onTap: () => ref
+                            .read(scanReceiptBottomSheetModelProvider)
+                            .selectTransaction(context,
+                                transaction: transaction),
+                      );
+                    },
+                  ),
+                ),
+                SizedBox(height: padding.bottom),
+              ],
+            ),
+          );
+        } else {
+          return Column(
+            children: [
+              const Expanded(
+                child: Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    child: Text(
+                      'We could not find the matching data. Please scan a different receipt',
                     ),
                   ),
                 ),
-                FloatingOutlinedButton(
-                  buttonName: 'Scan Different Receipt',
-                  onPressed: () => ref
-                      .read(scanReceiptBottomSheetModelProvider)
-                      .toggleState(ScanReceiptState.start),
-                ),
-              ],
-            );
-          }
-        },
-      ),
+              ),
+              FloatingOutlinedButton(
+                buttonName: 'Scan Different Receipt',
+                onPressed: () => ref
+                    .read(scanReceiptBottomSheetModelProvider)
+                    .toggleState(ScanReceiptState.start),
+              ),
+            ],
+          );
+        }
+      },
     );
   }
 }
