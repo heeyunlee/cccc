@@ -48,6 +48,8 @@ class InstitutionCardModel with ChangeNotifier {
   void _toggleLoading() {
     _isLoading = !_isLoading;
     notifyListeners();
+
+    logger.d('_toggleLoading. Currently isLoading? $_isLoading');
   }
 
   Future<void> openLinkUpdateMode(BuildContext context) async {
@@ -57,6 +59,9 @@ class InstitutionCardModel with ChangeNotifier {
       final response = await functions.createLinkTokenUpdateMode(
         institution!.institutionId,
       );
+      _toggleLoading();
+
+      logger.d('createLinkTokenUpdateMode response: $response');
       final linkToken = response['link_token'] as String?;
 
       if (linkToken != null) {
@@ -86,8 +91,6 @@ class InstitutionCardModel with ChangeNotifier {
         defaultActionText: 'OK',
       );
     }
-
-    _toggleLoading();
   }
 
   Future<void> onSuccessCallback(
@@ -107,8 +110,6 @@ class InstitutionCardModel with ChangeNotifier {
       institutionId,
     );
 
-    _toggleLoading();
-
     logger.d('Response: $response');
   }
 
@@ -122,8 +123,6 @@ class InstitutionCardModel with ChangeNotifier {
     if (error != null) {
       logger.e("onExit error: ${error.description()}");
     }
-
-    _toggleLoading();
   }
 
   Future<void> unlinkAccount(BuildContext context) async {

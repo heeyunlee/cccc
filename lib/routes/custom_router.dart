@@ -37,7 +37,7 @@ class CustomRouter {
           settings: settings,
           builder: (context) => const Settings(),
         );
-      case RouteNames.transactions:
+      case RouteNames.allTransactions:
         return adaptiveRoute(
           rootNavigator: false,
           maintainState: true,

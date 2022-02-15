@@ -1,10 +1,6 @@
-import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/services/firebase_auth.dart';
-import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/view_models/all_transactions_model.dart';
-import 'package:cccc/widgets/custom_stream_builder.dart';
-import 'package:cccc/widgets/ordered_transactions_list_view.dart';
+import 'package:cccc/widgets/transaction_list_tile.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cccc/routes/route_names.dart';
@@ -16,7 +12,7 @@ class AllTransactions extends ConsumerStatefulWidget {
   }) : super(key: key);
 
   static void show(BuildContext context) {
-    Navigator.of(context).pushNamed(RouteNames.transactions);
+    Navigator.of(context).pushNamed(RouteNames.allTransactions);
   }
 
   @override
@@ -26,40 +22,68 @@ class AllTransactions extends ConsumerStatefulWidget {
 
 class _AllTransactionsState extends ConsumerState<AllTransactions> {
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    ref.read(allTransactionsModelProvider).getTransactions();
+  }
+
+  @override
   Widget build(BuildContext context) {
     logger.d('[Transactions] Screen building...');
-
-    final auth = ref.watch(authProvider);
-    final database = ref.watch(databaseProvider(auth.currentUser!.uid));
+    final size = MediaQuery.of(context).size;
+    final padding = MediaQuery.of(context).padding;
+    final model = ref.watch(allTransactionsModelProvider);
 
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          const SliverAppBar(
-            floating: true,
-            pinned: true,
-            stretch: true,
-            backgroundColor: Colors.black,
-            title: Text('Transactions'),
-          ),
-          SliverToBoxAdapter(
-            child: CustomStreamBuilder<List<Transaction?>>(
-              stream: database.transactionsStream(),
-              loadingWidget: Container(),
-              // loadingWidget: const CircularProgressIndicator.adaptive(),
-              errorBuilder: (context, error) => Container(),
-              builder: (context, transactions) {
-                if (transactions == null) {
-                  return Container();
-                }
-
-                return OrderedTransactionsListView(
-                  model: ref.watch(allTransactionsModelProvider(transactions)),
-                );
-              },
+      body: NotificationListener<ScrollNotification>(
+        onNotification: (n) => ref
+            .read(allTransactionsModelProvider)
+            .onScrollNotification(context, n),
+        child: CustomScrollView(
+          slivers: [
+            const SliverAppBar(
+              floating: true,
+              pinned: true,
+              stretch: true,
+              backgroundColor: Colors.black,
+              title: Text('Transactions'),
             ),
-          ),
-        ],
+            SliverToBoxAdapter(
+              child: model.transactions.isEmpty
+                  ? SizedBox(
+                      width: size.width,
+                      height: size.height,
+                      child: const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
+                    )
+                  : Column(
+                      children: [
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, padding.bottom),
+                          itemCount: model.transactions.length,
+                          itemBuilder: (context, index) {
+                            final transaction = model.transactions[index];
+
+                            return TransactionListTile(
+                                transaction: transaction);
+                          },
+                        ),
+                        if (model.isLoading)
+                          SizedBox(
+                            width: size.width,
+                            height: 48,
+                            child: const Center(
+                              child: CircularProgressIndicator.adaptive(),
+                            ),
+                          ),
+                      ],
+                    ),
+            ),
+          ],
+        ),
       ),
     );
   }

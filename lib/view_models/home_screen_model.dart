@@ -45,7 +45,7 @@ class HomeScreenModel with ChangeNotifier {
   Stream<List<Account?>> get accountsStream => database.accountsStream();
 
   Stream<List<Transaction?>> get transactionsStream {
-    return database.transactionsStream();
+    return database.transactionsStream(5);
   }
 
   Map<AccountType, List<Account?>> accountsByType(List<Account?> accounts) {

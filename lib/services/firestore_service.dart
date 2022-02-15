@@ -103,6 +103,76 @@ class FirestoreService {
   }
 
   // Collection Stream
+  Stream<List<T?>> collectionStreamWithLimit<T>({
+    required String path,
+    required T Function(Map<String, dynamic>? data, String id) fromBuilder,
+    required Map<String, Object?> Function(T model) toBuilder,
+    required String orderByField,
+    required bool descending,
+    required int limit,
+  }) {
+    final reference = _instance
+        .collection(path)
+        .withConverter<T>(
+          fromFirestore: (json, _) => fromBuilder(json.data(), json.id),
+          toFirestore: (model, _) => toBuilder(model),
+        )
+        .orderBy(orderByField, descending: descending)
+        .limit(limit);
+
+    final snapshots = reference.snapshots();
+    final list = snapshots.map(
+      (event) => event.docs.map((doc) => doc.data()).toList(),
+    );
+
+    return list;
+  }
+
+  // Query Snapshot
+  Future<QuerySnapshot<T>> query<T>({
+    required String path,
+    required T Function(Map<String, dynamic>? data) fromBuilder,
+    required Map<String, Object?> Function(T model) toBuilder,
+    required String orderByField,
+    bool descending = true,
+    required int limit,
+  }) {
+    final query = _instance
+        .collection(path)
+        .withConverter<T>(
+          fromFirestore: (json, _) => fromBuilder(json.data()),
+          toFirestore: (model, _) => toBuilder(model),
+        )
+        .orderBy(orderByField, descending: descending)
+        .limit(limit);
+
+    return query.get();
+  }
+
+  // Collection Stream
+  Future<QuerySnapshot<T>> queryWithPagination<T>({
+    required String path,
+    required T Function(Map<String, dynamic>? data) fromBuilder,
+    required Map<String, Object?> Function(T model) toBuilder,
+    required String orderByField,
+    bool descending = true,
+    required DocumentSnapshot<T> startAfterDocument,
+    required int limit,
+  }) {
+    final query = _instance
+        .collection(path)
+        .withConverter<T>(
+          fromFirestore: (json, _) => fromBuilder(json.data()),
+          toFirestore: (model, _) => toBuilder(model),
+        )
+        .orderBy(orderByField, descending: descending)
+        .startAfterDocument(startAfterDocument)
+        .limit(limit);
+
+    return query.get();
+  }
+
+  // Collection Stream
   Stream<List<T?>> whereCollectionStream<T>({
     required String path,
     required T Function(Map<String, dynamic>? data, String id) fromBuilder,

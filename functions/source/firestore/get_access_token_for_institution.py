@@ -8,12 +8,10 @@ def get_access_token_for_institution(uid: str, institution_id: str):
     try:
         client = firestore.Client()
         user_ref = client.collection('users').document(uid)
-        secrets_ref: CollectionReference = user_ref.collection('secrets')
-        plaid_secrets_ref = secrets_ref.document('plaid')
-        plaid_secrets_dict = plaid_secrets_ref.get().to_dict()
-        access_tokens: Union[Dict, None] = plaid_secrets_dict.get(
-            'access_tokens')
-        access_token = access_tokens.get(institution_id)
+        secrets_ref: CollectionReference = user_ref.collection('plaid_secrets')
+        plaid_secret_ref = secrets_ref.document(institution_id)
+        plaid_secrets_dict = plaid_secret_ref.get().to_dict()
+        access_token: Union[str, None] = plaid_secrets_dict.get('access_token')
 
         return {'status': 200, 'access_token': access_token}
     except Exception as e:

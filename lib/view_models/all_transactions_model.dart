@@ -1,47 +1,109 @@
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
+import 'package:cccc/services/logger_init.dart';
+import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show DocumentSnapshot;
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 
-final allTransactionsModelProvider =
-    Provider.autoDispose.family<AllTransactionsModel, List<Transaction?>>(
-  (ref, transactions) {
+final allTransactionsModelProvider = ChangeNotifierProvider.autoDispose(
+  (ref) {
     final auth = ref.watch(authProvider);
     final database = ref.watch(databaseProvider(auth.currentUser!.uid));
 
-    return AllTransactionsModel(database: database, transactions: transactions);
+    return AllTransactionsModel(database: database);
   },
 );
 
-class AllTransactionsModel {
+class AllTransactionsModel with ChangeNotifier {
   AllTransactionsModel({
     required this.database,
-    required this.transactions,
   });
 
   final FirestoreDatabase database;
-  final List<Transaction?> transactions;
 
-  Stream<List<Transaction?>> get transactionsStream {
-    return database.transactionsStream();
+  bool get isLoading => _isLoading;
+  List<Transaction> get transactions => _transactions;
+
+  bool _isLoading = false;
+  DocumentSnapshot<Transaction>? _lastDocSnapshot;
+  final List<Transaction> _transactions = [];
+
+  void _toggleIsLoading() {
+    _isLoading = !_isLoading;
+
+    notifyListeners();
   }
 
-  Map<String, List<Transaction?>> get transactionsByYear {
-    // final now = DateTime.now();
+  Future<void> getTransactions() async {
+    final queryResponse = await database.transactionsQuery();
 
-    final map = <String, List<Transaction?>>{};
+    transactions.addAll(queryResponse.list);
+    _lastDocSnapshot = queryResponse.lastDocSnapshot;
 
-    for (final transaction in transactions) {
-      final f = DateFormat.yMMMM();
-      final yMMMM = f.format(transaction!.date);
+    notifyListeners();
+  }
 
-      map.putIfAbsent(yMMMM, () => []).add(transaction);
+  bool onScrollNotification(BuildContext context, ScrollNotification n) {
+    final maxScroll = n.metrics.maxScrollExtent;
+    final currentScroll = n.metrics.pixels;
+    final delta = MediaQuery.of(context).size.height * 0.25;
+
+    if (maxScroll - currentScroll <= delta) {
+      if (_lastDocSnapshot != null) {
+        _fetchTransactions(context);
+      }
+      return true;
+    } else {
+      return false;
     }
-
-    // final diff = now.difference(DateTime.now());
-    // print('took ${diff.inMilliseconds} milliseconds');
-
-    return map;
   }
+
+  Future<void> _fetchTransactions(BuildContext context) async {
+    try {
+      if (!_isLoading) {
+        _toggleIsLoading();
+
+        final queryResponse = await database.transactionsQuery(
+          startAfterDocument: _lastDocSnapshot!,
+        );
+        logger.d('transaction query result: ${queryResponse.lastDocSnapshot}');
+
+        _isLoading = false;
+        _lastDocSnapshot = queryResponse.lastDocSnapshot;
+        transactions.addAll(queryResponse.list);
+        notifyListeners();
+      }
+    } catch (e) {
+      logger.e(e);
+
+      _toggleIsLoading();
+
+      await showAdaptiveDialog(
+        context,
+        title: 'title',
+        content: e.toString(),
+        defaultActionText: 'OK',
+      );
+    }
+  }
+
+  // Map<String, List<Transaction?>> get transactionsByYear {
+  //   // final now = DateTime.now();
+
+  //   final map = <String, List<Transaction?>>{};
+
+  //   for (final transaction in _transactions) {
+  //     final f = DateFormat.yMMMM();
+  //     final yMMMM = f.format(transaction!.date);
+
+  //     map.putIfAbsent(yMMMM, () => []).add(transaction);
+  //   }
+
+  //   // final diff = now.difference(DateTime.now());
+  //   // print('took ${diff.inMilliseconds} milliseconds');
+
+  //   return map;
+  // }
 }

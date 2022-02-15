@@ -11,6 +11,7 @@ from source.token.public_token_exchange import public_token_exchange
 
 def link_and_connect_update_mode(request: flask.Request):
     # TODO: for release
+
     # Parsing data from request to get `uid` and `public_token`
     data_dict: dict = json.loads(request.data)
     public_token: Union[str, None] = data_dict.get('public_token')

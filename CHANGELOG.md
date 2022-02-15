@@ -1,6 +1,13 @@
 # Change Log
 
-## [0.0.11]
+## [0.0.12]
+### New Features & Screens
+- Created Firestore pagination for `AllTransactions` screen using query
+
+### Bug Fix & Refactor
+
+
+## [0.0.11]: Feb. 7th, 2022
 ### New Features & Screens
 - Add a Google Cloud Functions that fixes `ITEM_LOGIN_REQUIRED` error from Plaid Link
 - Add a `LinkedAccounts` screen where user can see all the linked accounts grouped by `institution_id`
@@ -101,7 +108,8 @@
 
 ### Bug Fix & Refactor
 
-[0.0.11]: https://github.com/heeyunlee/cccc
+[0.0.12]: https://github.com/heeyunlee/cccc
+[0.0.11]: https://github.com/heeyunlee/cccc/commit/214b6b4496c0e6a14ff83828b0438cd12f17fb46
 [0.0.10]: https://github.com/heeyunlee/cccc/commit/d33697280ac20257cd13f409835d8559533ac8b4
 [0.0.9]: https://github.com/heeyunlee/cccc/commit/168154fd54fee57a68a75c2b2339068c9a5cf21f
 [0.0.8]: https://github.com/heeyunlee/cccc/commit/424609ca970fcc04657240673cd7a3ddf38c7bdc
