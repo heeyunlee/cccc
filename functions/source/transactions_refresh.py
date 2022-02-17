@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from typing import Dict, List, Union
+from typing import Dict, List, Optional
 
 import flask
 from flask import jsonify
@@ -18,12 +18,13 @@ def transactions_refresh(request: flask.Request):
 
     data_dict: dict = json.loads(request.data)  # TODO: for release
     # data_dict = request  # TODO: for sandbox
-    uid: Union[str, None] = data_dict.get('uid')
+    uid: Optional[str] = data_dict.get('uid')
 
     #### 1. Get stored access_token and start_date ####
     access_tokens_response = get_access_tokens(uid)
-    access_tokens: Union[List[Dict],
-                         None] = access_tokens_response.get('acess_tokens')
+    access_tokens: Optional[List[Dict]
+                            ] = access_tokens_response.get('acess_tokens')
+    print(access_tokens)
 
     if access_tokens is None:
         return access_tokens_response
@@ -64,8 +65,7 @@ def transactions_refresh(request: flask.Request):
 
         #### 3. Get /accounts/balance/get and update Firestore accounts collection ####
         balances_get_response = accounts_balance_get(access_token)
-        accounts: Union[List[Dict],
-                        None] = balances_get_response.get('accounts')
+        accounts: Optional[List[Dict]] = balances_get_response.get('accounts')
 
         # If transaction is None, add the error
         if accounts is None:

@@ -1,16 +1,20 @@
 from datetime import datetime, timedelta
-from typing import Union
+from typing import Optional
 
-from google.cloud import firestore
 from google.cloud.firestore import CollectionReference
+from source.cloud_firestore import CloudFirestore
+from source.enums import FirestoreEnv
 
 
 def get_access_tokens(uid: str):
     try:
         access_tokens = []
 
-        firestore_client = firestore.Client()  # TODO: for release
-        user_doc = firestore_client.collection('users').document(uid)
+        # TODO: Change Environment for production for release
+        firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+        client = firestore.client()
+
+        user_doc = client.collection('users').document(uid)
         secrets_ref: CollectionReference = user_doc.collection('plaid_secrets')
         secrets = secrets_ref.stream()
 
@@ -19,7 +23,7 @@ def get_access_tokens(uid: str):
             result['institution_id'] = secret.id
             result['access_token'] = secret.get('access_token')
 
-            start_date: Union[datetime, None] = secret.to_dict().get(
+            start_date: Optional[datetime] = secret.to_dict().get(
                 'first_pending_transaction_date')
 
             if start_date is None:

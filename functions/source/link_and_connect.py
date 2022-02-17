@@ -1,8 +1,8 @@
 import json
-from typing import Dict, List, Union
+from typing import Dict, List, Optional
 
 import flask
-from flask import jsonify, make_response
+from flask import jsonify
 
 from source.balance.accounts_balance_get import accounts_balance_get
 from source.firestore.update_accounts import update_accounts
@@ -24,9 +24,9 @@ def link_and_connect(request: flask.Request):
 
     data_dict: dict = json.loads(request.data)  # TODO: for release
     # data_dict = request # TODO: for sandbox
-    public_token: Union[str, None] = data_dict.get('public_token')
-    uid: Union[str, None] = data_dict.get('uid')
-    institution_id: Union[str, None] = data_dict.get('institution_id')
+    public_token: Optional[str] = data_dict.get('public_token')
+    uid: Optional[str] = data_dict.get('uid')
+    institution_id: Optional[str] = data_dict.get('institution_id')
 
     if (uid and institution_id) is None:
         return jsonify(status=404, error_message='Please pass the right data in request')
@@ -50,7 +50,7 @@ def link_and_connect(request: flask.Request):
 
     # 2. Else, call /accounts/balance/get
     balances_get_response = accounts_balance_get(access_token)
-    accounts: Union[List[Dict], None] = balances_get_response.get('accounts')
+    accounts: Optional[List[Dict]] = balances_get_response.get('accounts')
     print(f'balances got: {balances_get_response}')
 
     # If accounts is None, return error

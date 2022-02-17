@@ -1,7 +1,8 @@
-from numpy import average
 import re
+from typing import Dict, List
+
 import dateutil.parser as parser
-from typing import List, Dict
+from numpy import average
 from source.texts.find_combination import find_combination
 
 

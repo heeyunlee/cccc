@@ -1,12 +1,12 @@
-import uuid
 import json
+import uuid
+from typing import Any, Dict, List, Optional
 
 import flask
 from flask import jsonify
-from typing import Dict, Any, Union, List
 
-from source.texts.recognize_prices import recognize_prices
 from source.texts.find_descriptions import find_descriptions
+from source.texts.recognize_prices import recognize_prices
 
 
 def process_receipt_texts(request: flask.Request):
@@ -22,7 +22,7 @@ def process_receipt_texts(request: flask.Request):
 
     result = recognize_prices(raw_texts, texts_with_offsets)
     price_with_points: List[Dict] = result.get('prices_with_points')
-    max_price: Union[float, None] = result.get('max_price')
+    max_price: Optional[float] = result.get('max_price')
     prices: List[float] = result.get('prices')
     dates: List = result.get('dates')
     status: int = result.get('status')

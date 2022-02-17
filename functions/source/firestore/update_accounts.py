@@ -1,15 +1,19 @@
 from datetime import datetime
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional
 
-from google.cloud import firestore
 from google.cloud.firestore_v1.collection import CollectionReference
 from plaid.model.account_balance import AccountBalance
+from source.cloud_firestore import CloudFirestore
+from source.enums import FirestoreEnv
 
 
-def update_accounts(uid: str, institution_id: str, accounts: Union[List[Dict], None]) -> Dict[str, Any]:
+def update_accounts(uid: str, institution_id: str, accounts: Optional[List[Dict]]) -> Dict[str, Any]:
 
     try:
-        client = firestore.Client()
+        # TODO: Change Environment for production for release
+        firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+        client = firestore.client()
+
         user_doc = client.collection('users').document(uid)
         accounts_collections: CollectionReference = user_doc.collection(
             'accounts')
@@ -39,7 +43,7 @@ def update_accounts(uid: str, institution_id: str, accounts: Union[List[Dict], N
                 account_doc_ref = accounts_collections.document(account_id)
                 account_snapshot = account_doc_ref.get()
 
-                balances: Union[AccountBalance, None] = account.get('balances')
+                balances: Optional[AccountBalance] = account.get('balances')
 
                 data = {
                     'account_id': account.get('account_id'),

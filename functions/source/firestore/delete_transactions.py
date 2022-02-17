@@ -1,13 +1,18 @@
 from typing import List
 
-from google.cloud import firestore
 from google.cloud.firestore import CollectionReference
+from source.cloud_firestore import CloudFirestore
+from source.enums import FirestoreEnv
 
 
 def delete_transactions(uid: str, account_ids: List[str]):
     try:
         deleted_transaction_ids = []
-        client = firestore.Client()
+
+        # TODO: Change Environment for production for release
+        firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+        client = firestore.client()
+
         user_ref = client.collection('users').document(uid)
         transactions_ref: CollectionReference = user_ref.collection(
             'transactions')

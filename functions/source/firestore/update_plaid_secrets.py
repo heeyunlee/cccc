@@ -1,13 +1,17 @@
 from datetime import date, datetime, timedelta
-from typing import Dict, List, Union
+from typing import Dict, List, Optional
 
-from google.cloud import firestore
 from google.cloud.firestore import CollectionReference
+from source.cloud_firestore import CloudFirestore
+from source.enums import FirestoreEnv
 
 
 def update_plaid_secrets(uid: str, institution_id: str, transactions: List[Dict]):
     try:
-        client = firestore.Client()
+        # TODO: Change Environment for production for release
+        firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+        client = firestore.client()
+
         user_ref = client.collection('users').document(uid)
         plaid_secret: CollectionReference = user_ref.collection(
             'plaid_secrets')
@@ -16,9 +20,9 @@ def update_plaid_secrets(uid: str, institution_id: str, transactions: List[Dict]
         def get_pending_transaction(transaction: dict):
             return transaction.get('pending') == True
 
-        first_pending_transaction: Union[Dict, None] = next(
+        first_pending_transaction: Optional[Dict] = next(
             filter(get_pending_transaction, reversed(transactions)), None)
-        print(first_pending_transaction)
+        print(f'first pending transaction: {first_pending_transaction}')
 
         if first_pending_transaction is None:
             now = datetime.now()

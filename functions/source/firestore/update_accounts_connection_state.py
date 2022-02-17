@@ -1,10 +1,14 @@
-from google.cloud import firestore
 from google.cloud.firestore import CollectionReference
+from source.cloud_firestore import CloudFirestore
+from source.enums import FirestoreEnv
 
 
 def update_accounts_connection_state(uid: str, institution_id: str):
     try:
-        client = firestore.Client()
+        # TODO: Change Environment for production for release
+        firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+        client = firestore.client()
+
         user_doc = client.collection('users').document(uid)
         accounts_collections: CollectionReference = user_doc.collection(
             'accounts')

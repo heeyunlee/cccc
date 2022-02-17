@@ -1,9 +1,10 @@
 import json
 
+import plaid
 from plaid import ApiException
 from plaid.model.accounts_balance_get_request import AccountsBalanceGetRequest
 from plaid.model.accounts_get_response import AccountsGetResponse
-from source.configuration import plaid_client
+from source.plaid_configuration import PlaidConfiguration
 
 ''' Retrieve real-time balance data
 
@@ -19,9 +20,11 @@ from source.configuration import plaid_client
 
 def accounts_balance_get(access_token: str):
     try:
+        plaid_config = PlaidConfiguration(plaid.Environment.Development)
+        client = plaid_config.client()
+
         request = AccountsBalanceGetRequest(access_token)
-        response: AccountsGetResponse = plaid_client.accounts_balance_get(
-            request)
+        response: AccountsGetResponse = client.accounts_balance_get(request)
 
         return response.to_dict()
     except ApiException as e:

@@ -1,13 +1,17 @@
 from typing import Any, Dict
 
 from google.cloud.firestore import CollectionReference
-from google.cloud import firestore
+from source.cloud_firestore import CloudFirestore
+from source.enums import FirestoreEnv
 
 
 def update_user_secrets(uid: str, access_token: str, institution_id: str) -> Dict[str, Any]:
     try:
-        firestore_client = firestore.Client()
-        user_doc = firestore_client.collection('users').document(uid)
+        # TODO: Change Environment for production for release
+        firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+        client = firestore.client()
+
+        user_doc = client.collection('users').document(uid)
         secrets_collection: CollectionReference = user_doc.collection(
             'plaid_secrets')
         institution_secret_ref = secrets_collection.document(institution_id)

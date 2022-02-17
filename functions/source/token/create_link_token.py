@@ -1,14 +1,14 @@
 import json
-from typing import Any, Dict, Union
+from typing import Any, Dict, Optional
 
 import flask
+import plaid
 from plaid import ApiException
 from plaid.api import plaid_api
 from plaid.model.country_code import CountryCode
-from plaid.model.link_token_create_request_user import \
-    LinkTokenCreateRequestUser
+from plaid.model.link_token_create_request_user import LinkTokenCreateRequestUser
 from plaid.model.products import Products
-from source.configuration import plaid_client
+from source.plaid_configuration import PlaidConfiguration
 
 ''' Create Link Token
 
@@ -27,7 +27,7 @@ def create_link_token(request: flask.Request) -> Dict[str, Any]:
 
     # Get UID from request
     data_dict: dict = json.loads(request.data)
-    uid: Union[str, None] = data_dict.get('uid')
+    uid: Optional[str] = data_dict.get('uid')
 
     if uid is None:
         return {'status': 404, 'error_message': 'uid was None'}
@@ -43,8 +43,11 @@ def create_link_token(request: flask.Request) -> Dict[str, Any]:
         )
         print(f'link_token_create_request: \n{request}')
 
-        # Create Link Token Response
-        response: plaid_api.LinkTokenCreateResponse = plaid_client.link_token_create(
+        # TODO: Change to Development or Production for release
+        plaid_config = PlaidConfiguration(plaid.Environment.Development)
+        client = plaid_config.client()
+
+        response: plaid_api.LinkTokenCreateResponse = client.link_token_create(
             request
         )
         print(f'link_token_create response: \n{response}')

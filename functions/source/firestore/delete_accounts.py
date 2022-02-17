@@ -1,12 +1,17 @@
-from google.cloud import firestore
 from google.cloud.firestore import CollectionReference
+from source.cloud_firestore import CloudFirestore
+from source.enums import FirestoreEnv
 
 
 def delete_accounts(uid: str, institution_id: str):
+
     try:
         delete_account_ids = []
 
-        client = firestore.Client()
+        # TODO: Change Environment for production for release
+        firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+        client = firestore.client()
+        
         user_ref = client.collection('users').document(uid)
         accounts_ref: CollectionReference = user_ref.collection('accounts')
         accounts_query = accounts_ref.where(

@@ -1,5 +1,5 @@
 import json
-from typing import Dict, List, Union
+from typing import Dict, List, Optional
 
 import flask
 from flask import jsonify
@@ -14,9 +14,9 @@ def link_and_connect_update_mode(request: flask.Request):
 
     # Parsing data from request to get `uid` and `public_token`
     data_dict: dict = json.loads(request.data)
-    public_token: Union[str, None] = data_dict.get('public_token')
-    uid: Union[str, None] = data_dict.get('uid')
-    institution_id: Union[str, None] = data_dict.get('institution_id')
+    public_token: Optional[str] = data_dict.get('public_token')
+    uid: Optional[str] = data_dict.get('uid')
+    institution_id: Optional[str] = data_dict.get('institution_id')
 
     if (public_token and uid and institution_id) is None:
         return jsonify(error_code=404, error_message='Please pass the right data in request')
@@ -40,7 +40,7 @@ def link_and_connect_update_mode(request: flask.Request):
 
     # 2. Else, call /accounts/balance/get
     balances_get_response = accounts_balance_get(access_token)
-    accounts: Union[List[Dict], None] = balances_get_response.get('accounts')
+    accounts: Optional[List[Dict]] = balances_get_response.get('accounts')
     print(f'balances got: {balances_get_response}')
 
     # If accounts is None, return error

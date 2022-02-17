@@ -1,13 +1,12 @@
 import json
 from typing import Any, Dict
 
+import plaid
 from plaid import ApiException
 from plaid.model.products import Products
-from plaid.model.sandbox_public_token_create_request import \
-    SandboxPublicTokenCreateRequest
-from plaid.model.sandbox_public_token_create_response import \
-    SandboxPublicTokenCreateResponse
-from tests.test_configuration import plaid_client
+from plaid.model.sandbox_public_token_create_request import SandboxPublicTokenCreateRequest
+from plaid.model.sandbox_public_token_create_response import SandboxPublicTokenCreateResponse
+from source.plaid_configuration import PlaidConfiguration
 
 ''' Create a test Item
 
@@ -28,7 +27,10 @@ def sandbox_public_token_create(institution_id: str) -> Dict[str, Any]:
             initial_products=[Products('transactions')],
         )
 
-        response: SandboxPublicTokenCreateResponse = plaid_client.sandbox_public_token_create(
+        plaid_config = PlaidConfiguration(plaid.Environment.Sandbox)
+        client = plaid_config.client()
+
+        response: SandboxPublicTokenCreateResponse = client.sandbox_public_token_create(
             request
         )
         response_dict = response.to_dict()

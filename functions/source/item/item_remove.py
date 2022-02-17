@@ -1,9 +1,10 @@
 import json
 
+import plaid
 from plaid import ApiException
 from plaid.model.item_remove_request import ItemRemoveRequest
 from plaid.model.item_remove_response import ItemRemoveResponse
-from source.configuration import plaid_client
+from source.plaid_configuration import PlaidConfiguration
 
 ''' Remove an Item
 
@@ -27,7 +28,12 @@ from source.configuration import plaid_client
 def item_remove(access_token: str):
     try:
         request = ItemRemoveRequest(access_token)
-        response: ItemRemoveResponse = plaid_client.item_remove(request)
+
+        # TODO: Change to Development or Production for release
+        plaid_config = PlaidConfiguration(plaid.Environment.Development)
+        client = plaid_config.client()
+
+        response: ItemRemoveResponse = client.item_remove(request)
 
         return response.to_dict()
     except ApiException as e:

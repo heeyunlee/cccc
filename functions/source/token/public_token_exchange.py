@@ -1,13 +1,11 @@
 import json
-from typing import Any, Dict, Union
+from typing import Any, Dict
 
+import plaid
 from plaid import ApiException
-from plaid.model.item_public_token_exchange_request import \
-    ItemPublicTokenExchangeRequest
-from plaid.model.item_public_token_exchange_response import \
-    ItemPublicTokenExchangeResponse
-
-from source.configuration import plaid_client
+from plaid.model.item_public_token_exchange_request import ItemPublicTokenExchangeRequest
+from plaid.model.item_public_token_exchange_response import ItemPublicTokenExchangeResponse
+from source.plaid_configuration import PlaidConfiguration
 
 ''' Exchange public token for an access token
 
@@ -25,7 +23,12 @@ def public_token_exchange(public_token: str) -> Dict[str, Any]:
     try:
         # Make Request to exchange `public_token` to `access_token`
         request = ItemPublicTokenExchangeRequest(public_token)
-        response: ItemPublicTokenExchangeResponse = plaid_client.item_public_token_exchange(
+
+        # TODO: Change to Development or Production for release
+        plaid_config = PlaidConfiguration(plaid.Environment.Development)
+        client = plaid_config.client()
+
+        response: ItemPublicTokenExchangeResponse = client.item_public_token_exchange(
             request
         )
 

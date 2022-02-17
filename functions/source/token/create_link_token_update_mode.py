@@ -2,12 +2,13 @@ import json
 from typing import Any, Dict
 
 import flask
+import plaid
 from plaid import ApiException
 from plaid.api import plaid_api
 from plaid.model.country_code import CountryCode
 from plaid.model.link_token_create_request_user import LinkTokenCreateRequestUser
-from source.configuration import plaid_client
 from source.firestore.get_access_token_for_institution import get_access_token_for_institution
+from source.plaid_configuration import PlaidConfiguration
 
 
 def create_link_token_update_mode(request: flask.Request) -> Dict[str, Any]:
@@ -37,8 +38,14 @@ def create_link_token_update_mode(request: flask.Request) -> Dict[str, Any]:
             country_codes=[CountryCode('US')],
             user=LinkTokenCreateRequestUser(client_user_id=uid)
         )
-        response: plaid_api.LinkTokenCreateResponse = plaid_client.link_token_create(
-            request)
+
+        # TODO: Change to Development or Production for release
+        plaid_config = PlaidConfiguration(plaid.Environment.Development)
+        client = plaid_config.client()
+
+        response: plaid_api.LinkTokenCreateResponse = client.link_token_create(
+            request
+        )
 
         return response.to_dict()
     except ApiException as e:

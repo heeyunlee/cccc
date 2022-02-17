@@ -1,11 +1,10 @@
 import json
 
+import plaid
 from plaid import ApiException
-from plaid.model.sandbox_item_reset_login_request import \
-    SandboxItemResetLoginRequest
-from plaid.model.sandbox_item_reset_login_response import \
-    SandboxItemResetLoginResponse
-from tests.test_configuration import plaid_client
+from plaid.model.sandbox_item_reset_login_request import SandboxItemResetLoginRequest
+from plaid.model.sandbox_item_reset_login_response import SandboxItemResetLoginResponse
+from source.plaid_configuration import PlaidConfiguration
 
 ''' Force a Sandbox Item into an error state
 
@@ -24,9 +23,14 @@ from tests.test_configuration import plaid_client
 def sandbox_item_reset_login(access_token: str):
     try:
         request = SandboxItemResetLoginRequest(access_token)
-        response: SandboxItemResetLoginResponse = plaid_client.sandbox_item_reset_login(
+
+        plaid_config = PlaidConfiguration(plaid.Environment.Sandbox)
+        client = plaid_config.client()
+
+        response: SandboxItemResetLoginResponse = client.sandbox_item_reset_login(
             request
         )
+
         return response.to_dict()
     except ApiException as e:
         exceptions: dict = json.loads(e.body)

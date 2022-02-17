@@ -1,14 +1,12 @@
 import json
 
+import plaid
 from plaid import ApiException
 from plaid.model.country_code import CountryCode
-from plaid.model.institutions_get_by_id_request import \
-    InstitutionsGetByIdRequest
-from plaid.model.institutions_get_by_id_request_options import \
-    InstitutionsGetByIdRequestOptions
-from plaid.model.institutions_get_by_id_response import \
-    InstitutionsGetByIdResponse
-from source.configuration import plaid_client
+from plaid.model.institutions_get_by_id_request import InstitutionsGetByIdRequest
+from plaid.model.institutions_get_by_id_request_options import InstitutionsGetByIdRequestOptions
+from plaid.model.institutions_get_by_id_response import InstitutionsGetByIdResponse
+from source.plaid_configuration import PlaidConfiguration
 
 ''' /institutions/get_by_id
 
@@ -31,7 +29,12 @@ def institutions_get_by_id(institution_id: str):
             country_codes=[CountryCode('US')],
             options=options,
         )
-        response: InstitutionsGetByIdResponse = plaid_client.institutions_get_by_id(
+
+        # TODO: Change to Development or Production for release
+        plaid_config = PlaidConfiguration(plaid.Environment.Development)
+        client = plaid_config.client()
+
+        response: InstitutionsGetByIdResponse = client.institutions_get_by_id(
             request)
         response_dict = response.to_dict()
 

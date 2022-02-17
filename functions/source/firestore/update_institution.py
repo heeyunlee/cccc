@@ -1,7 +1,8 @@
-from typing import Dict, Union
+from typing import Dict, Optional
 
-from google.cloud import firestore
 from source.institution.institutions_get_by_id import institutions_get_by_id
+from source.cloud_firestore import CloudFirestore
+from source.enums import FirestoreEnv
 
 
 def update_institution(data: dict, context):
@@ -14,14 +15,17 @@ def update_institution(data: dict, context):
     collection_path = path_parts[0]
     document_path = '/'.join(path_parts[1:])
 
-    client = firestore.Client()
+    # TODO: Change Environment for production for release
+    firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+    client = firestore.client()
+
     users_collection = client.collection(collection_path)
     account_ref = users_collection.document(document_path)
     account_dict = account_ref.get().to_dict()
     institution_id = account_dict.get('institution_id')
 
     institutions_get_result = institutions_get_by_id(institution_id)
-    institution: Union[Dict, None] = institutions_get_result.get('institution')
+    institution: Optional[Dict] = institutions_get_result.get('institution')
 
     # if [institution] is None, it means that an error occurred. So return error
     if institution is None:

@@ -1,14 +1,18 @@
 from datetime import date, datetime
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Optional
 
 from google.cloud.firestore import CollectionReference
-from google.cloud import firestore
+from source.cloud_firestore import CloudFirestore
+from source.enums import FirestoreEnv
 
 
 def update_transactions(uid: str, transactions: List[Dict[str, Any]]):
     try:
-        firestore_client = firestore.Client()  # TODO: for release
-        user_doc = firestore_client.collection('users').document(uid)
+        # TODO: Change Environment for production for release
+        firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+        client = firestore.client()
+
+        user_doc = client.collection('users').document(uid)
         transactions_collection: CollectionReference = user_doc.collection(
             'transactions')
 
@@ -27,8 +31,7 @@ def update_transactions(uid: str, transactions: List[Dict[str, Any]]):
             old_date: date = transaction.get('date')
             new_date = datetime(old_date.year, old_date.month, old_date.day)
 
-            authorized_date: Union[date, None] = transaction.get(
-                'authorized_date')
+            authorized_date: Optional[date] = transaction.get('authorized_date')
 
             if authorized_date is not None:
                 authorized_date = datetime(

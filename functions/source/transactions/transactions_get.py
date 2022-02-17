@@ -1,10 +1,11 @@
 import json
 from datetime import date
 
+import plaid
 from plaid import ApiException
 from plaid.model.transactions_get_request import TransactionsGetRequest
 from plaid.model.transactions_get_response import TransactionsGetResponse
-from source.configuration import plaid_client
+from source.plaid_configuration import PlaidConfiguration
 
 ''' Get transaction data
 
@@ -47,7 +48,12 @@ def transactions_get(access_token: str, start_date: date, end_date: date):
             start_date=start_date,
             end_date=end_date,
         )
-        response: TransactionsGetResponse = plaid_client.transactions_get(
+
+        # TODO: Change to Development or Production for release
+        plaid_config = PlaidConfiguration(plaid.Environment.Development)
+        client = plaid_config.client()
+
+        response: TransactionsGetResponse = client.transactions_get(
             request
         )
 
