@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:shimmer/shimmer.dart';
 
 import 'package:cccc/models/user.dart';
 import 'package:cccc/services/logger_init.dart';
@@ -65,19 +64,20 @@ class Home extends ConsumerWidget {
     HomeScreenModel model,
   ) {
     final media = MediaQuery.of(context);
+    final padding = MediaQuery.of(context).padding;
 
     return CustomScrollView(
       slivers: [
         if (!kIsWeb && Platform.isIOS)
           CupertinoSliverRefreshControl(
             onRefresh: () => model.transactionsRefresh(context, user),
-            builder: (context, _, __, ___, ____) {
-              return Shimmer.fromColors(
-                highlightColor: Colors.green,
-                baseColor: Colors.lightGreen,
-                child: Container(
-                  height: media.padding.top + 48,
-                  color: Colors.lightGreen,
+            builder: (context, mode, __, ___, ____) {
+              return Container(
+                height: media.padding.top + 136,
+                color: Colors.black,
+                child: const Align(
+                  alignment: Alignment.bottomCenter,
+                  child: CircularProgressIndicator.adaptive(),
                 ),
               );
             },
@@ -112,7 +112,7 @@ class Home extends ConsumerWidget {
               AccountsCard(model: model),
               const SizedBox(height: 16),
               RecentTransactionsCard(model: model),
-              SizedBox(height: 32 + MediaQuery.of(context).padding.bottom),
+              SizedBox(height: padding.bottom + 32),
             ],
           ),
         ),

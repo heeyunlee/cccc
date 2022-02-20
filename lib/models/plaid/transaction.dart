@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:cccc/extensions/enum_extension.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
+import 'package:cccc/extensions/enum_extension.dart';
 import 'package:cccc/extensions/string_extension.dart';
 import 'package:cccc/models/enum/payment_channel.dart';
 import 'package:cccc/models/transaction_item.dart';
@@ -44,6 +44,8 @@ class Transaction {
     this.personalFinanceCategory,
     this.isFoodCategory,
     this.transactionItems,
+    this.isDuplicate,
+    this.merchantId,
   });
 
   /// The ID of a posted transaction's associated pending transaction, where
@@ -242,6 +244,10 @@ class Transaction {
   /// List of [TransactionItem] from either receipt scan or other sources
   final List<TransactionItem>? transactionItems;
 
+  final bool? isDuplicate;
+
+  final String? merchantId;
+
   /// Factory Constructor
   factory Transaction.fromMap(Map<String, dynamic> json) {
     final String? pendingTransactionId = json['pending_transaction_id'];
@@ -297,6 +303,8 @@ class Transaction {
                 .map((e) => TransactionItem.fromMap(e))
                 .toList()
             : null;
+    final bool? isDuplicate = json['is_duplicate'] as bool?;
+    final String? merchantId = json['merchant_id'] as String?;
 
     return Transaction(
       location: location,
@@ -324,6 +332,8 @@ class Transaction {
       personalFinanceCategory: personalFinanceCategory,
       isFoodCategory: isFoodCategory,
       transactionItems: transactionItems,
+      isDuplicate: isDuplicate,
+      merchantId: merchantId,
     );
   }
 
@@ -354,6 +364,8 @@ class Transaction {
       'personal_finance_category': personalFinanceCategory?.toJson(),
       'is_food_category': isFoodCategory,
       'transaction_items': transactionItems?.map((e) => e.toMap()).toList(),
+      'is_duplicate': isDuplicate,
+      'merchant_id': merchantId,
     };
   }
 
@@ -383,6 +395,8 @@ class Transaction {
     PersonalFinanceCategory? personalFinanceCategory,
     bool? isFoodCategory,
     List<TransactionItem>? transactionItems,
+    bool? isDuplicate,
+    String? merchantId,
   }) {
     return Transaction(
       pendingTransactionId: pendingTransactionId ?? this.pendingTransactionId,
@@ -412,6 +426,8 @@ class Transaction {
           personalFinanceCategory ?? this.personalFinanceCategory,
       isFoodCategory: isFoodCategory ?? this.isFoodCategory,
       transactionItems: transactionItems ?? this.transactionItems,
+      isDuplicate: isDuplicate ?? this.isDuplicate,
+      merchantId: merchantId ?? this.merchantId,
     );
   }
 
@@ -422,7 +438,7 @@ class Transaction {
 
   @override
   String toString() {
-    return 'Transaction(pendingTransactionId: $pendingTransactionId, categoryId: $categoryId, category: $category, location: $location, paymentMeta: $paymentMeta, accountOwner: $accountOwner, name: $name, originalDescription: $originalDescription, accountId: $accountId, amount: $amount, isoCurrencyCode: $isoCurrencyCode, unofficialCurrencyCode: $unofficialCurrencyCode, date: $date, pending: $pending, transactionId: $transactionId, merchantName: $merchantName, checkNumber: $checkNumber, paymentChannel: $paymentChannel, authorizedDate: $authorizedDate, authorizedDatetime: $authorizedDatetime, datetime: $datetime, transactionCode: $transactionCode, personalFinanceCategory: $personalFinanceCategory, isFoodCategory: $isFoodCategory, transactionItems: $transactionItems)';
+    return 'Transaction(pendingTransactionId: $pendingTransactionId, categoryId: $categoryId, category: $category, location: $location, paymentMeta: $paymentMeta, accountOwner: $accountOwner, name: $name, originalDescription: $originalDescription, accountId: $accountId, amount: $amount, isoCurrencyCode: $isoCurrencyCode, unofficialCurrencyCode: $unofficialCurrencyCode, date: $date, pending: $pending, transactionId: $transactionId, merchantName: $merchantName, checkNumber: $checkNumber, paymentChannel: $paymentChannel, authorizedDate: $authorizedDate, authorizedDatetime: $authorizedDatetime, datetime: $datetime, transactionCode: $transactionCode, personalFinanceCategory: $personalFinanceCategory, isFoodCategory: $isFoodCategory, transactionItems: $transactionItems, isDuplicate: $isDuplicate, merchantId: $merchantId)';
   }
 
   @override
@@ -454,7 +470,9 @@ class Transaction {
         other.transactionCode == transactionCode &&
         other.personalFinanceCategory == personalFinanceCategory &&
         other.isFoodCategory == isFoodCategory &&
-        listEquals(other.transactionItems, transactionItems);
+        listEquals(other.transactionItems, transactionItems) &&
+        other.isDuplicate == isDuplicate &&
+        other.merchantId == merchantId;
   }
 
   @override
@@ -483,6 +501,8 @@ class Transaction {
         transactionCode.hashCode ^
         personalFinanceCategory.hashCode ^
         isFoodCategory.hashCode ^
-        transactionItems.hashCode;
+        transactionItems.hashCode ^
+        isDuplicate.hashCode ^
+        merchantId.hashCode;
   }
 }

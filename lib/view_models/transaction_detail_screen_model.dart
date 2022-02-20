@@ -9,18 +9,18 @@ import 'package:intl/intl.dart';
 import 'package:cccc/models/enum/payment_channel.dart';
 
 final transactionDetailScreenModelProvider = ChangeNotifierProvider.autoDispose
-    .family<TransactionDetailScreenModel, Transaction>((ref, transaction) {
+    .family<TransactionDetailModel, Transaction>((ref, transaction) {
   final auth = ref.watch(authProvider);
   final database = ref.watch(databaseProvider(auth.currentUser!.uid));
 
-  return TransactionDetailScreenModel(
+  return TransactionDetailModel(
     transaction: transaction,
     database: database,
   );
 });
 
-class TransactionDetailScreenModel with ChangeNotifier {
-  TransactionDetailScreenModel({
+class TransactionDetailModel with ChangeNotifier {
+  TransactionDetailModel({
     required this.transaction,
     required this.database,
   });
@@ -84,5 +84,5 @@ class TransactionDetailScreenModel with ChangeNotifier {
     return account.name;
   }
 
-  Stream<Account?> get acocuntStream => database.accountStream(accountId);
+  Future<Account?> get accountFuture => database.accountGet(accountId);
 }

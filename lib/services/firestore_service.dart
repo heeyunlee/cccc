@@ -10,14 +10,15 @@ class FirestoreService {
   // Document Future
   Future<T?> getDocument<T>({
     required String path,
-    required T Function(Map<String, dynamic>? data, String id) fromBuilder,
+    required T Function(Map<String, dynamic>? data) fromBuilder,
     required Map<String, Object?> Function(T model) toBuilder,
   }) async {
     final reference = FirebaseFirestore.instance.doc(path).withConverter<T>(
-          fromFirestore: (json, _) => fromBuilder(json.data(), json.id),
+          fromFirestore: (json, _) => fromBuilder(json.data()),
           toFirestore: (model, _) => toBuilder(model),
         );
     final snapshot = await reference.get();
+
     if (snapshot.exists) {
       return snapshot.data()!;
     }
@@ -28,11 +29,11 @@ class FirestoreService {
   Future<void> setData<T>({
     required String path,
     required T data,
-    required T Function(Map<String, dynamic>? data, String id) fromBuilder,
+    required T Function(Map<String, dynamic>? data) fromBuilder,
     required Map<String, Object?> Function(T model) toBuilder,
   }) async {
     final reference = _instance.doc(path).withConverter<T>(
-          fromFirestore: (json, _) => fromBuilder(json.data(), json.id),
+          fromFirestore: (json, _) => fromBuilder(json.data()),
           toFirestore: (model, _) => toBuilder(model),
         );
 
@@ -43,11 +44,11 @@ class FirestoreService {
   Future<void> updateData<T>({
     required String path,
     required Map<String, dynamic> data,
-    required T Function(Map<String, dynamic>? data, String id) fromBuilder,
+    required T Function(Map<String, dynamic>? data) fromBuilder,
     required Map<String, Object?> Function(T model) toBuilder,
   }) async {
     final reference = _instance.doc(path).withConverter<T>(
-          fromFirestore: (json, _) => fromBuilder(json.data(), json.id),
+          fromFirestore: (json, _) => fromBuilder(json.data()),
           toFirestore: (model, _) => toBuilder(model),
         );
 
@@ -78,58 +79,122 @@ class FirestoreService {
     return snapshot.map((event) => event.data());
   }
 
-  // Collection Stream
+  /// Collection Stream
   Stream<List<T?>> collectionStream<T>({
     required String path,
-    required T Function(Map<String, dynamic>? data, String id) fromBuilder,
+    required T Function(Map<String, dynamic>? data) fromBuilder,
     required Map<String, Object?> Function(T model) toBuilder,
     required String orderByField,
     required bool descending,
+    int? limit,
   }) {
-    final reference = _instance
+    Query<T> reference = _instance
         .collection(path)
         .withConverter<T>(
-          fromFirestore: (json, _) => fromBuilder(json.data(), json.id),
+          fromFirestore: (json, _) => fromBuilder(json.data()),
           toFirestore: (model, _) => toBuilder(model),
         )
         .orderBy(orderByField, descending: descending);
 
-    final snapshots = reference.snapshots();
-    final list = snapshots.map(
-      (event) => event.docs.map((doc) => doc.data()).toList(),
-    );
+    if (limit != null) reference = reference.limit(limit);
 
-    return list;
+    final snapshots = reference.snapshots();
+
+    return snapshots.map((e) => e.docs.map((doc) => doc.data()).toList());
   }
 
-  // Collection Stream
-  Stream<List<T?>> collectionStreamWithLimit<T>({
+  /// Collection Stream
+  Stream<List<T?>> whereCollectionStream<T>({
     required String path,
-    required T Function(Map<String, dynamic>? data, String id) fromBuilder,
+    required T Function(Map<String, dynamic>? data) fromBuilder,
     required Map<String, Object?> Function(T model) toBuilder,
     required String orderByField,
     required bool descending,
-    required int limit,
+    required Object where,
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
+    bool? isNull,
+    int? limit,
   }) {
-    final reference = _instance
+    Query<T> reference = _instance
         .collection(path)
         .withConverter<T>(
-          fromFirestore: (json, _) => fromBuilder(json.data(), json.id),
+          fromFirestore: (json, _) => fromBuilder(json.data()),
+          toFirestore: (model, _) => toBuilder(model),
+        )
+        .where(
+          where,
+          isEqualTo: isEqualTo,
+          isNotEqualTo: isNotEqualTo,
+          isLessThan: isLessThan,
+          isLessThanOrEqualTo: isLessThanOrEqualTo,
+          isGreaterThan: isGreaterThan,
+          isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+          arrayContains: arrayContains,
+          arrayContainsAny: arrayContainsAny,
+          whereIn: whereIn,
+          whereNotIn: whereNotIn,
+          isNull: isNull,
+        )
+        .orderBy(orderByField, descending: descending);
+
+    if (limit != null) reference = reference.limit(limit);
+
+    final snapshots = reference.snapshots();
+
+    return snapshots.map((e) => e.docs.map((doc) => doc.data()).toList());
+  }
+
+  // Query
+  Query<T> query<T>({
+    required String path,
+    required T Function(Map<String, dynamic>? data) fromBuilder,
+    required Map<String, Object?> Function(T model) toBuilder,
+    required String orderByField,
+    bool descending = true,
+    required int limit,
+  }) {
+    return _instance
+        .collection(path)
+        .withConverter<T>(
+          fromFirestore: (json, _) => fromBuilder(json.data()),
           toFirestore: (model, _) => toBuilder(model),
         )
         .orderBy(orderByField, descending: descending)
         .limit(limit);
-
-    final snapshots = reference.snapshots();
-    final list = snapshots.map(
-      (event) => event.docs.map((doc) => doc.data()).toList(),
-    );
-
-    return list;
   }
 
   // Query Snapshot
-  Future<QuerySnapshot<T>> query<T>({
+  Query<T> queryStartAfter<T>({
+    required String path,
+    required T Function(Map<String, dynamic>? data) fromBuilder,
+    required Map<String, Object?> Function(T model) toBuilder,
+    required String orderByField,
+    bool descending = true,
+    required int limit,
+    required DocumentSnapshot<T> startAfterDocument,
+  }) {
+    return _instance
+        .collection(path)
+        .withConverter<T>(
+          fromFirestore: (json, _) => fromBuilder(json.data()),
+          toFirestore: (model, _) => toBuilder(model),
+        )
+        .orderBy(orderByField, descending: descending)
+        .limit(limit)
+        .startAfterDocument(startAfterDocument);
+  }
+
+  // Query Snapshot
+  Future<QuerySnapshot<T>> querySnapshot<T>({
     required String path,
     required T Function(Map<String, dynamic>? data) fromBuilder,
     required Map<String, Object?> Function(T model) toBuilder,
@@ -170,107 +235,5 @@ class FirestoreService {
         .limit(limit);
 
     return query.get();
-  }
-
-  // Collection Stream
-  Stream<List<T?>> whereCollectionStream<T>({
-    required String path,
-    required T Function(Map<String, dynamic>? data, String id) fromBuilder,
-    required Map<String, Object?> Function(T model) toBuilder,
-    required String orderByField,
-    required bool descending,
-    required Object where,
-    Object? isEqualTo,
-    Object? isNotEqualTo,
-    Object? isLessThan,
-    Object? isLessThanOrEqualTo,
-    Object? isGreaterThan,
-    Object? isGreaterThanOrEqualTo,
-    Object? arrayContains,
-    List<Object?>? arrayContainsAny,
-    List<Object?>? whereIn,
-    List<Object?>? whereNotIn,
-    bool? isNull,
-  }) {
-    final reference = _instance
-        .collection(path)
-        .withConverter<T>(
-          fromFirestore: (json, _) => fromBuilder(json.data(), json.id),
-          toFirestore: (model, _) => toBuilder(model),
-        )
-        .where(
-          where,
-          isEqualTo: isEqualTo,
-          isNotEqualTo: isNotEqualTo,
-          isLessThan: isLessThan,
-          isLessThanOrEqualTo: isLessThanOrEqualTo,
-          isGreaterThan: isGreaterThan,
-          isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
-          arrayContains: arrayContains,
-          arrayContainsAny: arrayContainsAny,
-          whereIn: whereIn,
-          whereNotIn: whereNotIn,
-          isNull: isNull,
-        )
-        .orderBy(orderByField, descending: descending);
-
-    final snapshots = reference.snapshots();
-    final list = snapshots.map(
-      (event) => event.docs.map((doc) => doc.data()).toList(),
-    );
-
-    return list;
-  }
-
-  // Collection Stream with where and limit
-  Stream<List<T?>> whereCollectionWithLimitStream<T>({
-    required String path,
-    required T Function(Map<String, dynamic>? data, String id) fromBuilder,
-    required Map<String, Object?> Function(T model) toBuilder,
-    required String orderByField,
-    required bool descending,
-    required Object where,
-    Object? isEqualTo,
-    Object? isNotEqualTo,
-    Object? isLessThan,
-    Object? isLessThanOrEqualTo,
-    Object? isGreaterThan,
-    Object? isGreaterThanOrEqualTo,
-    Object? arrayContains,
-    List<Object?>? arrayContainsAny,
-    List<Object?>? whereIn,
-    List<Object?>? whereNotIn,
-    bool? isNull,
-    int? limit = 10,
-  }) {
-    final reference = _instance
-        .collection(path)
-        .withConverter<T>(
-          fromFirestore: (json, _) => fromBuilder(json.data(), json.id),
-          toFirestore: (model, _) => toBuilder(model),
-        )
-        .where(
-          where,
-          isEqualTo: isEqualTo,
-          isNotEqualTo: isNotEqualTo,
-          isLessThan: isLessThan,
-          isLessThanOrEqualTo: isLessThanOrEqualTo,
-          isGreaterThan: isGreaterThan,
-          isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
-          arrayContains: arrayContains,
-          arrayContainsAny: arrayContainsAny,
-          whereIn: whereIn,
-          whereNotIn: whereNotIn,
-          isNull: isNull,
-        )
-        .orderBy(orderByField, descending: descending)
-        .limit(limit!);
-
-    final snapshots = reference.snapshots();
-    final list = snapshots.map(
-      (event) => event.docs.map((doc) => doc.data()).toList(),
-    );
-
-    return list;
   }
 }

@@ -48,7 +48,7 @@ class AccountDetailScreenModel with ChangeNotifier {
   }
 
   Stream<List<Transaction?>> get transactionsStream {
-    return database.accountTransactionsLimitStream(account.accountId);
+    return database.transactionsStreamForSpecificAccount(account.accountId, 6);
   }
 
   Stream<Institution?> get institutionStream {

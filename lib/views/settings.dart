@@ -40,7 +40,7 @@ class Settings extends ConsumerWidget {
                 applicationName: '',
                 applicationIcon: ImageAssets.logo,
                 // TODO: CHANGE VERSION
-                applicationVersion: '0.0.11',
+                applicationVersion: '0.0.12',
               );
             },
             title: const Text('About'),
@@ -64,7 +64,7 @@ class Settings extends ConsumerWidget {
           ),
           const SizedBox(height: 32),
           // TODO: CHANGE VERSION
-          const Text('v.0.0.11', style: TextStyles.overlineWhite54),
+          const Text('v.0.0.12', style: TextStyles.overlineWhite54),
         ],
       ),
     );

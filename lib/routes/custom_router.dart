@@ -4,6 +4,7 @@ import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/routes/adaptive_page_route.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/views/account_detail.dart';
+import 'package:cccc/views/choose_merchant_for_transaction.dart';
 import 'package:cccc/views/connect_plaid.dart';
 import 'package:cccc/views/home.dart';
 import 'package:cccc/views/linked_accounts.dart';
@@ -83,7 +84,15 @@ class CustomRouter {
           builder: (context) => const LinkedAccounts(),
           settings: settings,
         );
+      case RouteNames.chooseMerchant:
+        final arg = settings.arguments as Transaction;
 
+        return adaptiveRoute(
+          rootNavigator: false,
+          maintainState: true,
+          builder: (context) => ChooseMerchantForTransaction(transaction: arg),
+          settings: settings,
+        );
       default:
         return null;
     }

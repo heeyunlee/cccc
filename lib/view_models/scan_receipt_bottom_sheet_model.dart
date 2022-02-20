@@ -138,6 +138,8 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
         toggleState(ScanReceiptState.start);
       }
     } catch (e) {
+      logger.e('Error Occurred: ${e.toString()}');
+
       showAdaptiveDialog(
         context,
         title: 'Something went wrong',
@@ -173,7 +175,8 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
         toggleState(ScanReceiptState.start);
       }
     } else {
-      final transactionStream = database.transactionsSpecificAmount(subtotal);
+      final transactionStream =
+          database.transactionsStreamSpecificAmount(subtotal);
       _transactionsStream = transactionStream;
 
       toggleState(ScanReceiptState.chooseTransaction);

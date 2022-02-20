@@ -1,6 +1,6 @@
-import 'package:cccc/services/logger_init.dart';
 import 'package:flutter/material.dart';
 
+/// Creates a custom [StreamBuilder] widget.
 class CustomStreamBuilder<T> extends StatelessWidget {
   const CustomStreamBuilder({
     Key? key,
@@ -38,8 +38,6 @@ class CustomStreamBuilder<T> extends StatelessWidget {
       stream: stream,
       builder: (BuildContext context, AsyncSnapshot<T> snapshot) {
         if (snapshot.hasError) {
-          logger.e('An error on the stream: \n${snapshot.error}');
-
           return errorBuilder(context, snapshot.error);
         } else {
           switch (snapshot.connectionState) {

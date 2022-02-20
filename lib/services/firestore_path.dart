@@ -10,6 +10,12 @@ class FirestorePath {
   static String account(String uid, String accountId) =>
       'users/$uid/accounts/$accountId';
 
-  static String institution(String institutionId) =>
-      'institutions/$institutionId';
+  static String institution(String id) => 'institutions/$id';
+
+  static String merchants() => 'merchants';
+  static String merchant(String id) => 'merchants/$id';
+
+  static String products(String merchantId) => 'merchants/$merchantId/products';
+  static String product(String merchantId, String productId) =>
+      'merchants/$merchantId/products/$productId';
 }

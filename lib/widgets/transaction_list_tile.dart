@@ -20,7 +20,9 @@ class TransactionListTile extends StatelessWidget {
   final void Function()? onTap;
   final Color? color;
 
-  String get category {
+  bool get isPending => transaction.pending;
+
+  String get subtitle {
     final category = transaction.category;
 
     if (category == null) {
@@ -31,6 +33,25 @@ class TransactionListTile extends StatelessWidget {
       return category[1];
     } else {
       return category[0];
+    }
+  }
+
+  String get title => transaction.name;
+
+  String get thirdTitle => DateFormat('M/d/y').format(transaction.date);
+
+  String get trailing => Formatter.amount(
+        transaction.amount,
+        transaction.isoCurrencyCode ?? 'USD',
+      );
+
+  TextStyle get trailingStyle {
+    if (isPending) {
+      return TextStyles.body2White38;
+    } else if (transaction.amount > 0) {
+      return TextStyles.body2;
+    } else {
+      return TextStyles.body2Green;
     }
   }
 
@@ -52,31 +73,27 @@ class TransactionListTile extends StatelessWidget {
           child: Icon(
             kCategoryIdEmojiMap[transaction.categoryId],
             size: 20,
-            color: transaction.pending ? Colors.white38 : Colors.white,
+            color: isPending ? Colors.white38 : Colors.white,
           ),
         ),
       ),
       title: Text(
-        transaction.name,
-        style: transaction.pending
-            ? TextStyles.body1White38Bold
-            : TextStyles.body1Bold,
+        title,
+        style: isPending ? TextStyles.body1White38Bold : TextStyles.body1Bold,
         maxLines: 1,
       ),
       subtitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            category,
-            style: transaction.pending
-                ? TextStyles.captionWhite38
-                : TextStyles.caption,
+            subtitle,
+            style: isPending ? TextStyles.captionWhite38 : TextStyles.caption,
             maxLines: 1,
           ),
           const SizedBox(height: 4),
           Text(
-            DateFormat('M/d/y').format(transaction.date),
-            style: transaction.pending
+            thirdTitle,
+            style: isPending
                 ? TextStyles.captionWhite38Bold
                 : TextStyles.captionGreyBold,
             maxLines: 1,
@@ -84,21 +101,11 @@ class TransactionListTile extends StatelessWidget {
         ],
       ),
       trailing: SizedBox(
-        width: 80,
+        width: 104,
         height: 64,
         child: Align(
           alignment: Alignment.centerRight,
-          child: Text(
-            Formatter.amount(
-              transaction.amount,
-              transaction.isoCurrencyCode ?? 'USD',
-            ),
-            style: transaction.pending
-                ? TextStyles.body2White38
-                : transaction.amount > 0
-                    ? TextStyles.body2
-                    : TextStyles.body2Green,
-          ),
+          child: Text(trailing, style: trailingStyle),
         ),
       ),
       onTap: enableOnTap!

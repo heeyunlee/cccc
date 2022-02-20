@@ -1,10 +1,11 @@
+import 'package:cccc/models/merchant.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/models/transactions_query.dart';
 import 'package:cccc/models/user.dart';
 import 'package:cccc/services/firestore_path.dart';
-import 'package:cloud_firestore/cloud_firestore.dart' show DocumentSnapshot;
+import 'package:cloud_firestore/cloud_firestore.dart'
+    show DocumentSnapshot, Query;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firestore_service.dart';
@@ -26,14 +27,14 @@ class FirestoreDatabase {
 
   Future<User?> getUser(String uid) => _service.getDocument<User>(
         path: FirestorePath.user(uid),
-        fromBuilder: (json, id) => User.fromMap(json!),
+        fromBuilder: (json) => User.fromMap(json!),
         toBuilder: (model) => model.toMap(),
       );
 
   Future<void> setUser(User user) => _service.setData<User>(
         path: FirestorePath.user(user.uid),
         data: user,
-        fromBuilder: (json, id) => User.fromMap(json!),
+        fromBuilder: (json) => User.fromMap(json!),
         toBuilder: (model) => model.toMap(),
       );
 
@@ -41,7 +42,7 @@ class FirestoreDatabase {
       _service.updateData<User>(
         path: FirestorePath.user(oldData.uid),
         data: newData,
-        fromBuilder: (json, id) => User.fromMap(json!),
+        fromBuilder: (json) => User.fromMap(json!),
         toBuilder: (model) => model.toMap(),
       );
 
@@ -62,80 +63,66 @@ class FirestoreDatabase {
     return _service.updateData<Transaction>(
       path: FirestorePath.transaction(uid!, oldData.transactionId),
       data: newData,
-      fromBuilder: (json, id) => Transaction.fromMap(json!),
+      fromBuilder: (json) => Transaction.fromMap(json!),
       toBuilder: (model) => model.toMap(),
     );
   }
 
   Stream<List<Transaction?>> transactionsStream([int? limit]) {
-    return _service.collectionStreamWithLimit<Transaction>(
+    return _service.collectionStream<Transaction>(
       path: FirestorePath.transactions(uid!),
-      fromBuilder: (json, id) => Transaction.fromMap(json!),
+      fromBuilder: (json) => Transaction.fromMap(json!),
       toBuilder: (model) => model.toMap(),
       orderByField: 'date',
       descending: true,
-      limit: limit ?? 10,
+      limit: limit,
     );
   }
 
-  Future<ListQueryResponse<Transaction>> transactionsQuery({
+  Query<Transaction> transactionsQuery({
     int limit = 15,
     DocumentSnapshot<Transaction>? startAfterDocument,
-  }) async {
-    final snapshot = (startAfterDocument == null)
-        ? await _service.query<Transaction>(
-            path: FirestorePath.transactions(uid!),
-            fromBuilder: (json) => Transaction.fromMap(json!),
-            toBuilder: (model) => model.toMap(),
-            orderByField: 'date',
-            limit: limit,
-          )
-        : await _service.queryWithPagination<Transaction>(
-            path: FirestorePath.transactions(uid!),
-            fromBuilder: (json) => Transaction.fromMap(json!),
-            toBuilder: (model) => model.toMap(),
-            orderByField: 'date',
-            startAfterDocument: startAfterDocument,
-            limit: limit,
-          );
-
-    final snapshotDocsList = snapshot.docs;
-    final lastDoc = await snapshotDocsList.last.reference.get();
-
-    final transactions = snapshotDocsList.map((e) => e.data()).toList();
-
-    return ListQueryResponse(list: transactions, lastDocSnapshot: lastDoc);
+  }) {
+    if (startAfterDocument == null) {
+      return _service.query(
+        path: FirestorePath.transactions(uid!),
+        fromBuilder: (json) => Transaction.fromMap(json!),
+        toBuilder: (model) => model.toMap(),
+        orderByField: 'date',
+        limit: limit,
+      );
+    } else {
+      return _service.queryStartAfter(
+        path: FirestorePath.transactions(uid!),
+        fromBuilder: (json) => Transaction.fromMap(json!),
+        toBuilder: (model) => model.toMap(),
+        orderByField: 'date',
+        limit: limit,
+        startAfterDocument: startAfterDocument,
+      );
+    }
   }
 
-  Stream<List<Transaction?>> transactionsForAccountStream(String accountId) {
+  Stream<List<Transaction?>> transactionsStreamForSpecificAccount(
+    String accountId, [
+    int? limit,
+  ]) {
     return _service.whereCollectionStream<Transaction>(
       path: FirestorePath.transactions(uid!),
-      fromBuilder: (json, id) => Transaction.fromMap(json!),
+      fromBuilder: (json) => Transaction.fromMap(json!),
       toBuilder: (model) => model.toMap(),
       orderByField: 'date',
       descending: true,
       where: 'account_id',
       isEqualTo: accountId,
+      limit: limit,
     );
   }
 
-  Stream<List<Transaction?>> accountTransactionsLimitStream(String accountId) {
-    return _service.whereCollectionWithLimitStream<Transaction>(
-      path: FirestorePath.transactions(uid!),
-      fromBuilder: (json, id) => Transaction.fromMap(json!),
-      toBuilder: (model) => model.toMap(),
-      orderByField: 'date',
-      descending: true,
-      where: 'account_id',
-      isEqualTo: accountId,
-      limit: 6,
-    );
-  }
-
-  Stream<List<Transaction?>> transactionsSpecificAmount(num amount) {
+  Stream<List<Transaction?>> transactionsStreamSpecificAmount(num amount) {
     return _service.whereCollectionStream<Transaction>(
       path: FirestorePath.transactions(uid!),
-      fromBuilder: (json, id) => Transaction.fromMap(json!),
+      fromBuilder: (json) => Transaction.fromMap(json!),
       toBuilder: (model) => model.toMap(),
       orderByField: 'date',
       descending: true,
@@ -144,13 +131,23 @@ class FirestoreDatabase {
     );
   }
 
-  Stream<List<Account?>> accountsStream() => _service.collectionStream<Account>(
-        path: FirestorePath.accounts(uid!),
-        fromBuilder: (json, id) => Account.fromMap(json!),
-        toBuilder: (model) => model.toMap(),
-        orderByField: 'type',
-        descending: false,
-      );
+  Stream<List<Account?>> accountsStream() {
+    return _service.collectionStream<Account>(
+      path: FirestorePath.accounts(uid!),
+      fromBuilder: (json) => Account.fromMap(json!),
+      toBuilder: (model) => model.toMap(),
+      orderByField: 'type',
+      descending: false,
+    );
+  }
+
+  Future<Account?> accountGet(String accountId) {
+    return _service.getDocument<Account>(
+      path: FirestorePath.account(uid!, accountId),
+      fromBuilder: (json) => Account.fromMap(json!),
+      toBuilder: (model) => model.toMap(),
+    );
+  }
 
   Stream<Account?> accountStream(String accountId) {
     return _service.documentStream<Account>(
@@ -166,5 +163,41 @@ class FirestoreDatabase {
       fromBuilder: (json) => json != null ? Institution.fromMap(json) : null,
       toBuilder: (model) => model!.toMap(),
     );
+  }
+
+  // Stream<List<Merchant?>> merchantsStream() {
+  //   return _service.collectionStream<Merchant>(
+  //     path: FirestorePath.merchants(),
+  //     fromBuilder: (json) => Merchant.fromMap(json!),
+  //     toBuilder: (model) => model.toMap(),
+  //     orderByField: 'name',
+  //     descending: false,
+  //   );
+  // }
+
+  Query<Merchant> merchantQuery({
+    int limit = 15,
+    DocumentSnapshot<Merchant>? startAfterDocument,
+  }) {
+    if (startAfterDocument == null) {
+      return _service.query<Merchant>(
+        path: FirestorePath.merchants(),
+        fromBuilder: (json) => Merchant.fromMap(json!),
+        toBuilder: (model) => model.toMap(),
+        orderByField: 'name',
+        descending: false,
+        limit: limit,
+      );
+    } else {
+      return _service.queryStartAfter(
+        path: FirestorePath.merchants(),
+        fromBuilder: (json) => Merchant.fromMap(json!),
+        toBuilder: (model) => model.toMap(),
+        orderByField: 'name',
+        descending: false,
+        limit: limit,
+        startAfterDocument: startAfterDocument,
+      );
+    }
   }
 }

@@ -1,3 +1,5 @@
+import 'package:cccc/views/choose_merchant_for_transaction.dart';
+import 'package:cccc/widgets/custom_future_builder.dart';
 import 'package:cccc/widgets/scan_receipt/scan_receipt_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -9,7 +11,6 @@ import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/styles.dart';
 import 'package:cccc/view_models/transaction_detail_screen_model.dart';
-import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/receipt_widget.dart';
 import 'package:cccc/widgets/transaction_detail_title.dart';
 
@@ -32,6 +33,7 @@ class TransactionDetail extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     logger.d('[TransactionDetail] building... ');
 
+    final size = MediaQuery.of(context).size;
     final model = ref.watch(transactionDetailScreenModelProvider(transaction));
 
     return Scaffold(
@@ -96,16 +98,65 @@ class TransactionDetail extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 16),
+                  if (model.isFood)
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(32, 16, 32, 16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            width: (size.width - 64) / 4,
+                            child: Column(
+                              children: const [
+                                Text('0 Kcal', style: TextStyles.body1Bold),
+                                SizedBox(height: 4),
+                                Text('Calories',
+                                    style: TextStyles.overlineGrey),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: (size.width - 64) / 4,
+                            child: Column(
+                              children: const [
+                                Text('0 g', style: TextStyles.body1Bold),
+                                SizedBox(height: 4),
+                                Text('Carbs', style: TextStyles.overlineGrey),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: (size.width - 64) / 4,
+                            child: Column(
+                              children: const [
+                                Text('0 g', style: TextStyles.body1Bold),
+                                SizedBox(height: 4),
+                                Text('Proteins',
+                                    style: TextStyles.overlineGrey),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: (size.width - 64) / 4,
+                            child: Column(
+                              children: const [
+                                Text('0 g', style: TextStyles.body1Bold),
+                                SizedBox(height: 4),
+                                Text('Fat', style: TextStyles.overlineGrey),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ExpansionTile(
                     initiallyExpanded: true,
-                    tilePadding: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 16,
-                    ),
-                    textColor: Theme.of(context).primaryColor,
                     collapsedTextColor: Colors.white,
-                    leading: const Icon(Icons.receipt),
+                    textColor: Colors.white,
+                    collapsedIconColor: Colors.white,
+                    iconColor: Colors.white,
                     childrenPadding: const EdgeInsets.symmetric(vertical: 16),
+                    leading: const Icon(Icons.receipt),
                     title: const Text(
                       'Items',
                       style: TextStyles.captionNoColor,
@@ -116,15 +167,26 @@ class TransactionDetail extends ConsumerWidget {
                   ),
                   ListTile(
                     onTap: () {},
-                    leading: const Icon(Icons.account_balance),
-                    title: const Text('Account', style: TextStyles.caption),
-                    trailing: CustomStreamBuilder<Account?>(
-                      stream: model.acocuntStream,
-                      errorBuilder: (context, error) => Text(
-                        'An Error Occurred. Error Code: ${error.toString()}',
+                    contentPadding: const EdgeInsets.symmetric(vertical: 4),
+                    leading: const SizedBox(
+                      height: 64,
+                      width: 56,
+                      child: Center(child: Icon(Icons.account_balance)),
+                    ),
+                    title: const Text(
+                      'Account',
+                      style: TextStyles.overlineGrey,
+                    ),
+                    subtitle: CustomFutureBuilder<Account?>(
+                      future: model.accountFuture,
+                      loadingWidget: const Text(
+                        'Loading',
                         style: TextStyles.body2Bold,
                       ),
-                      loadingWidget: const CircularProgressIndicator(),
+                      errorBuilder: (context, error) => Text(
+                        error.toString(),
+                        style: TextStyles.body2Bold,
+                      ),
                       builder: (context, account) {
                         return Text(
                           model.accountName(account),
@@ -134,25 +196,42 @@ class TransactionDetail extends ConsumerWidget {
                     ),
                   ),
                   ListTile(
-                    onTap: () {},
-                    leading: const Icon(Icons.storefront_sharp),
-                    title: const Text(
-                      'Merchant Name',
-                      style: TextStyles.caption,
+                    onTap: () => ChooseMerchantForTransaction.show(
+                      context,
+                      transaction: transaction,
                     ),
-                    trailing: Text(
+                    contentPadding: const EdgeInsets.symmetric(vertical: 4),
+                    leading: const SizedBox(
+                      height: 64,
+                      width: 56,
+                      child: Center(
+                        child: Icon(Icons.storefront_sharp),
+                      ),
+                    ),
+                    title: const Text(
+                      'Merchant',
+                      style: TextStyles.overlineGrey,
+                    ),
+                    subtitle: Text(
                       model.merchantName,
                       style: TextStyles.body2Bold,
                     ),
                   ),
                   ListTile(
                     onTap: () {},
-                    leading: const Icon(Icons.today),
+                    leading: const SizedBox(
+                      height: 64,
+                      width: 56,
+                      child: Center(
+                        child: Icon(Icons.today),
+                      ),
+                    ),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 4),
                     title: const Text(
                       'Date',
-                      style: TextStyles.caption,
+                      style: TextStyles.overlineGrey,
                     ),
-                    trailing: Text(
+                    subtitle: Text(
                       model.date,
                       style: TextStyles.body2Bold,
                     ),
@@ -167,6 +246,17 @@ class TransactionDetail extends ConsumerWidget {
                     trailing: Text(
                       model.categoryId,
                       style: TextStyles.body2Bold,
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.dynamic_feed),
+                    title: const Text(
+                      'Mark As Duplicate',
+                      style: TextStyles.caption,
+                    ),
+                    trailing: Switch(
+                      value: false,
+                      onChanged: (a) {},
                     ),
                   ),
                   ExpansionTile(

@@ -2,7 +2,6 @@ import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
-import 'package:cccc/widgets/shimmers.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cccc/models/plaid/account.dart';
@@ -12,6 +11,8 @@ import 'package:cccc/views/account_detail.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'account_circle_avatar.dart';
 import 'package:cccc/models/enum/account_subtype.dart';
+
+import 'shimmers.dart';
 
 class AccountListTile extends ConsumerWidget {
   const AccountListTile({
