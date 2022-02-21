@@ -1,0 +1,7 @@
+# Root folder
+private_keys.json
+__pycache__
+
+# Firestore folder
+firestore/google-services.json
+firestore/__pycache__
