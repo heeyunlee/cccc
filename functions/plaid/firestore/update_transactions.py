@@ -8,6 +8,8 @@ from firestore.cloud_firestore import CloudFirestore, FirestoreEnv
 
 def update_transactions(uid: str, transactions: List[Dict[str, Any]]):
     try:
+        print(f'{len(transactions)} transactions: {transactions}')
+
         # TODO: Change Environment for production for release
         firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
         client = firestore.client()
@@ -48,9 +50,13 @@ def update_transactions(uid: str, transactions: List[Dict[str, Any]]):
             if pending_transaction_id is not None:
                 transaction_doc = transactions_collection.document(
                     pending_transaction_id)
-                transaction_snapshot = transaction_doc.get()
+                pending_transaction_snapshot = transaction_doc.get()
 
-                if transaction_snapshot.exists:
+                transaction.update({
+                    'transaction_id': pending_transaction_id,
+                })
+
+                if pending_transaction_snapshot.exists:
                     transaction_doc.update(transaction)
                     updated += 1
                 else:

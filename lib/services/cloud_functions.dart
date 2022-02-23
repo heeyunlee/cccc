@@ -9,10 +9,9 @@ import 'cloud_functions_uris.dart';
 import 'firebase_auth.dart';
 import 'firestore_database.dart';
 
-final cloudFunctionsProvider = Provider<CloudFunctions>((ref) {
+final cloudFunctionsProvider = Provider.autoDispose<CloudFunctions>((ref) {
   final auth = ref.watch(authProvider);
-  final uid = auth.currentUser?.uid;
-  final database = ref.watch(databaseProvider(uid!));
+  final database = ref.watch(databaseProvider);
 
   return CloudFunctions(auth: auth, database: database);
 });

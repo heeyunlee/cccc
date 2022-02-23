@@ -4,51 +4,51 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.4.0)
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
-  - cloud_firestore (3.1.6):
-    - Firebase/Firestore (= 8.10.0)
+  - cloud_firestore (3.1.8):
+    - Firebase/Firestore (= 8.11.0)
     - firebase_core
     - Flutter
-  - Firebase/Auth (8.10.0):
+  - Firebase/Auth (8.11.0):
     - Firebase/CoreOnly
-    - FirebaseAuth (~> 8.10.0)
-  - Firebase/CoreOnly (8.10.0):
-    - FirebaseCore (= 8.10.0)
-  - Firebase/Firestore (8.10.0):
+    - FirebaseAuth (~> 8.11.0)
+  - Firebase/CoreOnly (8.11.0):
+    - FirebaseCore (= 8.11.0)
+  - Firebase/Firestore (8.11.0):
     - Firebase/CoreOnly
-    - FirebaseFirestore (~> 8.10.0)
-  - firebase_auth (3.3.5):
-    - Firebase/Auth (= 8.10.0)
+    - FirebaseFirestore (~> 8.11.0)
+  - firebase_auth (3.3.7):
+    - Firebase/Auth (= 8.11.0)
     - firebase_core
     - Flutter
-  - firebase_core (1.11.0):
-    - Firebase/CoreOnly (= 8.10.0)
+  - firebase_core (1.12.0):
+    - Firebase/CoreOnly (= 8.11.0)
     - Flutter
-  - FirebaseAuth (8.10.0):
+  - FirebaseAuth (8.11.0):
     - FirebaseCore (~> 8.0)
-    - GoogleUtilities/AppDelegateSwizzler (~> 7.6)
-    - GoogleUtilities/Environment (~> 7.6)
+    - GoogleUtilities/AppDelegateSwizzler (~> 7.7)
+    - GoogleUtilities/Environment (~> 7.7)
     - GTMSessionFetcher/Core (~> 1.5)
-  - FirebaseCore (8.10.0):
+  - FirebaseCore (8.11.0):
     - FirebaseCoreDiagnostics (~> 8.0)
-    - GoogleUtilities/Environment (~> 7.6)
-    - GoogleUtilities/Logger (~> 7.6)
-  - FirebaseCoreDiagnostics (8.10.0):
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/Logger (~> 7.7)
+  - FirebaseCoreDiagnostics (8.12.0):
     - GoogleDataTransport (~> 9.1)
-    - GoogleUtilities/Environment (~> 7.6)
-    - GoogleUtilities/Logger (~> 7.6)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/Logger (~> 7.7)
     - nanopb (~> 2.30908.0)
-  - FirebaseFirestore (8.10.0):
-    - FirebaseFirestore/AutodetectLeveldb (= 8.10.0)
-  - FirebaseFirestore/AutodetectLeveldb (8.10.0):
+  - FirebaseFirestore (8.11.0):
+    - FirebaseFirestore/AutodetectLeveldb (= 8.11.0)
+  - FirebaseFirestore/AutodetectLeveldb (8.11.0):
     - FirebaseFirestore/Base
     - FirebaseFirestore/WithLeveldb
-  - FirebaseFirestore/Base (8.10.0)
-  - FirebaseFirestore/WithLeveldb (8.10.0):
+  - FirebaseFirestore/Base (8.11.0)
+  - FirebaseFirestore/WithLeveldb (8.11.0):
     - FirebaseFirestore/Base
-  - FirebaseInstallations (8.10.0):
+  - FirebaseInstallations (8.12.0):
     - FirebaseCore (~> 8.0)
-    - GoogleUtilities/Environment (~> 7.6)
-    - GoogleUtilities/UserDefaults (~> 7.6)
+    - GoogleUtilities/Environment (~> 7.7)
+    - GoogleUtilities/UserDefaults (~> 7.7)
     - PromisesObjC (< 3.0, >= 1.2)
   - Flutter (1.0.0)
   - google_ml_kit (0.6.0):
@@ -237,16 +237,16 @@ PODS:
     - Flutter
     - Plaid (= 2.3.1)
   - PromisesObjC (2.0.0)
-  - Protobuf (3.19.1)
+  - Protobuf (3.19.4)
   - shared_preferences_ios (0.0.1):
     - Flutter
-  - SSZipArchive (2.4.2)
+  - SSZipArchive (2.4.3)
 
 DEPENDENCIES:
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
-  - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `8.10.0`)
+  - FirebaseFirestore (from `https://github.com/invertase/firestore-ios-sdk-frameworks.git`, tag `8.11.0`)
   - Flutter (from `Flutter`)
   - google_ml_kit (from `.symlinks/plugins/google_ml_kit/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
@@ -305,7 +305,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_core/ios"
   FirebaseFirestore:
     :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
-    :tag: 8.10.0
+    :tag: 8.11.0
   Flutter:
     :path: Flutter
   google_ml_kit:
@@ -322,19 +322,19 @@ EXTERNAL SOURCES:
 CHECKOUT OPTIONS:
   FirebaseFirestore:
     :git: https://github.com/invertase/firestore-ios-sdk-frameworks.git
-    :tag: 8.10.0
+    :tag: 8.11.0
 
 SPEC CHECKSUMS:
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
-  cloud_firestore: 03020d987c2828e9b2d87f6940d365ddb089394f
-  Firebase: 44213362f1dcc52555b935dc925ed35ac55f1b20
-  firebase_auth: 9d959bddc3b255ddfb67cf630a5bbb6186964356
-  firebase_core: 2ca2d6cc8a11693e701b37126afae4800be5dbac
-  FirebaseAuth: 59a2d2b933b5b79e18fb1e6ad230c6abdaa73d26
-  FirebaseCore: 04186597c095da37d90ff9fd3e53bc61a1ff2440
-  FirebaseCoreDiagnostics: 56fb7216d87e0e6ec2feddefa9d8a392fe8b2c18
-  FirebaseFirestore: 59f8b4382e214b21af226875bd2cf85b84d9af11
-  FirebaseInstallations: 830327b45345ffc859eaa9c17bcd5ae893fd5425
+  cloud_firestore: 8bd22e19f6ccf3a0d1976ea298e0ce37c9ad5839
+  Firebase: 44dd9724c84df18b486639e874f31436eaa9a20c
+  firebase_auth: 20bf788012988ef04ce608fada5b8d8cd1069302
+  firebase_core: 443bccfd6aa6b42f07be365b500773dc69db2d87
+  FirebaseAuth: d96d73aba85d192d7a7aa0b86dd6d7f8ec170b4b
+  FirebaseCore: 2f4f85b453cc8fea4bb2b37e370007d2bcafe3f0
+  FirebaseCoreDiagnostics: 3b40dfadef5b90433a60ae01f01e90fe87aa76aa
+  FirebaseFirestore: 8a0c6a06219bbaad86c72bcb66688c28995dde84
+  FirebaseInstallations: 25764cf322e77f99449395870a65b2bef88e1545
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
   google_ml_kit: a85eefb9ea6156b27ee2fba2b71e461e7b26a4f6
   google_sign_in: c5cecea71f3be43282263550556e311c4cc03582
@@ -346,7 +346,7 @@ SPEC CHECKSUMS:
   GoogleUtilitiesComponents: 679b2c881db3b615a2777504623df6122dd20afe
   GTMAppAuth: ad5c2b70b9a8689e1a04033c9369c4915bfcbe89
   GTMSessionFetcher: 43748f93435c2aa068b1cbe39655aaf600652e91
-  image_picker: 0d37d1cb66231c2473a0e3ccb8d062d0c2b3d297
+  image_picker: 541dcbb3b9cf32d87eacbd957845d8651d6c62c3
   MLImage: 647f3d580c10b3c9a3f6154f5d7baead60c42a0c
   MLKitBarcodeScanning: 6b998bd1cfe471ae407a7f647d649494617787c0
   MLKitCommon: 6d6be0a2e9a6340aad1c1f2b9449c11dee8af70f
@@ -371,10 +371,10 @@ SPEC CHECKSUMS:
   Plaid: 370b301a884270b5ab796f7a4bd72e4d1cc8be8b
   plaid_flutter: e8c18a8f8eb96d4bdda6a69aac5e2d9c25b10f90
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
-  Protobuf: 3724efa50cb2846d7ccebc8691c574e85fd74471
+  Protobuf: 235750e4696ff59fb07d949a9dbbc92b3c0700fe
   shared_preferences_ios: aef470a42dc4675a1cdd50e3158b42e3d1232b32
-  SSZipArchive: e7b4f3d9e780c2acc1764cd88fbf2de28f26e5b2
+  SSZipArchive: fe6a26b2a54d5a0890f2567b5cc6de5caa600aef
 
-PODFILE CHECKSUM: dd6cd8a6ec97d2135563e8c4d7b7f496eed339a8
+PODFILE CHECKSUM: 75bee8b9bbf2f043638b194ed1a2ba2584da214b
 
 COCOAPODS: 1.11.2

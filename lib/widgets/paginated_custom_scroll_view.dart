@@ -135,44 +135,46 @@ class _PaginatedCustomScrollViewState<T>
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return CustomScrollView(
-      controller: _controller,
-      slivers: [
-        if (widget.headerSliver != null) widget.headerSliver!,
-        SliverToBoxAdapter(
-          child: _list.isEmpty
-              ? widget.emptyWidget ??
-                  SizedBox(
+    return Scrollbar(
+      child: CustomScrollView(
+        controller: _controller,
+        slivers: [
+          if (widget.headerSliver != null) widget.headerSliver!,
+          SliverToBoxAdapter(
+            child: _list.isEmpty
+                ? widget.emptyWidget ??
+                    SizedBox(
+                      width: size.width,
+                      height: size.height,
+                      child: const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
+                    )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _list.length,
+                    padding: widget.listViewPadding,
+                    itemBuilder: (context, index) {
+                      final item = _list[index];
+
+                      return widget.listItemBuilder(context, item);
+                    },
+                  ),
+          ),
+          if (_isLoading)
+            widget.loadingFooterSliver ??
+                SliverToBoxAdapter(
+                  child: SizedBox(
                     width: size.width,
-                    height: size.height,
+                    height: 48,
                     child: const Center(
                       child: CircularProgressIndicator.adaptive(),
                     ),
-                  )
-              : ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _list.length,
-                  padding: widget.listViewPadding,
-                  itemBuilder: (context, index) {
-                    final item = _list[index];
-
-                    return widget.listItemBuilder(context, item);
-                  },
-                ),
-        ),
-        if (_isLoading)
-          widget.loadingFooterSliver ??
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  width: size.width,
-                  height: 48,
-                  child: const Center(
-                    child: CircularProgressIndicator.adaptive(),
                   ),
                 ),
-              ),
-      ],
+        ],
+      ),
     );
   }
 }

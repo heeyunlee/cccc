@@ -5,7 +5,6 @@ import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/models/receipt_response.dart';
 import 'package:cccc/models/transaction_item.dart';
 import 'package:cccc/services/cloud_functions.dart';
-import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/services/image_picker_service.dart';
 import 'package:cccc/services/logger_init.dart';
@@ -19,11 +18,9 @@ import 'package:cccc/extensions/list_extension.dart';
 
 final scanReceiptBottomSheetModelProvider = ChangeNotifierProvider.autoDispose(
   (ref) {
-    final auth = ref.watch(authProvider);
-    final uid = auth.currentUser!.uid;
     final imagePicker = ref.read(imagePickerServiceProvider);
     final functions = ref.watch(cloudFunctionsProvider);
-    final database = ref.watch(databaseProvider(uid));
+    final database = ref.watch(databaseProvider);
 
     return ScanReceiptBottomSheetModel(
       imagePicker: imagePicker,

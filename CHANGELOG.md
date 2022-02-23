@@ -3,8 +3,11 @@
 ## [0.0.12]
 ### New Features & Screens
 - Created Firestore pagination for `AllTransactions` screen using query
+- Created `PaginatedListView` and `PaginatedCustomScrollView` widget to use query
+- Created `ChooseMerchantForTransaction` and `ChooseMerchantForTransactionModel` screen to change the merchant for each transaction
 
 ### Bug Fix & Refactor
+- Updated and restructured Python Google Cloud Functions
 
 
 ## [0.0.11]: Feb. 7th, 2022

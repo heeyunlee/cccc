@@ -88,7 +88,7 @@ class CustomRouter {
         final arg = settings.arguments as Transaction;
 
         return adaptiveRoute(
-          rootNavigator: false,
+          rootNavigator: true,
           maintainState: true,
           builder: (context) => ChooseMerchantForTransaction(transaction: arg),
           settings: settings,

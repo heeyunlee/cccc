@@ -46,6 +46,7 @@ class Transaction {
     this.transactionItems,
     this.isDuplicate,
     this.merchantId,
+    this.newMerchantName,
   });
 
   /// The ID of a posted transaction's associated pending transaction, where
@@ -244,11 +245,17 @@ class Transaction {
   /// List of [TransactionItem] from either receipt scan or other sources
   final List<TransactionItem>? transactionItems;
 
+  /// User specified value of whether the transcation is duplicate or not.
   final bool? isDuplicate;
 
+  /// id of the corresponding merchant.
   final String? merchantId;
 
-  /// Factory Constructor
+  /// New Merchant name if the user has modified the [merchantName]. Decided
+  /// NOT to modify the original [merchantName] value to make a feature that
+  /// let users to reset the data.
+  final String? newMerchantName;
+
   factory Transaction.fromMap(Map<String, dynamic> json) {
     final String? pendingTransactionId = json['pending_transaction_id'];
 
@@ -264,19 +271,18 @@ class Transaction {
         : PaymentMeta.fromJson(json['payment_meta'] as Map<String, dynamic>);
 
     final String? accountOwner = json['account_owner'];
-    final String name = json['name'] as String;
-    final String? originalDescription = json['original_description'] as String?;
-    final String accountId = json['account_id'] as String;
+    final String name = json['name'];
+    final String? originalDescription = json['original_description'];
+    final String accountId = json['account_id'];
 
-    final num amount = json['amount'] as num;
-    final String? isoCurrencyCode = json['iso_currency_code'] as String?;
-    final String? unofficialCurrencyCode =
-        json['unofficial_currency_code'] as String?;
+    final num amount = json['amount'];
+    final String? isoCurrencyCode = json['iso_currency_code'];
+    final String? unofficialCurrencyCode = json['unofficial_currency_code'];
     final DateTime date = (json['date'] as Timestamp).toDate().toUtc();
     final bool pending = json['pending'] as bool;
-    final String transactionId = json['transaction_id'] as String;
-    final String? merchantName = json['merchant_name'] as String?;
-    final String? checkNumber = json['check_number'] as String?;
+    final String transactionId = json['transaction_id'];
+    final String? merchantName = json['merchant_name'];
+    final String? checkNumber = json['check_number'];
     final PaymentChannel paymentChannel =
         (json['payment_channel'] as String).toEnum(PaymentChannel.values);
 
@@ -289,22 +295,23 @@ class Transaction {
     final DateTime? datetime = json['datetime'] == null
         ? null
         : (json['datetime'] as Timestamp).toDate().toUtc();
-    final String? transactionCode = json['transaction_code'] as String?;
+    final String? transactionCode = json['transaction_code'];
 
     final PersonalFinanceCategory? personalFinanceCategory =
         json['personal_finance_category'] == null
             ? null
             : PersonalFinanceCategory.fromJson(
                 json['personal_finance_category'] as Map<String, dynamic>);
-    final bool? isFoodCategory = json['is_food_category'] as bool?;
+    final bool? isFoodCategory = json['is_food_category'];
     final List<TransactionItem>? transactionItems =
         (json['transaction_items'] != null)
             ? (json['transaction_items'] as List)
                 .map((e) => TransactionItem.fromMap(e))
                 .toList()
             : null;
-    final bool? isDuplicate = json['is_duplicate'] as bool?;
-    final String? merchantId = json['merchant_id'] as String?;
+    final bool? isDuplicate = json['is_duplicate'];
+    final String? merchantId = json['merchant_id'];
+    final String? newMerchantName = json['new_merchant_name'];
 
     return Transaction(
       location: location,
@@ -334,6 +341,7 @@ class Transaction {
       transactionItems: transactionItems,
       isDuplicate: isDuplicate,
       merchantId: merchantId,
+      newMerchantName: newMerchantName,
     );
   }
 
@@ -366,6 +374,7 @@ class Transaction {
       'transaction_items': transactionItems?.map((e) => e.toMap()).toList(),
       'is_duplicate': isDuplicate,
       'merchant_id': merchantId,
+      'new_merchant_name': newMerchantName,
     };
   }
 
@@ -397,6 +406,7 @@ class Transaction {
     List<TransactionItem>? transactionItems,
     bool? isDuplicate,
     String? merchantId,
+    String? newMerchantName,
   }) {
     return Transaction(
       pendingTransactionId: pendingTransactionId ?? this.pendingTransactionId,
@@ -428,6 +438,7 @@ class Transaction {
       transactionItems: transactionItems ?? this.transactionItems,
       isDuplicate: isDuplicate ?? this.isDuplicate,
       merchantId: merchantId ?? this.merchantId,
+      newMerchantName: newMerchantName ?? this.newMerchantName,
     );
   }
 
@@ -438,7 +449,7 @@ class Transaction {
 
   @override
   String toString() {
-    return 'Transaction(pendingTransactionId: $pendingTransactionId, categoryId: $categoryId, category: $category, location: $location, paymentMeta: $paymentMeta, accountOwner: $accountOwner, name: $name, originalDescription: $originalDescription, accountId: $accountId, amount: $amount, isoCurrencyCode: $isoCurrencyCode, unofficialCurrencyCode: $unofficialCurrencyCode, date: $date, pending: $pending, transactionId: $transactionId, merchantName: $merchantName, checkNumber: $checkNumber, paymentChannel: $paymentChannel, authorizedDate: $authorizedDate, authorizedDatetime: $authorizedDatetime, datetime: $datetime, transactionCode: $transactionCode, personalFinanceCategory: $personalFinanceCategory, isFoodCategory: $isFoodCategory, transactionItems: $transactionItems, isDuplicate: $isDuplicate, merchantId: $merchantId)';
+    return 'Transaction(pendingTransactionId: $pendingTransactionId, categoryId: $categoryId, category: $category, location: $location, paymentMeta: $paymentMeta, accountOwner: $accountOwner, name: $name, originalDescription: $originalDescription, accountId: $accountId, amount: $amount, isoCurrencyCode: $isoCurrencyCode, unofficialCurrencyCode: $unofficialCurrencyCode, date: $date, pending: $pending, transactionId: $transactionId, merchantName: $merchantName, checkNumber: $checkNumber, paymentChannel: $paymentChannel, authorizedDate: $authorizedDate, authorizedDatetime: $authorizedDatetime, datetime: $datetime, transactionCode: $transactionCode, personalFinanceCategory: $personalFinanceCategory, isFoodCategory: $isFoodCategory, transactionItems: $transactionItems, isDuplicate: $isDuplicate, merchantId: $merchantId, newMerchantName: $newMerchantName)';
   }
 
   @override
@@ -472,7 +483,8 @@ class Transaction {
         other.isFoodCategory == isFoodCategory &&
         listEquals(other.transactionItems, transactionItems) &&
         other.isDuplicate == isDuplicate &&
-        other.merchantId == merchantId;
+        other.merchantId == merchantId &&
+        other.newMerchantName == newMerchantName;
   }
 
   @override
@@ -503,6 +515,7 @@ class Transaction {
         isFoodCategory.hashCode ^
         transactionItems.hashCode ^
         isDuplicate.hashCode ^
-        merchantId.hashCode;
+        merchantId.hashCode ^
+        newMerchantName.hashCode;
   }
 }

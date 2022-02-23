@@ -42,15 +42,6 @@ class ButtonStyles {
   );
 
   static final elevated1 = ButtonStyle(
-    // side: MaterialStateProperty.resolveWith<BorderSide>(
-    //   (Set<MaterialState> states) {
-    //     if (states.any(kInteractiveStates.contains)) {
-    //       return const BorderSide(color: Colors.grey, width: 1.0);
-    //     }
-
-    //     return const BorderSide(color: Colors.white, width: 1.0);
-    //   },
-    // ),
     backgroundColor: MaterialStateProperty.resolveWith<Color>(
       (Set<MaterialState> states) {
         if (states.any(kInteractiveStates.contains)) {
@@ -86,6 +77,63 @@ class ButtonStyles {
       ),
     ),
   );
+
+  static ButtonStyle elevatedFullWidth(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final size = MediaQuery.of(context).size;
+    const double shrinkRatio = 0.975;
+
+    return ButtonStyle(
+      backgroundColor: MaterialStateProperty.resolveWith<Color>(
+        (Set<MaterialState> states) {
+          if (states.any(kInteractiveStates.contains)) {
+            return colorScheme.primary.withOpacity(0.9);
+          }
+
+          return colorScheme.primary;
+        },
+      ),
+      animationDuration: const Duration(milliseconds: 100),
+      splashFactory: NoSplash.splashFactory,
+      foregroundColor: MaterialStateProperty.resolveWith<Color>(
+        (Set<MaterialState> states) {
+          if (states.any(kInteractiveStates.contains)) {
+            return Colors.white;
+          }
+
+          return Colors.white;
+        },
+      ),
+      textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+        (Set<MaterialState> states) {
+          if (states.any(kInteractiveStates.contains)) {
+            return TextStyles.button2.copyWith(
+              fontSize: TextStyles.button2.fontSize! * shrinkRatio,
+            );
+          }
+
+          return TextStyles.button2;
+        },
+      ),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+        ),
+      ),
+      minimumSize: MaterialStateProperty.resolveWith<Size>(
+        (Set<MaterialState> states) {
+          final double width = size.width - 48;
+          const double height = 48;
+
+          if (states.any(kInteractiveStates.contains)) {
+            return Size(width - 4, height - 2);
+          }
+
+          return Size(width, height);
+        },
+      ),
+    );
+  }
 
   static final elevatedGrey = ElevatedButton.styleFrom(
     primary: Colors.grey,

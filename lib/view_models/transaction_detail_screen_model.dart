@@ -1,6 +1,5 @@
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/styles/styles.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +9,7 @@ import 'package:cccc/models/enum/payment_channel.dart';
 
 final transactionDetailScreenModelProvider = ChangeNotifierProvider.autoDispose
     .family<TransactionDetailModel, Transaction>((ref, transaction) {
-  final auth = ref.watch(authProvider);
-  final database = ref.watch(databaseProvider(auth.currentUser!.uid));
+  final database = ref.watch(databaseProvider);
 
   return TransactionDetailModel(
     transaction: transaction,
@@ -25,8 +23,12 @@ class TransactionDetailModel with ChangeNotifier {
     required this.database,
   });
 
-  final Transaction transaction;
   final FirestoreDatabase database;
+  final Transaction transaction;
+
+  Stream<Transaction?> transactionStream(String transactionId) {
+    return database.transactionStream(transactionId);
+  }
 
   String get amount => Formatter.amount(
         transaction.amount,
@@ -38,7 +40,11 @@ class TransactionDetailModel with ChangeNotifier {
 
   String get name => transaction.name;
 
-  String get merchantName => transaction.merchantName ?? 'Unknown';
+  String get merchantName {
+    return transaction.newMerchantName ??
+        transaction.merchantName ??
+        'No Merchant';
+  }
 
   String get date {
     final f = DateFormat.yMMMMd();

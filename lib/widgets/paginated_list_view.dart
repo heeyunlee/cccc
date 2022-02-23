@@ -138,41 +138,43 @@ class _PaginatedListViewState<T> extends State<PaginatedListView<T>> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return SingleChildScrollView(
-      controller: _controller,
-      child: Column(
-        children: [
-          if (widget.headerWidget != null) widget.headerWidget!,
-          _list.isEmpty
-              ? widget.emptyWidget ??
+    return Scrollbar(
+      child: SingleChildScrollView(
+        controller: _controller,
+        child: Column(
+          children: [
+            if (widget.headerWidget != null) widget.headerWidget!,
+            _list.isEmpty
+                ? widget.emptyWidget ??
+                    SizedBox(
+                      width: size.width,
+                      height: size.height,
+                      child: const Center(
+                        child: CircularProgressIndicator.adaptive(),
+                      ),
+                    )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: _list.length,
+                    padding: widget.listViewPadding,
+                    itemBuilder: (context, index) {
+                      final item = _list[index];
+
+                      return widget.listItemBuilder(context, item);
+                    },
+                  ),
+            if (_isLoading)
+              widget.loadingFooterWidget ??
                   SizedBox(
                     width: size.width,
-                    height: size.height,
+                    height: 48,
                     child: const Center(
                       child: CircularProgressIndicator.adaptive(),
                     ),
-                  )
-              : ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: _list.length,
-                  padding: widget.listViewPadding,
-                  itemBuilder: (context, index) {
-                    final item = _list[index];
-
-                    return widget.listItemBuilder(context, item);
-                  },
-                ),
-          if (_isLoading)
-            widget.loadingFooterWidget ??
-                SizedBox(
-                  width: size.width,
-                  height: 48,
-                  child: const Center(
-                    child: CircularProgressIndicator.adaptive(),
                   ),
-                ),
-        ],
+          ],
+        ),
       ),
     );
   }

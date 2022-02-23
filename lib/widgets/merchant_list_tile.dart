@@ -1,20 +1,37 @@
 import 'package:cccc/models/merchant.dart';
+import 'package:cccc/models/plaid/transaction.dart';
+import 'package:cccc/styles/styles.dart';
+import 'package:cccc/view_models/choose_merchant_for_transaction_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class MerchantListTile extends StatelessWidget {
+class MerchantListTile extends ConsumerWidget {
   const MerchantListTile({
     Key? key,
     required this.merchant,
+    required this.transaction,
   }) : super(key: key);
 
   final Merchant merchant;
+  final Transaction transaction;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final model = ref.watch(
+      chooseMerchantForTransactionModelProvider(transaction),
+    );
+
     return ListTile(
-      onTap: () {},
-      selected: true,
-      title: Text(merchant.name),
+      selectedTileColor: Colors.white24,
+      selectedColor: Colors.white,
+      onTap: () => model.setSelectedMerchant(merchant),
+      selected: model.selectedMerchantId == merchant.merchantId,
+      title: Text(
+        merchant.name,
+        style: model.selectedMerchantId == merchant.merchantId
+            ? TextStyles.captionBold
+            : TextStyles.caption,
+      ),
     );
   }
 }

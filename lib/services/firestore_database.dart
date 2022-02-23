@@ -3,15 +3,22 @@ import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/models/user.dart';
+import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_path.dart';
+import 'package:cccc/services/logger_init.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'
     show DocumentSnapshot, Query;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firestore_service.dart';
 
-final databaseProvider = Provider.family<FirestoreDatabase, String>(
-  (ref, uid) {
+final databaseProvider = Provider.autoDispose<FirestoreDatabase>(
+  (ref) {
+    final auth = ref.watch(authProvider);
+    final uid = auth.currentUser!.uid;
+
+    logger.d('uid from [databaseProvider]: $uid');
+
     return FirestoreDatabase(uid: uid);
   },
 );
@@ -68,6 +75,14 @@ class FirestoreDatabase {
     );
   }
 
+  Stream<Transaction?> transactionStream(String transactionId) {
+    return _service.documentStream<Transaction>(
+      path: FirestorePath.transaction(uid!, transactionId),
+      fromBuilder: (json) => Transaction.fromMap(json!),
+      toBuilder: (model) => model.toMap(),
+    );
+  }
+
   Stream<List<Transaction?>> transactionsStream([int? limit]) {
     return _service.collectionStream<Transaction>(
       path: FirestorePath.transactions(uid!),
@@ -77,30 +92,6 @@ class FirestoreDatabase {
       descending: true,
       limit: limit,
     );
-  }
-
-  Query<Transaction> transactionsQuery({
-    int limit = 15,
-    DocumentSnapshot<Transaction>? startAfterDocument,
-  }) {
-    if (startAfterDocument == null) {
-      return _service.query(
-        path: FirestorePath.transactions(uid!),
-        fromBuilder: (json) => Transaction.fromMap(json!),
-        toBuilder: (model) => model.toMap(),
-        orderByField: 'date',
-        limit: limit,
-      );
-    } else {
-      return _service.queryStartAfter(
-        path: FirestorePath.transactions(uid!),
-        fromBuilder: (json) => Transaction.fromMap(json!),
-        toBuilder: (model) => model.toMap(),
-        orderByField: 'date',
-        limit: limit,
-        startAfterDocument: startAfterDocument,
-      );
-    }
   }
 
   Stream<List<Transaction?>> transactionsStreamForSpecificAccount(
@@ -129,6 +120,30 @@ class FirestoreDatabase {
       where: 'amount',
       isEqualTo: amount,
     );
+  }
+
+  Query<Transaction> transactionsQuery({
+    int limit = 15,
+    DocumentSnapshot<Transaction>? startAfterDocument,
+  }) {
+    if (startAfterDocument == null) {
+      return _service.query(
+        path: FirestorePath.transactions(uid!),
+        fromBuilder: (json) => Transaction.fromMap(json!),
+        toBuilder: (model) => model.toMap(),
+        orderByField: 'date',
+        limit: limit,
+      );
+    } else {
+      return _service.queryStartAfter(
+        path: FirestorePath.transactions(uid!),
+        fromBuilder: (json) => Transaction.fromMap(json!),
+        toBuilder: (model) => model.toMap(),
+        orderByField: 'date',
+        limit: limit,
+        startAfterDocument: startAfterDocument,
+      );
+    }
   }
 
   Stream<List<Account?>> accountsStream() {
@@ -164,16 +179,6 @@ class FirestoreDatabase {
       toBuilder: (model) => model!.toMap(),
     );
   }
-
-  // Stream<List<Merchant?>> merchantsStream() {
-  //   return _service.collectionStream<Merchant>(
-  //     path: FirestorePath.merchants(),
-  //     fromBuilder: (json) => Merchant.fromMap(json!),
-  //     toBuilder: (model) => model.toMap(),
-  //     orderByField: 'name',
-  //     descending: false,
-  //   );
-  // }
 
   Query<Merchant> merchantQuery({
     int limit = 15,

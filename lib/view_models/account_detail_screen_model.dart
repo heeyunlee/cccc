@@ -2,7 +2,6 @@ import 'package:cccc/models/enum/account_connection_state.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,8 +13,7 @@ import 'package:cccc/extensions/datetime_extension.dart';
 final accountDetailScreenModelProvider = ChangeNotifierProvider.family
     .autoDispose<AccountDetailScreenModel, Account>(
   (ref, account) {
-    final auth = ref.watch(authProvider);
-    final database = ref.watch(databaseProvider(auth.currentUser!.uid));
+    final database = ref.watch(databaseProvider);
 
     return AccountDetailScreenModel(account: account, database: database);
   },

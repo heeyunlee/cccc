@@ -1,5 +1,4 @@
 import 'package:cccc/models/plaid/institution/institution.dart';
-import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:flutter/material.dart';
@@ -24,8 +23,7 @@ class AccountListTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(authProvider);
-    final database = ref.watch(databaseProvider(auth.currentUser!.uid));
+    final database = ref.watch(databaseProvider);
 
     return CustomStreamBuilder<Institution?>(
       stream: database.institutionStream(account.institutionId),
@@ -33,7 +31,7 @@ class AccountListTile extends ConsumerWidget {
         leading: Icon(Icons.error),
         title: Text('An Error has occurred'),
       ),
-      loadingWidget: Shimmers.listTile,
+      loadingWidget: Shimmers.accountListTile,
       builder: (context, institution) => ListTile(
         onTap: () => AccountDetail.show(
           context,

@@ -67,7 +67,7 @@ class SignInViewModel with ChangeNotifier {
           lastLoginDate: now,
         );
 
-        final database = ref.watch(databaseProvider(uid));
+        final database = ref.watch(databaseProvider);
 
         await database.setUser(user);
       },
@@ -86,7 +86,7 @@ class SignInViewModel with ChangeNotifier {
         final uid = user!.uid;
         final now = DateTime.now();
 
-        final database = ref.watch(databaseProvider(uid));
+        final database = ref.watch(databaseProvider);
         final oldUserData = await database.getUser(uid);
 
         final newUserData = oldUserData?.copyWith(

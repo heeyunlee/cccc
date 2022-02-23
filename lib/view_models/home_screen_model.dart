@@ -4,7 +4,6 @@ import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/models/user.dart';
 import 'package:cccc/services/cloud_functions.dart';
-import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
@@ -15,9 +14,7 @@ import 'package:intl/intl.dart';
 
 final homeScreenModelProvider = ChangeNotifierProvider.autoDispose(
   (ref) {
-    final auth = ref.watch(authProvider);
-    final uid = auth.currentUser!.uid;
-    final database = ref.watch(databaseProvider(uid));
+    final database = ref.watch(databaseProvider);
     final functions = ref.watch(cloudFunctionsProvider);
 
     return HomeScreenModel(database: database, functions: functions);
