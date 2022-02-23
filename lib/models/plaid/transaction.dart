@@ -44,7 +44,7 @@ class Transaction {
     this.personalFinanceCategory,
     this.isFoodCategory,
     this.transactionItems,
-    this.isDuplicate,
+    this.markAsDuplicate,
     this.merchantId,
     this.newMerchantName,
   });
@@ -246,7 +246,7 @@ class Transaction {
   final List<TransactionItem>? transactionItems;
 
   /// User specified value of whether the transcation is duplicate or not.
-  final bool? isDuplicate;
+  final bool? markAsDuplicate;
 
   /// id of the corresponding merchant.
   final String? merchantId;
@@ -309,7 +309,7 @@ class Transaction {
                 .map((e) => TransactionItem.fromMap(e))
                 .toList()
             : null;
-    final bool? isDuplicate = json['is_duplicate'];
+    final bool? markAsDuplicate = json['mark_as_duplicate'];
     final String? merchantId = json['merchant_id'];
     final String? newMerchantName = json['new_merchant_name'];
 
@@ -339,7 +339,7 @@ class Transaction {
       personalFinanceCategory: personalFinanceCategory,
       isFoodCategory: isFoodCategory,
       transactionItems: transactionItems,
-      isDuplicate: isDuplicate,
+      markAsDuplicate: markAsDuplicate,
       merchantId: merchantId,
       newMerchantName: newMerchantName,
     );
@@ -372,7 +372,7 @@ class Transaction {
       'personal_finance_category': personalFinanceCategory?.toJson(),
       'is_food_category': isFoodCategory,
       'transaction_items': transactionItems?.map((e) => e.toMap()).toList(),
-      'is_duplicate': isDuplicate,
+      'mark_as_duplicate': markAsDuplicate,
       'merchant_id': merchantId,
       'new_merchant_name': newMerchantName,
     };
@@ -404,7 +404,7 @@ class Transaction {
     PersonalFinanceCategory? personalFinanceCategory,
     bool? isFoodCategory,
     List<TransactionItem>? transactionItems,
-    bool? isDuplicate,
+    bool? markAsDuplicate,
     String? merchantId,
     String? newMerchantName,
   }) {
@@ -436,7 +436,7 @@ class Transaction {
           personalFinanceCategory ?? this.personalFinanceCategory,
       isFoodCategory: isFoodCategory ?? this.isFoodCategory,
       transactionItems: transactionItems ?? this.transactionItems,
-      isDuplicate: isDuplicate ?? this.isDuplicate,
+      markAsDuplicate: markAsDuplicate ?? this.markAsDuplicate,
       merchantId: merchantId ?? this.merchantId,
       newMerchantName: newMerchantName ?? this.newMerchantName,
     );
@@ -449,7 +449,7 @@ class Transaction {
 
   @override
   String toString() {
-    return 'Transaction(pendingTransactionId: $pendingTransactionId, categoryId: $categoryId, category: $category, location: $location, paymentMeta: $paymentMeta, accountOwner: $accountOwner, name: $name, originalDescription: $originalDescription, accountId: $accountId, amount: $amount, isoCurrencyCode: $isoCurrencyCode, unofficialCurrencyCode: $unofficialCurrencyCode, date: $date, pending: $pending, transactionId: $transactionId, merchantName: $merchantName, checkNumber: $checkNumber, paymentChannel: $paymentChannel, authorizedDate: $authorizedDate, authorizedDatetime: $authorizedDatetime, datetime: $datetime, transactionCode: $transactionCode, personalFinanceCategory: $personalFinanceCategory, isFoodCategory: $isFoodCategory, transactionItems: $transactionItems, isDuplicate: $isDuplicate, merchantId: $merchantId, newMerchantName: $newMerchantName)';
+    return 'Transaction(pendingTransactionId: $pendingTransactionId, categoryId: $categoryId, category: $category, location: $location, paymentMeta: $paymentMeta, accountOwner: $accountOwner, name: $name, originalDescription: $originalDescription, accountId: $accountId, amount: $amount, isoCurrencyCode: $isoCurrencyCode, unofficialCurrencyCode: $unofficialCurrencyCode, date: $date, pending: $pending, transactionId: $transactionId, merchantName: $merchantName, checkNumber: $checkNumber, paymentChannel: $paymentChannel, authorizedDate: $authorizedDate, authorizedDatetime: $authorizedDatetime, datetime: $datetime, transactionCode: $transactionCode, personalFinanceCategory: $personalFinanceCategory, isFoodCategory: $isFoodCategory, transactionItems: $transactionItems, markAsDuplicate: $markAsDuplicate, merchantId: $merchantId, newMerchantName: $newMerchantName)';
   }
 
   @override
@@ -482,7 +482,7 @@ class Transaction {
         other.personalFinanceCategory == personalFinanceCategory &&
         other.isFoodCategory == isFoodCategory &&
         listEquals(other.transactionItems, transactionItems) &&
-        other.isDuplicate == isDuplicate &&
+        other.markAsDuplicate == markAsDuplicate &&
         other.merchantId == merchantId &&
         other.newMerchantName == newMerchantName;
   }
@@ -514,7 +514,7 @@ class Transaction {
         personalFinanceCategory.hashCode ^
         isFoodCategory.hashCode ^
         transactionItems.hashCode ^
-        isDuplicate.hashCode ^
+        markAsDuplicate.hashCode ^
         merchantId.hashCode ^
         newMerchantName.hashCode;
   }

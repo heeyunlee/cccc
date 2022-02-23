@@ -3,6 +3,8 @@ import 'package:cccc/views/choose_merchant_for_transaction.dart';
 import 'package:cccc/widgets/custom_future_builder.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/scan_receipt/scan_receipt_bottom_sheet.dart';
+import 'package:cccc/widgets/show_adaptive_date_picker.dart';
+import 'package:cccc/widgets/transaction_mark_as_duplicate_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -97,7 +99,8 @@ class TransactionDetail extends ConsumerWidget {
                                   .map(
                                     (e) => Padding(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 4),
+                                        horizontal: 4,
+                                      ),
                                       child: Chip(
                                         label: Text(
                                           e,
@@ -243,7 +246,12 @@ class TransactionDetail extends ConsumerWidget {
                         ),
                       ),
                       ListTile(
-                        onTap: () {},
+                        onTap: () async {
+                          await showAdaptiveDatePicker(
+                            context,
+                            initialDate: transaction.date,
+                          );
+                        },
                         leading: const SizedBox(
                           height: 64,
                           width: 56,
@@ -273,16 +281,8 @@ class TransactionDetail extends ConsumerWidget {
                           style: TextStyles.body2Bold,
                         ),
                       ),
-                      ListTile(
-                        leading: const Icon(Icons.dynamic_feed),
-                        title: const Text(
-                          'Mark As Duplicate',
-                          style: TextStyles.caption,
-                        ),
-                        trailing: Switch(
-                          value: false,
-                          onChanged: (a) {},
-                        ),
+                      TransactionMarkAsDuplicateListTile(
+                        transaction: transaction,
                       ),
                       ExpansionTile(
                         iconColor: Colors.white,

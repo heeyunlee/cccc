@@ -35,12 +35,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Disable landscape mode
+    /// Disable landscape mode
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
 
-    // Set setSystemUIOverlayStyle for Android
+    /// Set setSystemUIOverlayStyle for Android
     SystemChrome.setSystemUIOverlayStyle(
       const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -49,13 +49,13 @@ class MyApp extends StatelessWidget {
       ),
     );
 
-    // Make Android fullscreen
+    /// Make Android fullscreen
     SystemChrome.setEnabledSystemUIMode(
       SystemUiMode.edgeToEdge,
       overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
     );
 
-    // Init debugging for Debug and Profile mode
+    /// Init debugging for Debug and Profile mode
     if (kDebugMode || kProfileMode) {
       initLogger(Level.debug);
     }
