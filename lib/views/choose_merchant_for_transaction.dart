@@ -5,6 +5,7 @@ import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/styles.dart';
 import 'package:cccc/view_models/choose_merchant_for_transaction_model.dart';
+import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
 import 'package:cccc/widgets/merchant_list_tile.dart';
 import 'package:cccc/widgets/paginated_custom_scroll_view.dart';
 import 'package:flutter/material.dart';
@@ -93,8 +94,10 @@ class ChooseMerchantForTransaction extends ConsumerWidget {
             onPressed: model.isLoading
                 ? null
                 : () => model.updateTransactionMerchant(context),
-            style: ButtonStyles.elevatedFullWidth(context),
-            child: const Text('SELECT'),
+            style: ButtonStyles.elevated(context, height: 48, radius: 16),
+            child: model.isLoading
+                ? const CustomAdaptiveProgressIndicator(color: Colors.white)
+                : const Text('SELECT'),
           );
         },
       ),

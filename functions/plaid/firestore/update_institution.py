@@ -2,7 +2,7 @@ from typing import Dict, Optional
 
 from endpoints.institution_endpoints import institutions_get_by_id
 
-from firestore.cloud_firestore import CloudFirestore, FirestoreEnv
+from firestore.firestore_configuration import FirestoreConfiguration, FirestoreEnv
 
 
 def update_institution(data: dict, context):
@@ -16,7 +16,7 @@ def update_institution(data: dict, context):
     document_path = '/'.join(path_parts[1:])
 
     # TODO: Change Environment for production for release
-    firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+    firestore = FirestoreConfiguration(FirestoreEnv.PRODUCTION)
     client = firestore.client()
 
     users_collection = client.collection(collection_path)

@@ -72,7 +72,7 @@ class LinkedAccounts extends ConsumerWidget {
           );
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         onPressed: () => ConnectPlaid.show(context),
         icon: const Icon(Icons.add),

@@ -2,8 +2,9 @@ import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/accounts_institution.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/styles/styles.dart';
-import 'package:cccc/widget_model/institution_card_model.dart';
+import 'package:cccc/widget_models/institution_card_model.dart';
 import 'package:cccc/widgets/account_list_tile_compact.dart';
+import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
 import 'package:cccc/widgets/show_custom_action_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -41,6 +42,7 @@ class _InstitutionCardState extends ConsumerState<InstitutionCard> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     final model = ref.watch(institutionCardModelProvider(AccountsInstitution(
       accounts: widget.accounts,
       institution: widget.institution,
@@ -48,7 +50,7 @@ class _InstitutionCardState extends ConsumerState<InstitutionCard> {
 
     return Card(
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           ListTile(
             contentPadding: const EdgeInsets.fromLTRB(16, 8, 0, 0),
@@ -85,11 +87,14 @@ class _InstitutionCardState extends ConsumerState<InstitutionCard> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              model.lastSyncedTime,
-              style: TextStyles.overlineWhite54,
+          Align(
+            alignment: Alignment.topLeft,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Text(
+                model.lastSyncedTime,
+                style: TextStyles.overlineWhite54,
+              ),
             ),
           ),
           if (model.isConnectionError) const SizedBox(height: 24),
@@ -102,19 +107,16 @@ class _InstitutionCardState extends ConsumerState<InstitutionCard> {
               ),
             ),
           if (model.isConnectionError)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: SizedBox(
-                width: double.maxFinite,
+            OutlinedButton(
+              onPressed: () => model.openLinkUpdateMode(context),
+              style: ButtonStyles.outline(
+                context,
+                width: size.width - 64,
                 height: 40,
-                child: model.isLoading
-                    ? const Center(child: CircularProgressIndicator.adaptive())
-                    : OutlinedButton(
-                        onPressed: () => model.openLinkUpdateMode(context),
-                        style: ButtonStyles.outline1,
-                        child: const Text('Re-authenticate'),
-                      ),
               ),
+              child: model.isLoading
+                  ? const CustomAdaptiveProgressIndicator()
+                  : const Text('Re-authenticate'),
             ),
           const SizedBox(height: 8),
           const Divider(color: Colors.white12),

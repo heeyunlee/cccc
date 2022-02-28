@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.0.13]
+### New Features & Screens
+- Add more Button interactivity by modifying `ButtonStyle`
+
+### Bug Fix & Refactor
+
 ## [0.0.12]: Feb. 22nd, 2022
 ### New Features & Screens
 - Created Firestore pagination for `AllTransactions` screen using query

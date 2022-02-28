@@ -3,9 +3,12 @@ import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/button_styles.dart';
+import 'package:cccc/views/transaction_detail.dart';
+import 'package:cccc/widget_models/scan_receipt_bottom_sheet_model.dart';
 import 'package:cccc/widgets/receipt_widget.dart';
 import 'package:cccc/widgets/scan_receipt/scan_receipt_bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 class ScanReceipt extends StatefulWidget {
@@ -106,7 +109,7 @@ class _ScanReceiptState extends State<ScanReceipt>
           SizedBox(height: 120 + MediaQuery.of(context).padding.bottom),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: _buildFAB(context),
     );
   }
@@ -114,36 +117,52 @@ class _ScanReceiptState extends State<ScanReceipt>
   Widget _buildFAB(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        SizedBox(
-          height: 48,
-          width: (size.width - 64) / 2,
-          child: OutlinedButton(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          OutlinedButton(
             onPressed: () => Navigator.of(context).pop(),
-            style: ButtonStyles.outline1,
+            style: ButtonStyles.outline(
+              context,
+              width: (size.width - 56) / 2,
+              height: 48,
+            ),
             child: const Text('Cancel'),
           ),
-        ),
-        const SizedBox(width: 16, height: 80),
-        SizedBox(
-          height: 48,
-          width: (size.width - 64) / 2,
-          child: OutlinedButton(
-            onPressed: () => showModalBottomSheet(
-              context: context,
-              isScrollControlled: true,
-              builder: (context) => ScanReceiptBottomSheet(
-                transaction: widget.transaction,
-              ),
-            ),
-            style: ButtonStyles.elevated1,
-            child: const FittedBox(child: Text('Upload a Receipt')),
+          Consumer(
+            builder: (context, ref, child) {
+              return ElevatedButton(
+                onPressed: () async {
+                  final updated = await showModalBottomSheet<bool?>(
+                    context: context,
+                    isScrollControlled: true,
+                    builder: (context) => ScanReceiptBottomSheet(
+                      transaction: widget.transaction,
+                    ),
+                  );
+
+                  if (updated ?? false) {
+                    TransactionDetail.show(
+                      context,
+                      ref
+                          .read(scanReceiptBottomSheetModelProvider)
+                          .transaction!,
+                    );
+                  }
+                },
+                style: ButtonStyles.elevated(
+                  context,
+                  width: (size.width - 56) / 2,
+                  radius: 16,
+                ),
+                child: const FittedBox(child: Text('Upload a Receipt')),
+              );
+            },
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

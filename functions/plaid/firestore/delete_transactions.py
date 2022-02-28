@@ -2,7 +2,7 @@ from typing import List
 
 from google.cloud.firestore import CollectionReference
 
-from firestore.cloud_firestore import CloudFirestore, FirestoreEnv
+from firestore.firestore_configuration import FirestoreConfiguration, FirestoreEnv
 
 
 def delete_transactions(uid: str, account_ids: List[str]):
@@ -10,7 +10,7 @@ def delete_transactions(uid: str, account_ids: List[str]):
         deleted_transaction_ids = []
 
         # TODO: Change Environment for production for release
-        firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+        firestore = FirestoreConfiguration(FirestoreEnv.PRODUCTION)
         client = firestore.client()
 
         user_ref = client.collection('users').document(uid)

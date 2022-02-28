@@ -196,7 +196,8 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
       );
 
       await database.updateTransaction(_transaction!, newTransaction.toMap());
-      Navigator.of(context).pop();
+
+      toggleState(ScanReceiptState.completed);
     } catch (e) {
       showAdaptiveDialog(
         context,

@@ -4,14 +4,14 @@ from typing import Any, Dict, List, Optional
 from google.cloud.firestore_v1.collection import CollectionReference
 from plaid.model.account_balance import AccountBalance
 
-from firestore.cloud_firestore import CloudFirestore, FirestoreEnv
+from firestore.firestore_configuration import FirestoreConfiguration, FirestoreEnv
 
 
 def update_accounts(uid: str, institution_id: str, accounts: Optional[List[Dict]]) -> Dict[str, Any]:
 
     try:
         # TODO: Change Environment for production for release
-        firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+        firestore = FirestoreConfiguration(FirestoreEnv.PRODUCTION)
         client = firestore.client()
 
         user_doc = client.collection('users').document(uid)

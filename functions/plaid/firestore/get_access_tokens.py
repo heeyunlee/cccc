@@ -3,7 +3,7 @@ from typing import Optional
 
 from google.cloud.firestore import CollectionReference
 
-from firestore.cloud_firestore import CloudFirestore, FirestoreEnv
+from firestore.firestore_configuration import FirestoreConfiguration, FirestoreEnv
 
 
 def get_access_tokens(uid: str):
@@ -11,7 +11,7 @@ def get_access_tokens(uid: str):
         access_tokens = []
 
         # TODO: Change Environment for production for release
-        firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+        firestore = FirestoreConfiguration(FirestoreEnv.PRODUCTION)
         client = firestore.client()
 
         user_doc = client.collection('users').document(uid)

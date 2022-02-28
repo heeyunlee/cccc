@@ -2,13 +2,13 @@ from typing import Optional
 
 from google.cloud.firestore import CollectionReference
 
-from firestore.cloud_firestore import CloudFirestore, FirestoreEnv
+from firestore.firestore_configuration import FirestoreConfiguration, FirestoreEnv
 
 
 def get_access_token_for_institution(uid: str, institution_id: str):
     try:
         # TODO: Change Environment for production for release
-        firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+        firestore = FirestoreConfiguration(FirestoreEnv.PRODUCTION)
         client = firestore.client()
 
         user_ref = client.collection('users').document(uid)

@@ -3,13 +3,13 @@ from typing import Dict, List, Optional
 
 from google.cloud.firestore import CollectionReference
 
-from firestore.cloud_firestore import CloudFirestore, FirestoreEnv
+from firestore.firestore_configuration import FirestoreConfiguration, FirestoreEnv
 
 
 def update_plaid_secrets(uid: str, institution_id: str, transactions: List[Dict]):
     try:
         # TODO: Change Environment for production for release
-        firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+        firestore = FirestoreConfiguration(FirestoreEnv.PRODUCTION)
         client = firestore.client()
 
         user_ref = client.collection('users').document(uid)

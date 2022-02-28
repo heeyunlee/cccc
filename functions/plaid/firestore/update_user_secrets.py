@@ -2,13 +2,13 @@ from typing import Any, Dict
 
 from google.cloud.firestore import CollectionReference
 
-from firestore.cloud_firestore import CloudFirestore, FirestoreEnv
+from firestore.firestore_configuration import FirestoreConfiguration, FirestoreEnv
 
 
 def update_user_secrets(uid: str, access_token: str, institution_id: str) -> Dict[str, Any]:
     try:
         # TODO: Change Environment for production for release
-        firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+        firestore = FirestoreConfiguration(FirestoreEnv.PRODUCTION)
         client = firestore.client()
 
         user_doc = client.collection('users').document(uid)

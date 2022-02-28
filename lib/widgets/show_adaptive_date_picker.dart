@@ -19,11 +19,13 @@ Future<DateTime?> showAdaptiveDatePicker(
   } else {
     final firstDate = initialDate.subtract(const Duration(days: 365 * 5));
     final lastDate = initialDate.add(const Duration(days: 365 * 5));
+
     final pickedDate = await showDatePicker(
       context: context,
       initialDate: initialDate,
       firstDate: firstDate,
       lastDate: lastDate,
+      useRootNavigator: false,
     );
 
     return pickedDate;

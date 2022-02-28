@@ -2,9 +2,9 @@ import 'package:cccc/models/enum/scan_receipt_state.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/text_styles.dart';
-import 'package:cccc/view_models/scan_receipt_bottom_sheet_model.dart';
+import 'package:cccc/styles/theme_colors.dart';
+import 'package:cccc/widget_models/scan_receipt_bottom_sheet_model.dart';
 import 'package:cccc/widgets/bottom_sheet_card.dart';
-import 'package:cccc/widgets/scan_receipt/scan_receipt_completed_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -38,11 +38,12 @@ class _ScanReceiptBottomSheetState
       child: BottomSheetCard(
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          appBar: _buildAppBar(),
-          body: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 200),
-            child: _buildChild(),
+          appBar: AppBar(
+            leading: _buildAppBarButton(),
+            centerTitle: true,
+            title: _buildAppBarTitleString(),
           ),
+          body: _buildChild(),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: _buildFAB(),
@@ -72,35 +73,47 @@ class _ScanReceiptBottomSheetState
     }
   }
 
-  PreferredSizeWidget? _buildAppBar() {
+  Widget? _buildAppBarButton() {
     final model = ref.watch(scanReceiptBottomSheetModelProvider);
 
     switch (model.state) {
       case ScanReceiptState.start:
       case ScanReceiptState.error:
-        return AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.close),
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-          centerTitle: true,
-          title: const Text('Choose Source'),
+        return IconButton(
+          icon: const Icon(Icons.close),
+          onPressed: () => Navigator.of(context).pop(),
         );
       case ScanReceiptState.editItems:
       case ScanReceiptState.chooseTransaction:
-        return AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            onPressed: () => ref
-                .read(scanReceiptBottomSheetModelProvider)
-                .toggleState(ScanReceiptState.start),
-          ),
-          centerTitle: true,
-          title: const Text('Review the retrieved data'),
+        return IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () => ref
+              .read(scanReceiptBottomSheetModelProvider)
+              .toggleState(ScanReceiptState.start),
         );
       case ScanReceiptState.loading:
       case ScanReceiptState.completed:
-        return null;
+        return const IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: ThemeColors.grey900),
+          onPressed: null,
+        );
+    }
+  }
+
+  Widget _buildAppBarTitleString() {
+    final model = ref.watch(scanReceiptBottomSheetModelProvider);
+
+    switch (model.state) {
+      case ScanReceiptState.start:
+      case ScanReceiptState.error:
+        return const Text('Choose Source');
+      case ScanReceiptState.editItems:
+        return const Text('Edit Receipt Items');
+      case ScanReceiptState.chooseTransaction:
+        return const Text('Choose Transaction');
+      case ScanReceiptState.loading:
+      case ScanReceiptState.completed:
+        return const Text('');
     }
   }
 
@@ -130,7 +143,15 @@ class _ScanReceiptBottomSheetState
               'We could not fetch receipt items from the image. Please try again',
         );
       case ScanReceiptState.completed:
-        return const ScanReceiptCompletedWidget();
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: const [
+            Text('Transaction updated successfully!'),
+            SizedBox(height: 24),
+            Icon(Icons.check_circle_outline, size: 48, color: Colors.green),
+            SizedBox(height: 24, width: double.maxFinite),
+          ],
+        );
     }
   }
 
@@ -155,7 +176,10 @@ class _ScanReceiptBottomSheetState
       case ScanReceiptState.error:
         return const SizedBox.shrink();
       case ScanReceiptState.completed:
-        return const SizedBox.shrink();
+        return FloatingActionButton.extended(
+          onPressed: () => Navigator.of(context).pop(true),
+          label: const Text('COMPLETE!'),
+        );
     }
   }
 }

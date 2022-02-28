@@ -1,5 +1,5 @@
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/view_models/scan_receipt_bottom_sheet_model.dart';
+import 'package:cccc/widget_models/scan_receipt_bottom_sheet_model.dart';
 import 'package:cccc/widgets/scan_receipt/transaction_item_listtile.dart';
 import 'package:cccc/widgets/scan_receipt/transaction_subtotal_item_list_tile.dart';
 import 'package:flutter/material.dart';

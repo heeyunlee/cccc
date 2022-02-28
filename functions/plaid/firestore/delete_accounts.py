@@ -1,6 +1,6 @@
 from google.cloud.firestore import CollectionReference
 
-from firestore.cloud_firestore import CloudFirestore, FirestoreEnv
+from firestore.firestore_configuration import FirestoreConfiguration, FirestoreEnv
 
 
 def delete_accounts(uid: str, institution_id: str):
@@ -9,7 +9,7 @@ def delete_accounts(uid: str, institution_id: str):
         delete_account_ids = []
 
         # TODO: Change Environment for production for release
-        firestore = CloudFirestore(FirestoreEnv.PRODUCTION)
+        firestore = FirestoreConfiguration(FirestoreEnv.PRODUCTION)
         client = firestore.client()
 
         user_ref = client.collection('users').document(uid)

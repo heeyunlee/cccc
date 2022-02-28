@@ -41,24 +41,19 @@ class SignIn extends ConsumerWidget {
               onPressed: model.isLoading
                   ? null
                   : () => model.signInWithGoogle(context, ref),
-              style: ButtonStyles.outline1,
-              child: SizedBox(
-                height: 48,
-                width: size.width - 64,
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 8,
-                      top: 14,
-                      child: SvgPicture.asset(
-                        'assets/svg/google_logo.svg',
-                        width: 18,
-                        height: 18,
-                      ),
+              style: ButtonStyles.outline(context, height: 48),
+              child: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: SvgPicture.asset(
+                      'assets/svg/google_logo.svg',
+                      width: 18,
+                      height: 18,
                     ),
-                    const Center(child: Text('Sign in with Google')),
-                  ],
-                ),
+                  ),
+                  const Center(child: Text('Sign in with Google')),
+                ],
               ),
             ),
             const SizedBox(height: 16),

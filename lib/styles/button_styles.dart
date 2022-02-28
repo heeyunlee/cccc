@@ -3,89 +3,95 @@ import 'package:cccc/styles/text_styles.dart';
 import 'package:cccc/styles/theme_colors.dart';
 import 'package:flutter/material.dart';
 
+/// class with the list of custom-created [ButtonStyle]
 class ButtonStyles {
-  static final outline1 = ButtonStyle(
-    side: MaterialStateProperty.resolveWith<BorderSide>(
-      (Set<MaterialState> states) {
-        if (states.any(kInteractiveStates.contains)) {
-          return const BorderSide(color: Colors.grey, width: 1.0);
-        }
-
-        return const BorderSide(color: Colors.white, width: 1.0);
-      },
-    ),
-    foregroundColor: MaterialStateProperty.resolveWith<Color>(
-      (Set<MaterialState> states) {
-        if (states.any(kInteractiveStates.contains)) {
-          return Colors.grey;
-        }
-
-        return Colors.white;
-      },
-    ),
-    textStyle: MaterialStateProperty.resolveWith<TextStyle>(
-      (Set<MaterialState> states) {
-        if (states.any(kInteractiveStates.contains)) {
-          return TextStyles.button1Grey;
-        }
-
-        return TextStyles.button1;
-      },
-    ),
-    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-      const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(16.0),
-        ),
-      ),
-    ),
-  );
-
-  static final elevated1 = ButtonStyle(
-    backgroundColor: MaterialStateProperty.resolveWith<Color>(
-      (Set<MaterialState> states) {
-        if (states.any(kInteractiveStates.contains)) {
-          return ThemeColors.primary600;
-        }
-
-        return ThemeColors.primary500;
-      },
-    ),
-    foregroundColor: MaterialStateProperty.resolveWith<Color>(
-      (Set<MaterialState> states) {
-        if (states.any(kInteractiveStates.contains)) {
-          return Colors.white70;
-        }
-
-        return Colors.white;
-      },
-    ),
-    textStyle: MaterialStateProperty.resolveWith<TextStyle>(
-      (Set<MaterialState> states) {
-        if (states.any(kInteractiveStates.contains)) {
-          return TextStyles.button1Grey;
-        }
-
-        return TextStyles.button1;
-      },
-    ),
-    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-      const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(
-          Radius.circular(16.0),
-        ),
-      ),
-    ),
-  );
-
-  static ButtonStyle elevatedFullWidth(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
-    final size = MediaQuery.of(context).size;
-    const double shrinkRatio = 0.975;
-
+  /// Creates [ButtonStyle] for the [OutlinedButton] widget with the custom
+  /// interactive styles.
+  ///
+  /// User can specify the button's width, height, or shrink ratio.
+  ///
+  /// If not specified, the default values for params are:
+  /// [width] = `MediaQuery.of(context).size.width - 48`
+  /// [height] = `48`
+  /// [shrinkRatio] = `0.985`
+  ///
+  /// When the button is active, the colors of border, foreground, and text will
+  /// be [Colors.white], and when the button is in [kInteractiveStates], the
+  /// colors will change to [Colors.white70]
+  static ButtonStyle outline(
+    BuildContext context, {
+    double? width,
+    double height = 56,
+    double shrinkRatio = 0.985,
+  }) {
     return ButtonStyle(
+      splashFactory: NoSplash.splashFactory,
+      fixedSize: MaterialStateProperty.resolveWith<Size>(
+        (states) {
+          final Size size = MediaQuery.of(context).size;
+          final double buttonWidth = width ?? size.width - 48;
+
+          if (states.any(kInteractiveStates.contains)) {
+            return Size(buttonWidth * shrinkRatio, height * shrinkRatio);
+          }
+
+          return Size(buttonWidth, height);
+        },
+      ),
+      side: MaterialStateProperty.resolveWith<BorderSide>(
+        (Set<MaterialState> states) {
+          if (states.any(kInteractiveStates.contains)) {
+            return const BorderSide(color: Colors.white70, width: 1.0);
+          }
+
+          return const BorderSide(color: Colors.white, width: 1.0);
+        },
+      ),
+      foregroundColor: MaterialStateProperty.resolveWith<Color>(
+        (Set<MaterialState> states) {
+          if (states.any(kInteractiveStates.contains)) {
+            return Colors.white70;
+          }
+
+          return Colors.white;
+        },
+      ),
+      textStyle: MaterialStateProperty.all<TextStyle>(TextStyles.button2),
+      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+        const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+        ),
+      ),
+    );
+  }
+
+  /// Creates [ButtonStyle] for the [ElevatedButton] widget with the custom
+  /// interactive styles.
+  ///
+  /// User can specify the button's width, height, shrink ratio, and radius.
+  ///
+  /// If not specified, the default values for params are:
+  /// [width] = `MediaQuery.of(context).size.width - 48`
+  /// [height] = `48`
+  /// [shrinkRatio] = `0.985`
+  /// [radius] = 8
+  ///
+  /// When the button is active, the colors of border, foreground, and text will
+  /// be [Colors.white], and when the button is in [kInteractiveStates], the
+  /// colors will change to [Colors.white70]
+  static ButtonStyle elevated(
+    BuildContext context, {
+    double? width,
+    double height = 48,
+    double shrinkRatio = 0.985,
+    double radius = 8,
+  }) {
+    return ButtonStyle(
+      splashFactory: NoSplash.splashFactory,
       backgroundColor: MaterialStateProperty.resolveWith<Color>(
         (Set<MaterialState> states) {
+          final colorScheme = Theme.of(context).colorScheme;
+
           if (states.any(kInteractiveStates.contains)) {
             return colorScheme.primary.withOpacity(0.9);
           }
@@ -93,43 +99,31 @@ class ButtonStyles {
           return colorScheme.primary;
         },
       ),
-      animationDuration: const Duration(milliseconds: 100),
-      splashFactory: NoSplash.splashFactory,
       foregroundColor: MaterialStateProperty.resolveWith<Color>(
         (Set<MaterialState> states) {
           if (states.any(kInteractiveStates.contains)) {
-            return Colors.white;
+            return Colors.white70;
           }
 
           return Colors.white;
         },
       ),
-      textStyle: MaterialStateProperty.resolveWith<TextStyle>(
-        (Set<MaterialState> states) {
-          if (states.any(kInteractiveStates.contains)) {
-            return TextStyles.button2.copyWith(
-              fontSize: TextStyles.button2.fontSize! * shrinkRatio,
-            );
-          }
-
-          return TextStyles.button2;
-        },
-      ),
+      textStyle: MaterialStateProperty.all<TextStyle>(TextStyles.button2),
       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-        const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(8.0)),
+        RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius),
         ),
       ),
-      minimumSize: MaterialStateProperty.resolveWith<Size>(
+      fixedSize: MaterialStateProperty.resolveWith<Size>(
         (Set<MaterialState> states) {
-          final double width = size.width - 48;
-          const double height = 48;
+          final size = MediaQuery.of(context).size;
+          final double buttonWidth = width ?? size.width - 48;
 
           if (states.any(kInteractiveStates.contains)) {
-            return Size(width - 4, height - 2);
+            return Size(buttonWidth * shrinkRatio, height * shrinkRatio);
           }
 
-          return Size(width, height);
+          return Size(buttonWidth, height);
         },
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/view_models/connect_plaid_model.dart';
+import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
@@ -36,7 +37,6 @@ class _ConnectPlaidState extends ConsumerState<ConnectPlaid> {
     logger.d('[ConnectPlaid] screen building...');
 
     final model = ref.watch(connectPlaidModelProvider);
-    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: AppBar(
@@ -61,19 +61,12 @@ class _ConnectPlaidState extends ConsumerState<ConnectPlaid> {
       floatingActionButton: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            height: 56,
-            width: size.width - 48,
-            child: OutlinedButton(
-              onPressed: () => model.openLink(context),
-              style: ButtonStyles.outline1,
-              child: model.isLoading
-                  ? const CircularProgressIndicator(
-                      strokeWidth: 1.5,
-                      color: Colors.white,
-                    )
-                  : const Text('Accept & Continue'),
-            ),
+          OutlinedButton(
+            onPressed: model.isLoading ? null : () => model.openLink(context),
+            style: ButtonStyles.outline(context),
+            child: model.isLoading
+                ? const CustomAdaptiveProgressIndicator(color: Colors.white)
+                : const Text('Accept & Continue'),
           ),
         ],
       ),

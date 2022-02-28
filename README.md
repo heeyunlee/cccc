@@ -7,8 +7,8 @@
     - [**Table of contents**](#table-of-contents)
   - [**Introduction**](#introduction)
   - [**Features**](#features)
-    - [Link Bank Accounts and Fetch Transactions Data](#link-bank-accounts-and-fetch-transactions-data)
-    - [Scan Receipt Image Using Google ML Kit, Google Cloud Functions with Python, and ImagePicker](#scan-receipt-image-using-google-ml-kit-google-cloud-functions-with-python-and-imagepicker)
+    - [**Link Bank Accounts and Fetch Transactions Data**](#link-bank-accounts-and-fetch-transactions-data)
+    - [**Scan Receipt Image**](#scan-receipt-image)
   - [**Architecture**](#architecture)
 
 
@@ -24,18 +24,17 @@ This project uses the following technologies:
 
 ## **Features**
 
-### Link Bank Accounts and Fetch Transactions Data
+### **Link Bank Accounts and Fetch Transactions Data**
    Open Plaid Link         |   Connect Bank Account    |     Fetch Transactions    |
 :-------------------------:|:-------------------------:|:-------------------------:|
 <img src="readme_assets/plaid_ios_1.gif" width="200"/>|<img src="readme_assets/plaid_ios_2.gif" width="200"/>|<img src="readme_assets/plaid_ios_3.gif" width="200"/>
 
-For this feature, I used 
 
-### Scan Receipt Image Using Google ML Kit, Google Cloud Functions with Python, and ImagePicker
+### **Scan Receipt Image**
 
-   Android                 |           iOS           |
-:-------------------------:|:-----------------------:|
-<img src="readme_assets/scan_receipt_android.gif" width="200"/>|<img src="readme_assets/scan_receipt_ios.gif" width="200"/>
+   Android                 |
+:-------------------------:|
+<img src="readme_assets/scan_receipt.gif" width="200"/>|
 
 
 ## **Architecture**
@@ -48,8 +47,9 @@ lib/
 │───routes/
 │───services/
 │───styles/
-│───view/
 │───view_models/
+│───views/
+│───widget_models/
 │───widgets/
 └───main.dart
 ```

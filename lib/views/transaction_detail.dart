@@ -3,7 +3,6 @@ import 'package:cccc/views/choose_merchant_for_transaction.dart';
 import 'package:cccc/widgets/custom_future_builder.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/scan_receipt/scan_receipt_bottom_sheet.dart';
-import 'package:cccc/widgets/show_adaptive_date_picker.dart';
 import 'package:cccc/widgets/transaction_mark_as_duplicate_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -246,12 +245,8 @@ class TransactionDetail extends ConsumerWidget {
                         ),
                       ),
                       ListTile(
-                        onTap: () async {
-                          await showAdaptiveDatePicker(
-                            context,
-                            initialDate: transaction.date,
-                          );
-                        },
+                        onTap: () async =>
+                            await model.updateTransactionDate(context),
                         leading: const SizedBox(
                           height: 64,
                           width: 56,
