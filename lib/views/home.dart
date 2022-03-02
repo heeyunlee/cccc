@@ -16,11 +16,16 @@ import '../widgets/accounts_card.dart';
 import '../widgets/custom_stream_builder.dart';
 import '../widgets/home_flexible_space_bar.dart';
 
-class Home extends ConsumerWidget {
+class Home extends ConsumerStatefulWidget {
   const Home({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ConsumerStatefulWidget> createState() => _HomeState();
+}
+
+class _HomeState extends ConsumerState<Home> {
+  @override
+  Widget build(BuildContext context) {
     logger.d('[Home] building... on Web? $kIsWeb');
 
     final model = ref.watch(homeScreenModelProvider);
@@ -36,17 +41,20 @@ class Home extends ConsumerWidget {
         stream: model.userStream,
         builder: (context, user) {
           if (user != null) {
-            if (kIsWeb) {
-              return _customScrollWidget(context, user, model);
-            } else {
-              if (Platform.isIOS) {
+            final ThemeData theme = Theme.of(context);
+
+            switch (theme.platform) {
+              case TargetPlatform.iOS:
+              case TargetPlatform.macOS:
                 return _customScrollWidget(context, user, model);
-              } else {
+              case TargetPlatform.android:
+              case TargetPlatform.fuchsia:
+              case TargetPlatform.linux:
+              case TargetPlatform.windows:
                 return RefreshIndicator(
                   onRefresh: () => model.transactionsRefresh(context, user),
                   child: _customScrollWidget(context, user, model),
                 );
-              }
             }
           } else {
             return const Center(

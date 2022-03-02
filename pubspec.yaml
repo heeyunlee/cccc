@@ -10,6 +10,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+
+  # Debugging
   device_preview: ^1.0.0
 
   # Core
@@ -22,6 +24,7 @@ dependencies:
   http: ^0.13.4
   intl: ^0.17.0
   image_picker: ^0.8.4+9
+  local_auth: ^1.1.11
 
   # Google & Firebase
   firebase_core: ^1.12.0
@@ -32,6 +35,7 @@ dependencies:
 
   # State Management
   flutter_riverpod: ^1.0.3
+  shared_preferences: ^2.0.13
 
   # Plaid
   plaid_flutter: ^2.2.0

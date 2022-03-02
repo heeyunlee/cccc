@@ -8,6 +8,8 @@ import 'package:cccc/views/choose_merchant_for_transaction.dart';
 import 'package:cccc/views/connect_plaid.dart';
 import 'package:cccc/views/home.dart';
 import 'package:cccc/views/linked_accounts.dart';
+import 'package:cccc/views/local_authenticate_screen.dart';
+import 'package:cccc/views/privacy_and_security_settings.dart';
 import 'package:cccc/views/scan_receipt.dart';
 import 'package:cccc/views/settings.dart';
 import 'package:cccc/views/transaction_detail.dart';
@@ -91,6 +93,20 @@ class CustomRouter {
           rootNavigator: true,
           maintainState: true,
           builder: (context) => ChooseMerchantForTransaction(transaction: arg),
+          settings: settings,
+        );
+      case RouteNames.privacyAndSecurity:
+        return adaptiveRoute(
+          rootNavigator: false,
+          maintainState: true,
+          builder: (context) => const PrivacyAndSecuritySettings(),
+          settings: settings,
+        );
+      case RouteNames.authenticate:
+        return adaptiveRoute(
+          rootNavigator: true,
+          maintainState: true,
+          builder: (context) => const LocalAuthenticationScreen(),
           settings: settings,
         );
       default:

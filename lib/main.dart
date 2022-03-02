@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
 import 'firebase_options.dart';
-import 'widgets/auth_states_changes_stream_builder.dart';
+import 'widgets/auth_states_widget_builder.dart';
 import 'routes/custom_router.dart';
 import 'styles/styles.dart';
 
@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
       overlays: [SystemUiOverlay.top, SystemUiOverlay.bottom],
     );
 
-    /// Init debugging for Debug and Profile mode
+    /// Init debugging [Logger] for Debug and Profile mode
     if (kDebugMode || kProfileMode) {
       initLogger(Level.debug);
     }
@@ -65,7 +65,7 @@ class MyApp extends StatelessWidget {
       locale: DevicePreview.locale(context),
       builder: DevicePreview.appBuilder,
       title: 'CCCC: Credit Card Calorie Counter',
-      home: const AuthStatesChangesStreamBuilder(),
+      home: const AuthStatesWidgetBuilder(),
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSwatch(

@@ -30,7 +30,7 @@ class FirestoreDatabase {
 
   final String? uid;
 
-  final _service = FirestoreService.instance;
+  final FirestoreService _service = FirestoreService.instance;
 
   Future<User?> getUser(String uid) => _service.getDocument<User>(
         path: FirestorePath.user(uid),

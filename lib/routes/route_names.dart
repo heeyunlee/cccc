@@ -8,4 +8,6 @@ class RouteNames {
   static const scanReceipts = '/scan-receipts';
   static const linkedAccounts = '/linked-accounts';
   static const chooseMerchant = '/choose-merchant';
+  static const privacyAndSecurity = '/privacy-and-security';
+  static const authenticate = '/authenticate';
 }

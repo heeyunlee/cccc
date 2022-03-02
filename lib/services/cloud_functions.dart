@@ -1,3 +1,5 @@
+import 'package:cccc/constants/cloud_function_host.dart';
+import 'package:cccc/constants/cloud_functions_keys.dart';
 import 'package:cccc/models/receipt_response.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/models/user.dart';
@@ -5,7 +7,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'cloud_functions_uris.dart';
 import 'firebase_auth.dart';
 import 'firestore_database.dart';
 
@@ -29,7 +30,7 @@ class CloudFunctions {
     final uid = auth.currentUser!.uid;
 
     final response = await http.post(
-      CloudFunctionsURIs.createLinkToken,
+      _CloudFunctionsURIs.createLinkToken,
       body: json.encode({
         'uid': uid,
       }),
@@ -47,7 +48,7 @@ class CloudFunctions {
     final uid = auth.currentUser!.uid;
 
     final response = await http.post(
-      CloudFunctionsURIs.createLinkTokenUpdateMode,
+      _CloudFunctionsURIs.createLinkTokenUpdateMode,
       body: json.encode({
         'uid': uid,
         'institution_id': institutionId,
@@ -67,7 +68,7 @@ class CloudFunctions {
     final uid = auth.currentUser!.uid;
 
     final response = await http.post(
-      CloudFunctionsURIs.linkAndConnect,
+      _CloudFunctionsURIs.linkAndConnect,
       body: json.encode({
         'uid': uid,
         'public_token': publicToken,
@@ -88,7 +89,7 @@ class CloudFunctions {
     final uid = auth.currentUser!.uid;
 
     final response = await http.post(
-      CloudFunctionsURIs.linkAndConnectUpdateMode,
+      _CloudFunctionsURIs.linkAndConnectUpdateMode,
       body: json.encode({
         'uid': uid,
         'public_token': publicToken,
@@ -106,7 +107,7 @@ class CloudFunctions {
     logger.d('`transactionsRefresh` function called');
 
     final response = await http.post(
-      CloudFunctionsURIs.transactionsRefresh,
+      _CloudFunctionsURIs.transactionsRefresh,
       body: json.encode({
         'uid': user.uid,
       }),
@@ -139,7 +140,7 @@ class CloudFunctions {
       logger.d('plaidAccessToken exists');
 
       final response = await http.post(
-        CloudFunctionsURIs.updateTransactionsWithImage,
+        _CloudFunctionsURIs.updateTransactionsWithImage,
         body: json.encode({
           'url': url,
         }),
@@ -158,7 +159,7 @@ class CloudFunctions {
       logger.d('[rawTexts] exists \n$rawTexts');
 
       final response = await http.post(
-        CloudFunctionsURIs.processReceiptTexts,
+        _CloudFunctionsURIs.processReceiptTexts,
         body: json.encode({
           'raw_texts': rawTexts,
           'texts_with_offsets': textsWithOffsets,
@@ -174,7 +175,7 @@ class CloudFunctions {
 
   Future<http.Response> unlinkAccount(String? institutionId) async {
     final response = await http.post(
-      CloudFunctionsURIs.unlinkAccount,
+      _CloudFunctionsURIs.unlinkAccount,
       body: json.encode({
         'uid': auth.currentUser!.uid,
         'institution_id': institutionId,
@@ -185,4 +186,54 @@ class CloudFunctions {
 
     return response;
   }
+}
+
+class _CloudFunctionsURIs {
+  static Uri createLinkToken = Uri(
+    scheme: 'https',
+    host: CloudFunctionHost.host,
+    path: CloudFunctionsKeys.createLinkToken,
+  );
+
+  static Uri linkAndConnect = Uri(
+    scheme: 'https',
+    host: CloudFunctionHost.host,
+    path: CloudFunctionsKeys.linkAndConnect,
+  );
+
+  static Uri linkAndConnectUpdateMode = Uri(
+    scheme: 'https',
+    host: CloudFunctionHost.host,
+    path: CloudFunctionsKeys.linkAndConnectUpdateMode,
+  );
+
+  static Uri transactionsRefresh = Uri(
+    scheme: 'https',
+    host: CloudFunctionHost.host,
+    path: CloudFunctionsKeys.transactionsRefresh,
+  );
+
+  static Uri updateTransactionsWithImage = Uri(
+    scheme: 'https',
+    host: CloudFunctionHost.host,
+    path: CloudFunctionsKeys.updateTransactionsWithImage,
+  );
+
+  static Uri processReceiptTexts = Uri(
+    scheme: 'https',
+    host: CloudFunctionHost.host,
+    path: CloudFunctionsKeys.processReceiptTexts,
+  );
+
+  static Uri createLinkTokenUpdateMode = Uri(
+    scheme: 'https',
+    host: CloudFunctionHost.host,
+    path: CloudFunctionsKeys.createLinkTokenUpdateMode,
+  );
+
+  static Uri unlinkAccount = Uri(
+    scheme: 'https',
+    host: CloudFunctionHost.host,
+    path: CloudFunctionsKeys.unlinkAccount,
+  );
 }
