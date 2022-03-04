@@ -7,19 +7,8 @@ import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:cccc/widgets/show_adaptive_date_picker.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:cccc/models/enum/payment_channel.dart';
-
-final transactionDetailScreenModelProvider = ChangeNotifierProvider.autoDispose
-    .family<TransactionDetailModel, Transaction>((ref, transaction) {
-  final database = ref.watch(databaseProvider);
-
-  return TransactionDetailModel(
-    transaction: transaction,
-    database: database,
-  );
-});
 
 class TransactionDetailModel with ChangeNotifier {
   TransactionDetailModel({

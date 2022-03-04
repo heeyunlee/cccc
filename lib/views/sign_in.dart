@@ -1,10 +1,11 @@
-import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/styles/button_styles.dart';
-import 'package:cccc/styles/text_styles.dart';
-import 'package:cccc/view_models/sign_in_screen_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+
+import 'package:cccc/providers.dart' show signInModelProvider;
+import 'package:cccc/services/logger_init.dart';
+import 'package:cccc/styles/button_styles.dart';
+import 'package:cccc/styles/text_styles.dart';
 
 class SignIn extends ConsumerWidget {
   const SignIn({Key? key}) : super(key: key);
@@ -13,7 +14,7 @@ class SignIn extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     logger.d('[SignIn] Screen building...');
 
-    final model = ref.watch(signInViewModelProvider);
+    final model = ref.watch(signInModelProvider);
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
@@ -58,12 +59,17 @@ class SignIn extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             const Text('or', style: TextStyles.overlineGrey),
-            TextButton(
-              onPressed: model.isLoading
-                  ? null
-                  : () => model.signInAnonymously(context, ref),
-              style: ButtonStyles.text2,
-              child: const Text('Sign in Anonymously'),
+            SizedBox(
+              height: 48,
+              child: Center(
+                child: TextButton(
+                  onPressed: model.isLoading
+                      ? null
+                      : () => model.signInAnonymously(context, ref),
+                  style: ButtonStyles.text(textStyle: TextStyles.button2),
+                  child: const Text('Sign in Anonymously'),
+                ),
+              ),
             ),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom + 48,

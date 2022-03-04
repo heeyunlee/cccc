@@ -1,16 +1,16 @@
-import 'package:cccc/models/plaid/institution/institution.dart';
-import 'package:cccc/services/firestore_database.dart';
-import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:cccc/models/enum/account_subtype.dart';
 import 'package:cccc/models/plaid/account.dart';
+import 'package:cccc/models/plaid/institution/institution.dart';
+import 'package:cccc/providers.dart' show databaseProvider;
 import 'package:cccc/styles/formatter.dart';
 import 'package:cccc/styles/text_styles.dart';
 import 'package:cccc/views/account_detail.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'account_circle_avatar.dart';
-import 'package:cccc/models/enum/account_subtype.dart';
+import 'package:cccc/widgets/custom_stream_builder.dart';
 
+import 'account_circle_avatar.dart';
 import 'shimmers.dart';
 
 class AccountListTile extends ConsumerWidget {

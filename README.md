@@ -32,9 +32,57 @@ This project uses the following technologies:
 
 ### **Scan Receipt Image**
 
-   Android                 |
+  Screenshot               |
 :-------------------------:|
 <img src="readme_assets/scan_receipt.gif" width="200"/>|
+
+Using [image_picker], Google ML Kit's [Text Recognition] function, and [Plaid API], I created a feature where users can scan the receipt image and match it with the transaction data from their debit/credit card.
+
+1. Pick Image to scan using [image_picker] package
+
+``` dart
+import 'package:image_picker/image_picker.dart';
+
+Future<File?> pickImage(ImageSource source) async {
+  final image = await picker.pickImage(source: source);
+
+  if (image != null) {
+    final file = File(image.path);
+
+    return file;
+  } else {
+
+    return null;
+  }
+}
+```
+
+2. Extract Texts and items from the file
+
+``` dart
+import 'package:google_ml_kit/google_ml_kit.dart';
+
+Future<ReceiptResponse?> extractTexts() async {
+  logger.d('File exists. Start using [GoogleMlKit]');
+
+  final imageFile = pickImage(ImageSource.camera)
+  final textDetector = GoogleMlKit.vision.textDetector();
+  final inputImage = InputImage.fromFile(imageFile);
+  final recognisedText = await textDetector.processImage(inputImage);
+  final textsWithOffsets = _getTextsWithOffsets(recognisedText);
+  final nestedLines = texts.blocks.map((e) => e.lines).toList();
+  final textLines = nestedLines.expand((e) => e).toList();
+  final textElements = textLines.expand((e) => e.elements).toList();
+  final textElementsMap = textElements.map((e) => e.toMap).toList();
+  
+  final response = await functions.processReceiptTexts(
+    rawTexts: recognisedText.text.replaceAll('\n', ', '),
+    textsWithOffsets: textsWithOffsets,
+  );
+
+  return response;
+}
+```
 
 
 ## **Architecture**
@@ -68,5 +116,7 @@ lib/
 [Flutter]: https://flutter.dev/
 [Firebase]: https://firebase.google.com/
 [Plaid API]: https://plaid.com/
-[Firebase Cloud Firestore]: https://firebase.google.com/products/firestore?gclid=EAIaIQobChMIudGSjImI9QIVSkpyCh2BiwOAEAAYASAAEgI5bPD_BwE&gclsrc=aw.ds
+[Firebase Cloud Firestore]: https://firebase.google.com/products/firestore
 [Google Cloud Functions]: https://cloud.google.com/functions
+[image_picker]: https://pub.dev/packages/image_picker
+[Text Recognition]: https://developers.google.com/ml-kit/vision/text-recognition

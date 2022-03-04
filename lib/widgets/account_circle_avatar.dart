@@ -10,7 +10,7 @@ class InstitutionCircleAvatar extends StatelessWidget {
     Key? key,
     required this.institution,
     this.diameter = 32,
-  }) : super(key: key);
+  }) : super(key: const ValueKey('InstitutionCircleAvatar'));
 
   final Institution? institution;
   final double? diameter;

@@ -1,6 +1,6 @@
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/services/logger_init.dart';
+import 'package:cccc/providers.dart';
 import 'package:cccc/widgets/paginated_custom_scroll_view.dart';
 import 'package:cccc/widgets/transaction_list_tile.dart';
 import 'package:flutter/material.dart';
@@ -28,7 +28,7 @@ class AllTransactions extends ConsumerWidget {
           title: Text('Transactions'),
           pinned: true,
         ),
-        query: ref.watch(databaseProvider).transactionsQuery(),
+        query: ref.read(databaseProvider).transactionsQuery(),
         listViewPadding: EdgeInsets.only(
           bottom: MediaQuery.of(context).padding.bottom + 16,
         ),

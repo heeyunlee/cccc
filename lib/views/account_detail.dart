@@ -1,17 +1,16 @@
-import 'package:cccc/models/plaid/account.dart';
-import 'package:cccc/models/plaid/institution/institution.dart';
-import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/routes/route_names.dart';
-import 'package:cccc/styles/button_styles.dart';
-import 'package:cccc/styles/decorations.dart';
-import 'package:cccc/styles/text_styles.dart';
-import 'package:cccc/view_models/account_detail_screen_model.dart';
-import 'package:cccc/widgets/account_circle_avatar.dart';
-import 'package:cccc/widgets/account_detail_bottom_sheet.dart';
-import 'package:cccc/widgets/custom_stream_builder.dart';
-import 'package:cccc/widgets/transaction_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:cccc/models/plaid/account.dart';
+import 'package:cccc/models/plaid/institution/institution.dart';
+import 'package:cccc/providers.dart' show accountDetailModelProvider;
+import 'package:cccc/routes/route_names.dart';
+import 'package:cccc/services/logger_init.dart';
+import 'package:cccc/styles/decorations.dart';
+import 'package:cccc/styles/text_styles.dart';
+import 'package:cccc/widgets/account_circle_avatar.dart';
+import 'package:cccc/widgets/account_detail_bottom_sheet.dart';
+import 'package:cccc/widgets/recent_transactions_card.dart';
 
 class AccountDetail extends ConsumerStatefulWidget {
   const AccountDetail({
@@ -79,8 +78,11 @@ class _AccountDetailState extends ConsumerState<AccountDetail>
 
   @override
   Widget build(BuildContext context) {
+    logger.d('[AccountDetail] screen building...');
+
     final size = MediaQuery.of(context).size;
-    final model = ref.watch(accountDetailScreenModelProvider(widget.account));
+    final padding = MediaQuery.of(context).padding;
+    final model = ref.watch(accountDetailModelProvider(widget.account));
 
     return Scaffold(
       body: CustomScrollView(
@@ -154,6 +156,9 @@ class _AccountDetailState extends ConsumerState<AccountDetail>
                               ),
                               const SizedBox(width: 16),
                               InstitutionCircleAvatar(
+                                key: ValueKey(
+                                  'InstitutionCircleAvatar-${widget.institution?.institutionId}',
+                                ),
                                 institution: widget.institution,
                                 diameter: 20,
                               ),
@@ -179,96 +184,10 @@ class _AccountDetailState extends ConsumerState<AccountDetail>
             ),
           ),
           SliverToBoxAdapter(
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 4,
-                      horizontal: 32,
-                    ),
-                    child: Row(
-                      children: [
-                        const Text(
-                          'Transactions',
-                          style: TextStyles.subtitle1Bold,
-                        ),
-                        const Spacer(),
-                        TextButton(
-                          onPressed: () {},
-                          style: ButtonStyles.text2,
-                          child: Row(
-                            children: const [
-                              Text('View More'),
-                              SizedBox(width: 4),
-                              Icon(Icons.arrow_forward, size: 16)
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Card(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    margin: const EdgeInsets.symmetric(horizontal: 16),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    color: Colors.white12,
-                    child: CustomStreamBuilder<List<Transaction?>>(
-                      stream: model.transactionsStream,
-                      loadingWidget: const SizedBox(
-                        height: 200,
-                        width: double.infinity,
-                        child: Center(
-                          child: CircularProgressIndicator(),
-                        ),
-                      ),
-                      errorBuilder: (context, error) => SizedBox(
-                        height: 200,
-                        width: double.infinity,
-                        child: Row(
-                          children: [
-                            const Icon(Icons.error, color: Colors.red),
-                            const SizedBox(width: 8),
-                            Text(
-                              'An Error Occurred. Error code: ${error.toString()}',
-                              maxLines: 1,
-                            ),
-                          ],
-                        ),
-                      ),
-                      builder: (context, data) {
-                        if (data != null && data.isNotEmpty) {
-                          return ListView.builder(
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            padding: EdgeInsets.zero,
-                            itemCount: data.length,
-                            itemBuilder: (context, index) {
-                              final transaction = data[index]!;
-
-                              return TransactionListTile(
-                                transaction: transaction,
-                              );
-                            },
-                          );
-                        } else {
-                          return const SizedBox(
-                            height: 200,
-                            width: double.infinity,
-                            child: Center(
-                              child: Text('No transactions'),
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 48),
-                ],
-              ),
+            child: RecentTransactionsCard(
+              transactionsStream: model.transactionsStream,
+              titleTextStyle: TextStyles.subtitle1Bold,
+              bottomPaddingHeight: padding.bottom + 16,
             ),
           ),
         ],

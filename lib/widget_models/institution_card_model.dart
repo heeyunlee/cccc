@@ -1,23 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:plaid_flutter/plaid_flutter.dart';
+
+import 'package:cccc/extensions/datetime_extension.dart';
 import 'package:cccc/models/enum/account_connection_state.dart';
 import 'package:cccc/models/plaid/account.dart';
-import 'package:cccc/models/plaid/accounts_institution.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/services/cloud_functions.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:plaid_flutter/plaid_flutter.dart';
-import 'package:cccc/extensions/datetime_extension.dart';
-
-final institutionCardModelProvider = ChangeNotifierProvider.autoDispose
-    .family<InstitutionCardModel, AccountsInstitution?>(
-  (ref, accountsInstitution) => InstitutionCardModel(
-    functions: ref.watch(cloudFunctionsProvider),
-    institution: accountsInstitution?.institution,
-    accounts: accountsInstitution?.accounts,
-  ),
-);
 
 class InstitutionCardModel with ChangeNotifier {
   InstitutionCardModel({

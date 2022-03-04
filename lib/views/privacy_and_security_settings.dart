@@ -4,7 +4,8 @@ import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/widgets/local_authentication_list_tile.dart';
 
 class PrivacyAndSecuritySettings extends StatelessWidget {
-  const PrivacyAndSecuritySettings({Key? key}) : super(key: key);
+  const PrivacyAndSecuritySettings({Key? key})
+      : super(key: const ValueKey('PrivacyAndSecuritySettings'));
 
   static void show(BuildContext context) {
     Navigator.of(context).pushNamed(RouteNames.privacyAndSecurity);

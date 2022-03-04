@@ -1,4 +1,5 @@
-import 'package:cccc/services/firestore_database.dart';
+import 'package:cccc/providers.dart'
+    show databaseProvider, transactionDetailModelProvider;
 import 'package:cccc/views/choose_merchant_for_transaction.dart';
 import 'package:cccc/widgets/custom_future_builder.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
@@ -13,7 +14,6 @@ import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/styles.dart';
-import 'package:cccc/view_models/transaction_detail_screen_model.dart';
 import 'package:cccc/widgets/receipt_widget.dart';
 import 'package:cccc/widgets/transaction_detail_title.dart';
 
@@ -59,7 +59,7 @@ class TransactionDetail extends ConsumerWidget {
           }
 
           final model = ref.watch(
-            transactionDetailScreenModelProvider(transaction),
+            transactionDetailModelProvider(transaction),
           );
 
           return CustomScrollView(
@@ -341,6 +341,7 @@ class TransactionDetail extends ConsumerWidget {
 
   Widget _buildItemsWidget(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final theme = Theme.of(context);
 
     if (transaction.transactionItems != null) {
       return ReceiptWidget(
@@ -371,7 +372,7 @@ class TransactionDetail extends ConsumerWidget {
                     transaction: transaction,
                   ),
                 ),
-                style: ButtonStyles.text1Primary,
+                style: ButtonStyles.text(foregroundColor: theme.primaryColor),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: const [

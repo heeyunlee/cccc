@@ -3,25 +3,11 @@ import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/models/user.dart';
-import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/firestore_path.dart';
-import 'package:cccc/services/logger_init.dart';
 import 'package:cloud_firestore/cloud_firestore.dart'
     show DocumentSnapshot, Query;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'firestore_service.dart';
-
-final databaseProvider = Provider.autoDispose<FirestoreDatabase>(
-  (ref) {
-    final auth = ref.watch(authProvider);
-    final uid = auth.currentUser!.uid;
-
-    logger.d('uid from [databaseProvider]: $uid');
-
-    return FirestoreDatabase(uid: uid);
-  },
-);
 
 class FirestoreDatabase {
   FirestoreDatabase({

@@ -1,7 +1,8 @@
 import 'package:cccc/models/merchant.dart';
 import 'package:cccc/models/plaid/transaction.dart';
+import 'package:cccc/providers.dart'
+    show chooseMerchantForTransactionModelProvider;
 import 'package:cccc/styles/styles.dart';
-import 'package:cccc/view_models/choose_merchant_for_transaction_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

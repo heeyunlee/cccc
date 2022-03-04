@@ -1,8 +1,8 @@
+import 'package:cccc/providers.dart' show localAuthenticationServiceProvider;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:cccc/routes/route_names.dart';
-import 'package:cccc/services/local_authentication_service.dart';
 
 class LocalAuthenticationScreen extends ConsumerStatefulWidget {
   const LocalAuthenticationScreen({Key? key}) : super(key: key);

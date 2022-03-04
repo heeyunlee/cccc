@@ -8,21 +8,11 @@ import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-final homeScreenModelProvider = ChangeNotifierProvider.autoDispose(
-  (ref) {
-    final database = ref.watch(databaseProvider);
-    final functions = ref.watch(cloudFunctionsProvider);
-
-    return HomeScreenModel(database: database, functions: functions);
-  },
-);
-
-class HomeScreenModel with ChangeNotifier {
-  HomeScreenModel({
+class HomeModel with ChangeNotifier {
+  HomeModel({
     required this.database,
     required this.functions,
   });

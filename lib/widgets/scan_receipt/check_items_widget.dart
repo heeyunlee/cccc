@@ -1,9 +1,10 @@
-import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/widget_models/scan_receipt_bottom_sheet_model.dart';
-import 'package:cccc/widgets/scan_receipt/transaction_item_listtile.dart';
-import 'package:cccc/widgets/scan_receipt/transaction_subtotal_item_list_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:cccc/models/plaid/transaction.dart';
+import 'package:cccc/providers.dart' show scanReceiptBottomSheetModelProvider;
+import 'package:cccc/widgets/scan_receipt/transaction_item_listtile.dart';
+import 'package:cccc/widgets/scan_receipt/transaction_subtotal_item_list_tile.dart';
 
 class CheckItemsWidget extends ConsumerWidget {
   const CheckItemsWidget({Key? key, this.transaction}) : super(key: key);

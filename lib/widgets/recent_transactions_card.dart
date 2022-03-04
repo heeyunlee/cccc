@@ -1,59 +1,75 @@
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/styles/button_styles.dart';
 import 'package:cccc/styles/text_styles.dart';
-import 'package:cccc/view_models/home_screen_model.dart';
+import 'package:cccc/views/all_transactions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'custom_stream_builder.dart';
 import 'transaction_list_tile.dart';
-import '../views/all_transactions.dart';
 
 class RecentTransactionsCard extends ConsumerWidget {
   const RecentTransactionsCard({
     Key? key,
-    required this.model,
+    required this.transactionsStream,
+    this.titleTextStyle = TextStyles.h6,
+    this.bottomPaddingHeight = 0,
   }) : super(key: key);
 
-  final HomeScreenModel model;
+  final Stream<List<Transaction?>> transactionsStream;
+  final TextStyle titleTextStyle;
+  final double bottomPaddingHeight;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return CustomStreamBuilder<List<Transaction?>>(
-      errorBuilder: (context, error) => SizedBox(
-        height: 200,
-        width: double.maxFinite,
-        child: Text('An Error Occurred. Error code: ${error.toString()}'),
-      ),
-      loadingWidget: const SizedBox(
-        height: 200,
-        width: double.maxFinite,
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      ),
-      stream: model.transactionsStream,
-      builder: (context, transactions) {
-        return Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 32,
-                vertical: 4,
+    final size = MediaQuery.of(context).size;
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(32, 0, 16, 0),
+          child: Row(
+            children: [
+              Text('Transactions', style: titleTextStyle),
+              const Spacer(),
+              TextButton(
+                onPressed: () => AllTransactions.show(context),
+                style: ButtonStyles.text(textStyle: TextStyles.button2),
+                child: Row(
+                  children: const [
+                    Text('View More'),
+                    SizedBox(width: 4),
+                    Icon(Icons.arrow_forward, size: 16)
+                  ],
+                ),
               ),
-              child: Row(
-                children: [
-                  const Text('Transactions', style: TextStyles.h6),
-                  const Spacer(),
-                  TextButton(
-                    onPressed: () => AllTransactions.show(context),
-                    style: ButtonStyles.text2,
-                    child: const Text('VIEW ALL'),
-                  ),
-                ],
+            ],
+          ),
+        ),
+        CustomStreamBuilder<List<Transaction?>>(
+          errorBuilder: (context, error) => SizedBox(
+            height: size.height / 2,
+            width: double.maxFinite,
+            child: Padding(
+              padding: const EdgeInsets.all(32.0),
+              child: Center(
+                child: Text(
+                  'An Error Occurred. Error code: ${error.toString()}',
+                ),
               ),
             ),
-            Card(
+          ),
+          loadingWidget: SizedBox(
+            height: size.height / 2,
+            width: double.maxFinite,
+            child: const Center(
+              child: CircularProgressIndicator(),
+            ),
+          ),
+          stream: transactionsStream,
+          builder: (context, transactions) {
+            return Card(
+              margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: (transactions == null || transactions.isEmpty)
                   ? const SizedBox(
                       height: 96 * 3,
@@ -68,18 +84,18 @@ class RecentTransactionsCard extends ConsumerWidget {
                       padding: EdgeInsets.zero,
                       physics: const NeverScrollableScrollPhysics(),
                       shrinkWrap: true,
-                      itemCount:
-                          transactions.length > 5 ? 5 : transactions.length,
+                      itemCount: transactions.length,
                       itemBuilder: (context, index) {
                         return TransactionListTile(
                           transaction: transactions[index]!,
                         );
                       },
                     ),
-            ),
-          ],
-        );
-      },
+            );
+          },
+        ),
+        SizedBox(height: bottomPaddingHeight),
+      ],
     );
   }
 }

@@ -1,10 +1,10 @@
 import 'package:cccc/constants/dummy_data.dart';
 import 'package:cccc/models/plaid/transaction.dart';
+import 'package:cccc/providers.dart' show scanReceiptBottomSheetModelProvider;
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/button_styles.dart';
 import 'package:cccc/views/transaction_detail.dart';
-import 'package:cccc/widget_models/scan_receipt_bottom_sheet_model.dart';
 import 'package:cccc/widgets/receipt_widget.dart';
 import 'package:cccc/widgets/scan_receipt/scan_receipt_bottom_sheet.dart';
 import 'package:flutter/material.dart';

@@ -1,16 +1,17 @@
-import 'package:cccc/models/enum/scan_receipt_state.dart';
-import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/styles/text_styles.dart';
-import 'package:cccc/styles/theme_colors.dart';
-import 'package:cccc/widget_models/scan_receipt_bottom_sheet_model.dart';
-import 'package:cccc/widgets/bottom_sheet_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:cccc/models/enum/scan_receipt_state.dart';
+import 'package:cccc/models/plaid/transaction.dart';
+import 'package:cccc/providers.dart' show scanReceiptBottomSheetModelProvider;
+import 'package:cccc/services/logger_init.dart';
+import 'package:cccc/styles/text_styles.dart';
+import 'package:cccc/styles/theme_colors.dart';
+import 'package:cccc/widgets/bottom_sheet_card.dart';
+
+import 'check_items_widget.dart';
 import 'choose_image_to_scan_widget.dart';
 import 'match_transaction_with_items_widget.dart';
-import 'check_items_widget.dart';
 
 class ScanReceiptBottomSheet extends ConsumerStatefulWidget {
   const ScanReceiptBottomSheet({

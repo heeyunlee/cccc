@@ -1,6 +1,6 @@
 import 'package:cccc/constants/image_assets.dart';
+import 'package:cccc/providers.dart' show authProvider;
 import 'package:cccc/routes/route_names.dart';
-import 'package:cccc/services/firebase_auth.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/text_styles.dart';
 import 'package:cccc/views/linked_accounts.dart';

@@ -1,12 +1,12 @@
-import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/view_models/connect_plaid_model.dart';
-import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
 
+import 'package:cccc/providers.dart' show connectPlaidModelProvider;
 import 'package:cccc/routes/route_names.dart';
+import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/button_styles.dart';
+import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
 
 class ConnectPlaid extends ConsumerStatefulWidget {
   const ConnectPlaid({Key? key}) : super(key: key);

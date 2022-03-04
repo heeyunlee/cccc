@@ -1,5 +1,11 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'package:cccc/extensions/list_extension.dart';
+import 'package:cccc/extensions/text_element_extension.dart';
 import 'package:cccc/models/enum/scan_receipt_state.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/models/receipt_response.dart';
@@ -9,26 +15,6 @@ import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/services/image_picker_service.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:google_ml_kit/google_ml_kit.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:cccc/extensions/text_element_extension.dart';
-import 'package:cccc/extensions/list_extension.dart';
-
-final scanReceiptBottomSheetModelProvider = ChangeNotifierProvider.autoDispose(
-  (ref) {
-    final imagePicker = ref.read(imagePickerServiceProvider);
-    final functions = ref.watch(cloudFunctionsProvider);
-    final database = ref.watch(databaseProvider);
-
-    return ScanReceiptBottomSheetModel(
-      imagePicker: imagePicker,
-      functions: functions,
-      database: database,
-    );
-  },
-);
 
 class ScanReceiptBottomSheetModel with ChangeNotifier {
   ScanReceiptBottomSheetModel({
@@ -84,6 +70,7 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
       rawTexts: recognisedText.text.replaceAll('\n', ', '),
       textsWithOffsets: textsWithOffsets,
     );
+    textDetector.close();
 
     return response;
   }

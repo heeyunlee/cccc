@@ -1,10 +1,11 @@
-import 'package:cccc/models/plaid/account.dart';
-import 'package:cccc/styles/styles.dart';
-import 'package:cccc/views/linked_accounts.dart';
-import 'package:cccc/view_models/account_detail_bottom_sheet_model.dart';
-import 'package:cccc/widgets/account_connection_state_icon.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:cccc/models/plaid/account.dart';
+import 'package:cccc/providers.dart' show accountDetailBottomSheetModelProvider;
+import 'package:cccc/styles/styles.dart';
+import 'package:cccc/views/linked_accounts.dart';
+import 'package:cccc/widgets/account_connection_state_icon.dart';
 
 import 'bottom_sheet_card.dart';
 

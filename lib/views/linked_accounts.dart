@@ -1,9 +1,9 @@
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
+import 'package:cccc/providers.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/views/connect_plaid.dart';
-import 'package:cccc/view_models/linked_accounts_model.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/institution_card.dart';
 import 'package:cccc/widgets/show_error_widget.dart';

@@ -13,6 +13,8 @@ Future<bool?> showAdaptiveDialog(
   String? cancelAcitionText,
   bool isCancelDestructiveAction = false,
 }) {
+  final theme = Theme.of(context);
+
   if (!Platform.isIOS) {
     return showDialog<bool>(
       context: context,
@@ -23,16 +25,16 @@ Future<bool?> showAdaptiveDialog(
           if (cancelAcitionText != null)
             TextButton(
               style: isCancelDestructiveAction
-                  ? ButtonStyles.text1Red
-                  : ButtonStyles.text1,
+                  ? ButtonStyles.text(foregroundColor: Colors.red)
+                  : ButtonStyles.text(),
               onPressed: () => Navigator.of(context).pop(false),
               child: Text(cancelAcitionText),
             ),
           const SizedBox(width: 8),
           TextButton(
             style: isDefaultDestructiveAction
-                ? ButtonStyles.text1Red
-                : ButtonStyles.text1Primary,
+                ? ButtonStyles.text(foregroundColor: Colors.red)
+                : ButtonStyles.text(foregroundColor: theme.primaryColor),
             onPressed: () => Navigator.of(context).pop(true),
             child: Text(defaultActionText),
           ),

@@ -1,6 +1,5 @@
 import 'package:cccc/constants/constants.dart';
 import 'package:cccc/styles/text_styles.dart';
-import 'package:cccc/styles/theme_colors.dart';
 import 'package:flutter/material.dart';
 
 /// class with the list of custom-created [ButtonStyle]
@@ -81,6 +80,7 @@ class ButtonStyles {
   /// colors will change to [Colors.white70]
   static ButtonStyle elevated(
     BuildContext context, {
+    Color? backgroundColor,
     double? width,
     double height = 48,
     double shrinkRatio = 0.985,
@@ -93,10 +93,10 @@ class ButtonStyles {
           final colorScheme = Theme.of(context).colorScheme;
 
           if (states.any(kInteractiveStates.contains)) {
-            return colorScheme.primary.withOpacity(0.9);
+            return (backgroundColor ?? colorScheme.primary).withOpacity(0.9);
           }
 
-          return colorScheme.primary;
+          return backgroundColor ?? colorScheme.primary;
         },
       ),
       foregroundColor: MaterialStateProperty.resolveWith<Color>(
@@ -129,96 +129,37 @@ class ButtonStyles {
     );
   }
 
-  static final elevatedGrey = ElevatedButton.styleFrom(
-    primary: Colors.grey,
-    textStyle: TextStyles.button1,
-  );
+  /// Creates [ButtonStyle] for the [TextButton] widget with the custom
+  /// interactive styles.
+  ///
+  /// User can specify the button's [TextStyle] and [foregroundColor]
+  ///
+  /// When the button is active, the colors of the text will be [Colors.white]
+  /// or specified [foregroundColor], and when the button is in [kInteractiveStates],
+  /// the opacity of the colors will decrease to 70%
+  static ButtonStyle text({
+    Color foregroundColor = Colors.white,
+    TextStyle textStyle = TextStyles.button1,
+  }) {
+    return ButtonStyle(
+      alignment: Alignment.center,
+      padding: MaterialStateProperty.all<EdgeInsets>(
+        const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      ),
+      textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+        (Set<MaterialState> states) {
+          return textStyle;
+        },
+      ),
+      foregroundColor: MaterialStateProperty.resolveWith<Color>(
+        (Set<MaterialState> states) {
+          if (states.any(kInteractiveStates.contains)) {
+            return foregroundColor.withOpacity(0.70);
+          }
 
-  static final text1 = ButtonStyle(
-    padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
-    textStyle: MaterialStateProperty.resolveWith<TextStyle>(
-      (Set<MaterialState> states) {
-        if (states.any(kInteractiveStates.contains)) {
-          return TextStyles.button1Grey;
-        }
-
-        return TextStyles.button1;
-      },
-    ),
-    foregroundColor: MaterialStateProperty.resolveWith<Color>(
-      (Set<MaterialState> states) {
-        if (states.any(kInteractiveStates.contains)) {
-          return Colors.grey;
-        }
-
-        return Colors.white;
-      },
-    ),
-  );
-
-  static final text1Primary = ButtonStyle(
-    padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
-    textStyle: MaterialStateProperty.resolveWith<TextStyle>(
-      (Set<MaterialState> states) {
-        if (states.any(kInteractiveStates.contains)) {
-          return TextStyles.button1Primary300;
-        }
-
-        return TextStyles.button1Primary;
-      },
-    ),
-    foregroundColor: MaterialStateProperty.resolveWith<Color>(
-      (Set<MaterialState> states) {
-        if (states.any(kInteractiveStates.contains)) {
-          return ThemeColors.primary300;
-        }
-
-        return ThemeColors.primary500;
-      },
-    ),
-  );
-
-  static final text1Red = ButtonStyle(
-    padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
-    textStyle: MaterialStateProperty.resolveWith<TextStyle>(
-      (Set<MaterialState> states) {
-        if (states.any(kInteractiveStates.contains)) {
-          return TextStyles.button1Red300;
-        }
-
-        return TextStyles.button1Red;
-      },
-    ),
-    foregroundColor: MaterialStateProperty.resolveWith<Color>(
-      (Set<MaterialState> states) {
-        if (states.any(kInteractiveStates.contains)) {
-          return ThemeColors.red300;
-        }
-
-        return Colors.red;
-      },
-    ),
-  );
-
-  static final text2 = ButtonStyle(
-    padding: MaterialStateProperty.all<EdgeInsets>(EdgeInsets.zero),
-    textStyle: MaterialStateProperty.resolveWith<TextStyle>(
-      (Set<MaterialState> states) {
-        if (states.any(kInteractiveStates.contains)) {
-          return TextStyles.button2Grey;
-        }
-
-        return TextStyles.button2;
-      },
-    ),
-    foregroundColor: MaterialStateProperty.resolveWith<Color>(
-      (Set<MaterialState> states) {
-        if (states.any(kInteractiveStates.contains)) {
-          return Colors.grey;
-        }
-
-        return Colors.white;
-      },
-    ),
-  );
+          return foregroundColor;
+        },
+      ),
+    );
+  }
 }

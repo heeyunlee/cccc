@@ -1,8 +1,9 @@
-import 'package:cccc/styles/text_styles.dart';
-import 'package:cccc/widget_models/scan_receipt_bottom_sheet_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+
+import 'package:cccc/providers.dart' show scanReceiptBottomSheetModelProvider;
+import 'package:cccc/styles/text_styles.dart';
 
 class TransactionSubtotalItemListTile extends ConsumerWidget {
   const TransactionSubtotalItemListTile({Key? key}) : super(key: key);

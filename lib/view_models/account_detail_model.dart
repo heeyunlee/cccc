@@ -4,23 +4,13 @@ import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/services/firestore_database.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:cccc/models/enum/account_subtype.dart';
 import 'package:cccc/models/enum/account_type.dart';
 import 'package:cccc/extensions/datetime_extension.dart';
 
-final accountDetailScreenModelProvider = ChangeNotifierProvider.family
-    .autoDispose<AccountDetailScreenModel, Account>(
-  (ref, account) {
-    final database = ref.watch(databaseProvider);
-
-    return AccountDetailScreenModel(account: account, database: database);
-  },
-);
-
-class AccountDetailScreenModel with ChangeNotifier {
-  AccountDetailScreenModel({
+class AccountDetailModel with ChangeNotifier {
+  AccountDetailModel({
     required this.account,
     required this.database,
   });
@@ -46,7 +36,7 @@ class AccountDetailScreenModel with ChangeNotifier {
   }
 
   Stream<List<Transaction?>> get transactionsStream {
-    return database.transactionsStreamForSpecificAccount(account.accountId, 6);
+    return database.transactionsStreamForSpecificAccount(account.accountId, 12);
   }
 
   Stream<Institution?> get institutionStream {

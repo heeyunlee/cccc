@@ -1,6 +1,6 @@
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/styles/text_styles.dart';
-import 'package:cccc/view_models/home_screen_model.dart';
+import 'package:cccc/view_models/home_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'custom_stream_builder.dart';
@@ -13,7 +13,7 @@ class AccountsCard extends ConsumerWidget {
     required this.model,
   }) : super(key: key);
 
-  final HomeScreenModel model;
+  final HomeModel model;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

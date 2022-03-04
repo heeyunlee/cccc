@@ -5,8 +5,12 @@
 - Add more Button interactivity by modifying `ButtonStyle`
 - Added a function where user can use local authentication such as fingerprint or face ID using [LocalAuthentication] package
 - Created `LocalAuthenticationService` class to deal with [LocalAuthentication] package
+- Created `SharedPreferencesService` class to deal with [SharedPreferences] package
 
 ### Bug Fix & Refactor
+- Update readme
+- Created `providers.dart` file that has all the providers created with `Riverpod` package
+- Fix bug `LocalAuthenticationService` that called local authentication twice
 
 ## [0.0.12]: Feb. 22nd, 2022
 ### New Features & Screens
@@ -133,3 +137,4 @@
 [0.0.2]: https://github.com/heeyunlee/cccc/commit/96682cce01f88cd05830057fc17f703601fc936a
 [collection]: https://pub.dev/packages/collection
 [LocalAuthentication]: https://pub.dev/packages/local_auth
+[SharedPreferences]: https://pub.dev/packages/shared_preferences

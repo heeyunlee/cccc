@@ -1,14 +1,15 @@
-import 'package:cccc/models/plaid/account.dart';
-import 'package:cccc/models/plaid/accounts_institution.dart';
-import 'package:cccc/models/plaid/institution/institution.dart';
-import 'package:cccc/styles/styles.dart';
-import 'package:cccc/widget_models/institution_card_model.dart';
-import 'package:cccc/widgets/account_list_tile_compact.dart';
-import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
-import 'package:cccc/widgets/show_custom_action_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
+
+import 'package:cccc/models/plaid/account.dart';
+import 'package:cccc/models/plaid/accounts_institution.dart';
+import 'package:cccc/models/plaid/institution/institution.dart';
+import 'package:cccc/providers.dart' show institutionCardModelProvider;
+import 'package:cccc/styles/styles.dart';
+import 'package:cccc/widgets/account_list_tile_compact.dart';
+import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
+import 'package:cccc/widgets/show_custom_action_sheet.dart';
 
 import 'account_circle_avatar.dart';
 import 'account_connection_state_icon.dart';

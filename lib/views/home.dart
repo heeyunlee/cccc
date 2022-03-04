@@ -6,8 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:cccc/models/user.dart';
+import 'package:cccc/providers.dart' show homeModelProvider;
 import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/view_models/home_screen_model.dart';
+import 'package:cccc/view_models/home_model.dart';
 import 'package:cccc/views/scan_receipt.dart';
 import 'package:cccc/views/settings.dart';
 import 'package:cccc/widgets/recent_transactions_card.dart';
@@ -28,7 +29,7 @@ class _HomeState extends ConsumerState<Home> {
   Widget build(BuildContext context) {
     logger.d('[Home] building... on Web? $kIsWeb');
 
-    final model = ref.watch(homeScreenModelProvider);
+    final model = ref.watch(homeModelProvider);
 
     return Scaffold(
       extendBody: true,
@@ -69,7 +70,7 @@ class _HomeState extends ConsumerState<Home> {
   Widget _customScrollWidget(
     BuildContext context,
     User user,
-    HomeScreenModel model,
+    HomeModel model,
   ) {
     final media = MediaQuery.of(context);
     final padding = MediaQuery.of(context).padding;
@@ -119,7 +120,9 @@ class _HomeState extends ConsumerState<Home> {
               const SizedBox(height: 16),
               AccountsCard(model: model),
               const SizedBox(height: 16),
-              RecentTransactionsCard(model: model),
+              RecentTransactionsCard(
+                transactionsStream: model.transactionsStream,
+              ),
               SizedBox(height: padding.bottom + 32),
             ],
           ),

@@ -3,19 +3,11 @@ import 'package:cccc/constants/cloud_functions_keys.dart';
 import 'package:cccc/models/receipt_response.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/models/user.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import 'firebase_auth.dart';
 import 'firestore_database.dart';
-
-final cloudFunctionsProvider = Provider.autoDispose<CloudFunctions>((ref) {
-  final auth = ref.watch(authProvider);
-  final database = ref.watch(databaseProvider);
-
-  return CloudFunctions(auth: auth, database: database);
-});
 
 class CloudFunctions {
   CloudFunctions({

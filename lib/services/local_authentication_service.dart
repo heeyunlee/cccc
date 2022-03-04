@@ -1,19 +1,19 @@
 import 'package:cccc/services/logger_init.dart';
+import 'package:cccc/services/shared_preference_service.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:cccc/extensions/string_extension.dart';
-
-final localAuthenticationServiceProvider = ChangeNotifierProvider(
-  (ref) => LocalAuthenticationService(),
-);
 
 /// A class that deals with [LocalAuthentication] and its related functions
 class LocalAuthenticationService with ChangeNotifier {
+  LocalAuthenticationService({required this.sharedPref});
+
+  final SharedPreferencesService sharedPref;
+  final LocalAuthentication _auth = LocalAuthentication();
+
   /// user's preference on whether to use local authentication or not.
   /// Defaults to `false`
   bool get useLocalAuth => _useLocalAuth;
@@ -22,60 +22,24 @@ class LocalAuthenticationService with ChangeNotifier {
   /// Defaults to `false`
   bool get isAuthenticated => _isAuthenticated;
 
-  /// boolean value on whether the device is able to check Biometrics.
-  /// Defaults to `false`
-  bool get canCheckBiometrics => _canCheckBiometrics;
-
-  /// String value of the first element of the `availableBioMetrics` list
-  String get availableBiometric => _availableBiometric;
-
-  bool _useLocalAuth = false;
+  late bool _useLocalAuth;
   bool _isAuthenticated = false;
-  bool _canCheckBiometrics = false;
-  String _availableBiometric = '';
-  final LocalAuthentication _auth = LocalAuthentication();
 
-  /// A function that gets user's pre-defined preference on whether he/she wants
-  /// to use the [LocalAuthentication] by using [SharedPreferences] library.
-  ///
-  /// Using [SharedPreferences], the function gets `useLocalAuth` value, and
-  /// when it's `null`, it sets the value to `false`
-  Future<void> getLocalAuthPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    final bool? _useLocalAuthPrefs = prefs.getBool('useLocalAuth');
-
-    if (_useLocalAuthPrefs == null) {
-      await prefs.setBool('useLocalAuth', false);
-    }
-    _useLocalAuth = _useLocalAuthPrefs ?? false;
+  void setUseLocalAuth(bool? value) {
+    _useLocalAuth = value ?? false;
     notifyListeners();
-
-    logger.d('''
-        useLocalAuth in sharedpref: $_useLocalAuthPrefs,
-        _useLocalAuth in Service: $_useLocalAuth,
-        _isauthenticated in service: $_isAuthenticated,
-    ''');
   }
 
-  /// A function that checks if the user's device supports Biometric
-  /// Authentication. It updates the value `_canCheckBiometrics` and
-  /// `_availableBiometric` based on the result.
-  void checkBiometric() async {
-    final canCheckBiometrics = await _auth.canCheckBiometrics;
-
-    if (canCheckBiometrics) {
-      final availableBioMetrics = await _auth.getAvailableBiometrics();
-
-      _canCheckBiometrics = canCheckBiometrics;
-      _availableBiometric = availableBioMetrics.first.name.title;
-      notifyListeners();
-    }
+  void setIsAuthenticated(bool value) {
+    _isAuthenticated = value;
+    notifyListeners();
   }
 
   /// A function that calls [LocalAuthentication] library's authenticate function.
   /// It also handlues Exceptions
   Future<bool> authenticate(BuildContext context) async {
-    logger.d('authenticate function called');
+    final widgetKey = context.widget.key;
+    logger.d('authenticate function called. Widget key: $widgetKey');
 
     try {
       const iosStrings = IOSAuthMessages(
@@ -87,9 +51,7 @@ class LocalAuthenticationService with ChangeNotifier {
 
       final _authenticatedResult = await _auth.authenticate(
         localizedReason: 'Use either your biometric to authenticate',
-        stickyAuth: true,
         iOSAuthStrings: iosStrings,
-        useErrorDialogs: true,
         sensitiveTransaction: false,
       );
 
@@ -106,7 +68,7 @@ class LocalAuthenticationService with ChangeNotifier {
 
       final dialog = await showAdaptiveDialog(
         context,
-        title: 'An Error Occurred',
+        title: 'Error',
         content: e.message ?? 'An error occurred',
         defaultActionText: 'OK',
       );
@@ -124,21 +86,35 @@ class LocalAuthenticationService with ChangeNotifier {
     _useLocalAuth = value;
     notifyListeners();
 
-    final prefs = await SharedPreferences.getInstance();
-
     if (value) {
+      logger.d('value is true. Call Local auth and authenticate');
+
       final authSuccessful = await authenticate(context);
 
       if (authSuccessful) {
-        await prefs.setBool('useLocalAuth', true);
-        _isAuthenticated = true;
+        final updated = await sharedPref.update<bool>(
+          'useLocalAuth',
+          value,
+        );
+
+        logger.d('authenticated? $authSuccessful. Updated to $value: $updated');
       } else {
         _useLocalAuth = false;
         _isAuthenticated = false;
+        final updated = await sharedPref.update<bool>(
+          'useLocalAuth',
+          false,
+        );
+
+        logger.d('authenticated? $authSuccessful. Updated to $value: $updated');
       }
     } else {
-      await prefs.setBool('useLocalAuth', value);
-      _isAuthenticated = false;
+      _useLocalAuth = value;
+      final updated = await sharedPref.update<bool>(
+        'useLocalAuth',
+        false,
+      );
+      logger.d('updated user auth pref? $updated');
     }
     notifyListeners();
   }

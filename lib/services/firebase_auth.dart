@@ -1,23 +1,22 @@
 import 'package:firebase_auth/firebase_auth.dart' as fire_auth;
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-final authProvider = Provider<FirebaseAuthService>(
-  (ref) => FirebaseAuthService(),
-);
+import 'package:cccc/services/logger_init.dart';
+import 'package:cccc/services/shared_preference_service.dart';
 
 class FirebaseAuthService {
   final fire_auth.FirebaseAuth _auth = fire_auth.FirebaseAuth.instance;
-  final googleSignIn = GoogleSignIn();
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final _sharedPreferencesService = SharedPreferencesService();
 
   Stream<fire_auth.User?> authStateChanges() => _auth.authStateChanges();
 
   fire_auth.User? get currentUser => _auth.currentUser;
 
-  fire_auth.User? user;
+  fire_auth.User? _user;
 
   void _setUser(fire_auth.User? value) {
-    user = value;
+    _user = value;
   }
 
   Future<fire_auth.User?> signInAnonymously() async {
@@ -33,7 +32,7 @@ class FirebaseAuthService {
   }
 
   Future<fire_auth.User?> signInWithGoogle() async {
-    final googleSignInAccount = await googleSignIn.signIn();
+    final googleSignInAccount = await _googleSignIn.signIn();
 
     if (googleSignInAccount != null) {
       // Obtain the auth details from the request
@@ -68,15 +67,23 @@ class FirebaseAuthService {
   }
 
   Future<void> signOut() async {
-    final signedInWithGoogle = await googleSignIn.isSignedIn();
+    final signedInWithGoogle = await _googleSignIn.isSignedIn();
 
     if (signedInWithGoogle) {
-      await googleSignIn.signOut();
+      await _googleSignIn.signOut();
     }
+    await _auth.signOut();
 
     _setUser(null);
-    assert(user == null);
+    assert(_user == null);
 
-    await _auth.signOut();
+    final removeLocalAuth = await _sharedPreferencesService.remove(
+      'useLocalAuth',
+    );
+
+    logger.d('''
+      user: $_user,
+      removeLocalAuthConfig?: $removeLocalAuth
+    ''');
   }
 }

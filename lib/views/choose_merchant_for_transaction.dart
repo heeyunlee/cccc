@@ -1,10 +1,10 @@
 import 'package:cccc/models/merchant.dart';
 import 'package:cccc/models/plaid/transaction.dart';
+import 'package:cccc/providers.dart'
+    show chooseMerchantForTransactionModelProvider, databaseProvider;
 import 'package:cccc/routes/route_names.dart';
-import 'package:cccc/services/firestore_database.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/styles.dart';
-import 'package:cccc/view_models/choose_merchant_for_transaction_model.dart';
 import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
 import 'package:cccc/widgets/merchant_list_tile.dart';
 import 'package:cccc/widgets/paginated_custom_scroll_view.dart';

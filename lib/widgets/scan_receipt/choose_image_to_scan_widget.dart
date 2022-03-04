@@ -1,7 +1,8 @@
-import 'package:cccc/widget_models/scan_receipt_bottom_sheet_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'package:cccc/providers.dart' show scanReceiptBottomSheetModelProvider;
 
 class ChooseImageToScanWidget extends ConsumerWidget {
   const ChooseImageToScanWidget({

@@ -1,11 +1,12 @@
-import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/services/firestore_database.dart';
-import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/styles/text_styles.dart';
-import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:cccc/models/plaid/transaction.dart';
+import 'package:cccc/providers.dart' show databaseProvider;
+import 'package:cccc/services/logger_init.dart';
+import 'package:cccc/styles/text_styles.dart';
+import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 
 class TransactionMarkAsDuplicateListTile extends ConsumerStatefulWidget {
   const TransactionMarkAsDuplicateListTile({
