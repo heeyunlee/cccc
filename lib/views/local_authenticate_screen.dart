@@ -21,7 +21,7 @@ class _LocalAuthenticationScreenState
   @override
   void initState() {
     super.initState();
-    ref.read(localAuthenticationServiceProvider).authenticate(context);
+    ref.read(localAuthenticationServiceProvider).authenticateAndUpdate();
   }
 
   @override
@@ -52,9 +52,9 @@ class _LocalAuthenticationScreenState
             ),
             IconButton(
               iconSize: 48,
-              onPressed: () => ref
+              onPressed: () async => await ref
                   .read(localAuthenticationServiceProvider)
-                  .authenticate(context),
+                  .authenticateAndUpdate(),
               icon: const Icon(Icons.fingerprint),
             ),
           ],

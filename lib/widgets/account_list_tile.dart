@@ -38,7 +38,10 @@ class AccountListTile extends ConsumerWidget {
           account: account,
           institution: institution,
         ),
-        leading: InstitutionCircleAvatar(institution: institution),
+        leading: InstitutionCircleAvatar(
+          institution: institution,
+          account: account,
+        ),
         title: Text(
           account.officialName ?? account.name,
           style: TextStyles.body2,

@@ -1,6 +1,14 @@
 # Change Log
 
-## [0.0.13]
+## [0.0.14]
+### New Features & Screens
+- Update `InstitutionCircleAvatar` widget to show account connection state with circle border color
+  
+### Bug Fix & Refactor
+- Created `LocalAuthenticationSwitch` to fix erorrs and reduce rebuilds
+
+
+## [0.0.13]: Mar. 3, 2022
 ### New Features & Screens
 - Add more Button interactivity by modifying `ButtonStyle`
 - Added a function where user can use local authentication such as fingerprint or face ID using [LocalAuthentication] package
@@ -124,6 +132,8 @@
 
 ### Bug Fix & Refactor
 
+[0.0.14]: https://github.com/heeyunlee/cccc/commit/main
+[0.0.13]: https://github.com/heeyunlee/cccc/commit/6d1ed36a6c42e557f0ae58f706341f90e6827925
 [0.0.12]: https://github.com/heeyunlee/cccc/commit/6340afe7d1f7ef3fbab10557a15668ab68bd2ceb
 [0.0.11]: https://github.com/heeyunlee/cccc/commit/214b6b4496c0e6a14ff83828b0438cd12f17fb46
 [0.0.10]: https://github.com/heeyunlee/cccc/commit/d33697280ac20257cd13f409835d8559533ac8b4

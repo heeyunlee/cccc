@@ -5,7 +5,6 @@ import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/providers.dart' show accountDetailBottomSheetModelProvider;
 import 'package:cccc/styles/styles.dart';
 import 'package:cccc/views/linked_accounts.dart';
-import 'package:cccc/widgets/account_connection_state_icon.dart';
 
 import 'bottom_sheet_card.dart';
 
@@ -43,24 +42,15 @@ class _AccountDetailBottomSheetState
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const SizedBox(height: 24),
-                  FittedBox(
-                    child: Row(
-                      children: [
-                        Text(
-                          model.name,
-                          style: TextStyles.subtitle2,
-                        ),
-                        const SizedBox(width: 8),
-                        AccountConnectionStateIcon(account: model.account),
-                      ],
-                    ),
+                  Text(
+                    model.name,
+                    style: TextStyles.subtitle2,
                   ),
                   const SizedBox(height: 8),
                   if (model.connectionIsError)
                     const Text(
                       'There is an error with connecting the account. Please reauthenticate to fix the issue',
                       style: TextStyles.captionWhite54,
-                      maxLines: 2,
                     ),
                 ],
               ),

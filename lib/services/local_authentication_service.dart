@@ -1,11 +1,10 @@
-import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/services/shared_preference_service.dart';
-import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:local_auth/auth_strings.dart';
 import 'package:local_auth/local_auth.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cccc/extensions/string_extension.dart';
+
+import 'package:cccc/services/shared_preference_service.dart';
 
 /// A class that deals with [LocalAuthentication] and its related functions
 class LocalAuthenticationService with ChangeNotifier {
@@ -25,11 +24,28 @@ class LocalAuthenticationService with ChangeNotifier {
   late bool _useLocalAuth;
   bool _isAuthenticated = false;
 
-  void setUseLocalAuth(bool? value) {
-    _useLocalAuth = value ?? false;
-    notifyListeners();
+  /// A function that gets `useLocalAuth` value from [SharedPreferencesService].
+  Future<bool> getUseLocalAuth() async {
+    final useLocalAuth = await sharedPref.get<bool?>('useLocalAuth', bool);
+    _useLocalAuth = useLocalAuth ?? false;
+
+    return _useLocalAuth;
   }
 
+  /// A function that gets the capitalized `string` of first availableBiometrics.
+  ///
+  /// If `availableBiometrics` is empty, it returns `Passcode`
+  Future<String> getAvailableBiometric() async {
+    final availableBiometrics = await _auth.getAvailableBiometrics();
+
+    if (availableBiometrics.isNotEmpty) {
+      return availableBiometrics.first.name.title;
+    } else {
+      return 'Passcode';
+    }
+  }
+
+  /// A function that sets [_isAuthenticated] value and calls `notifyListeners()`
   void setIsAuthenticated(bool value) {
     _isAuthenticated = value;
     notifyListeners();
@@ -37,9 +53,8 @@ class LocalAuthenticationService with ChangeNotifier {
 
   /// A function that calls [LocalAuthentication] library's authenticate function.
   /// It also handlues Exceptions
-  Future<bool> authenticate(BuildContext context) async {
-    final widgetKey = context.widget.key;
-    logger.d('authenticate function called. Widget key: $widgetKey');
+  Future<Map<String, dynamic>> authenticate() async {
+    final result = <String, dynamic>{};
 
     try {
       const iosStrings = IOSAuthMessages(
@@ -49,73 +64,30 @@ class LocalAuthenticationService with ChangeNotifier {
         lockOut: 'Please reenable your Touch ID',
       );
 
-      final _authenticatedResult = await _auth.authenticate(
-        localizedReason: 'Use either your biometric to authenticate',
+      final authenticated = await _auth.authenticate(
+        localizedReason: 'Enable Local Auth',
         iOSAuthStrings: iosStrings,
-        sensitiveTransaction: false,
       );
 
-      if (_authenticatedResult) {
-        _isAuthenticated = true;
-        notifyListeners();
-
-        return _authenticatedResult;
-      } else {
-        return false;
-      }
+      result['authenticated'] = authenticated;
+      result['message'] = 'authentication successful';
     } on PlatformException catch (e) {
-      logger.e('Exception found in using local authentication: ${e.message}');
-
-      final dialog = await showAdaptiveDialog(
-        context,
-        title: 'Error',
-        content: e.message ?? 'An error occurred',
-        defaultActionText: 'OK',
-      );
-      return dialog ?? false;
+      /// Handle exception here
+      result['authenticated'] = false;
+      result['message'] = e.message;
     }
+
+    return result;
   }
 
-  /// A function that changes user's preferences on using [LocalAuthentication]
-  /// based on user's input with [Switch] widget. It also updates the
-  /// `useLocalAuth` value in [SharedPreferences] instance.
-  ///
-  /// If the user opt to use the local authentication, it immediately calls
-  /// [authenticate] function.
-  void useAuthenticationOnChaged(BuildContext context, bool value) async {
-    _useLocalAuth = value;
-    notifyListeners();
+  /// A function call combines [authenticate] and [setIsAuthenticated] functions
+  /// to call authenticate then update [_isAuthenticated] value
+  Future<void> authenticateAndUpdate() async {
+    final authResult = await authenticate();
+    final authenticated = authResult['authenticated'];
 
-    if (value) {
-      logger.d('value is true. Call Local auth and authenticate');
-
-      final authSuccessful = await authenticate(context);
-
-      if (authSuccessful) {
-        final updated = await sharedPref.update<bool>(
-          'useLocalAuth',
-          value,
-        );
-
-        logger.d('authenticated? $authSuccessful. Updated to $value: $updated');
-      } else {
-        _useLocalAuth = false;
-        _isAuthenticated = false;
-        final updated = await sharedPref.update<bool>(
-          'useLocalAuth',
-          false,
-        );
-
-        logger.d('authenticated? $authSuccessful. Updated to $value: $updated');
-      }
-    } else {
-      _useLocalAuth = value;
-      final updated = await sharedPref.update<bool>(
-        'useLocalAuth',
-        false,
-      );
-      logger.d('updated user auth pref? $updated');
+    if (authenticated) {
+      setIsAuthenticated(true);
     }
-    notifyListeners();
   }
 }

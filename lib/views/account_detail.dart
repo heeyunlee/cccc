@@ -156,24 +156,16 @@ class _AccountDetailState extends ConsumerState<AccountDetail>
                               ),
                               const SizedBox(width: 16),
                               InstitutionCircleAvatar(
-                                key: ValueKey(
-                                  'InstitutionCircleAvatar-${widget.institution?.institutionId}',
-                                ),
+                                account: widget.account,
                                 institution: widget.institution,
                                 diameter: 20,
                               ),
                             ],
                           ),
                           const SizedBox(height: 4),
-                          Row(
-                            children: [
-                              Text(
-                                model.lastSyncedDate,
-                                style: TextStyles.overlineWhite54,
-                              ),
-                              const SizedBox(width: 8),
-                              model.connectionStateIcon,
-                            ],
+                          Text(
+                            model.lastSyncedDate,
+                            style: TextStyles.overlineWhite54,
                           ),
                         ],
                       ),

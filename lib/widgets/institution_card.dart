@@ -12,7 +12,7 @@ import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
 import 'package:cccc/widgets/show_custom_action_sheet.dart';
 
 import 'account_circle_avatar.dart';
-import 'account_connection_state_icon.dart';
+// import 'account_connection_state_icon.dart';
 
 class InstitutionCard extends ConsumerStatefulWidget {
   const InstitutionCard({
@@ -55,15 +55,18 @@ class _InstitutionCardState extends ConsumerState<InstitutionCard> {
         children: [
           ListTile(
             contentPadding: const EdgeInsets.fromLTRB(16, 8, 0, 0),
-            leading: InstitutionCircleAvatar(institution: widget.institution),
+            leading: InstitutionCircleAvatar(
+              institution: widget.institution,
+              account: widget.accounts.first!,
+            ),
             title: Row(
               children: [
                 Text(model.name),
                 const SizedBox(width: 16),
-                AccountConnectionStateIcon(
-                  account: model.firstAccount,
-                  size: 24,
-                ),
+                // AccountConnectionStateIcon(
+                //   account: model.firstAccount,
+                //   size: 24,
+                // ),
               ],
             ),
             trailing: IconButton(

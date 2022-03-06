@@ -1,8 +1,5 @@
 import 'package:cccc/providers.dart'
-    show
-        authProvider,
-        sharedPreferenceServiceProvider,
-        localAuthenticationServiceProvider;
+    show authProvider, localAuthenticationServiceProvider;
 
 import 'package:cccc/views/auth_state_error.dart';
 import 'package:cccc/views/local_authenticate_screen.dart';
@@ -36,18 +33,12 @@ class AuthStatesWidgetBuilder extends ConsumerWidget {
   }
 
   Widget _homeOrLocalAuth(WidgetRef ref) {
-    final sharedPref = ref.watch(sharedPreferenceServiceProvider);
+    final localAuth = ref.watch(localAuthenticationServiceProvider);
 
-    return CustomFutureBuilder<bool?>(
-      future: sharedPref.get('useLocalAuth', bool),
+    return CustomFutureBuilder<bool>(
+      future: localAuth.getUseLocalAuth(),
       builder: (context, useLocalAuth) {
-        ref
-            .read(localAuthenticationServiceProvider)
-            .setUseLocalAuth(useLocalAuth);
-
-        if (useLocalAuth ?? false) {
-          final localAuth = ref.watch(localAuthenticationServiceProvider);
-
+        if (useLocalAuth!) {
           if (localAuth.isAuthenticated) {
             return const Home();
           } else {

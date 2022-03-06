@@ -136,7 +136,10 @@ final linkedAccountsModelProvider = ChangeNotifierProvider.autoDispose
 /// Creates [PrivacyAndSecuritySettingsModel] provider that manages the state of
 /// the `PrivacyAndSecuritySettings` screen
 final privacyAndSecuritySettingsModelProvider = ChangeNotifierProvider((ref) {
-  return PrivacyAndSecuritySettingsModel();
+  final sharedPref = SharedPreferencesService();
+  final localAuth = LocalAuthenticationService(sharedPref: sharedPref);
+
+  return PrivacyAndSecuritySettingsModel(localAuth: localAuth);
 });
 
 /// Creates [ScanReceiptBottomSheetModel] provider that manages the state of

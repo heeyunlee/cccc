@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:cccc/models/enum/account_connection_state.dart';
+import 'package:cccc/models/plaid/account.dart';
 import 'package:flutter/material.dart';
 
 import 'package:cccc/models/plaid/institution/institution.dart';
@@ -9,14 +11,53 @@ class InstitutionCircleAvatar extends StatelessWidget {
   const InstitutionCircleAvatar({
     Key? key,
     required this.institution,
+    required this.account,
     this.diameter = 32,
   }) : super(key: const ValueKey('InstitutionCircleAvatar'));
 
   final Institution? institution;
+  final Account account;
   final double? diameter;
 
   @override
   Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          width: diameter! * 9 / 8,
+          height: diameter! * 9 / 8,
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: _getBorderColor(),
+              width: 2,
+            ),
+            borderRadius: BorderRadius.circular(diameter!),
+          ),
+          child: Container(
+            width: diameter! * 17 / 16,
+            height: diameter! * 17 / 16,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: ThemeColors.grey900,
+                width: 2,
+              ),
+              borderRadius: BorderRadius.circular(diameter!),
+            ),
+            child: _buildCircle(),
+          ),
+        ),
+        if (account.accountConnectionState == AccountConnectionState.error)
+          const Positioned(
+            right: -2,
+            bottom: -2,
+            child: Icon(Icons.error, size: 12),
+          ),
+      ],
+    );
+  }
+
+  Widget _buildCircle() {
     if (institution == null) {
       return Container(
         width: diameter,
@@ -37,7 +78,14 @@ class InstitutionCircleAvatar extends StatelessWidget {
         width: diameter,
         height: diameter,
         decoration: Decorations.colorCircle(hexCodeInt),
-        child: Center(child: Text(institution!.name[0])),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: FittedBox(
+              child: Text(institution!.name[0]),
+            ),
+          ),
+        ),
       );
     }
 
@@ -45,6 +93,18 @@ class InstitutionCircleAvatar extends StatelessWidget {
       base64Decode(institution!.logo!),
       width: diameter,
       height: diameter,
+      fit: BoxFit.cover,
     );
+  }
+
+  Color _getBorderColor() {
+    switch (account.accountConnectionState) {
+      case AccountConnectionState.diactivated:
+        return Colors.yellow[700]!;
+      case AccountConnectionState.error:
+        return Colors.red;
+      case AccountConnectionState.healthy:
+        return Colors.green;
+    }
   }
 }
