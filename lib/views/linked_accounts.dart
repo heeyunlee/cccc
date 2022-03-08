@@ -3,6 +3,7 @@ import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/providers.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
+import 'package:cccc/styles/styles.dart';
 import 'package:cccc/views/connect_plaid.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/institution_card.dart';
@@ -73,10 +74,17 @@ class LinkedAccounts extends ConsumerWidget {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton.extended(
+      floatingActionButton: ElevatedButton(
         onPressed: () => ConnectPlaid.show(context),
-        icon: const Icon(Icons.add),
-        label: const Text('Add a New Account'),
+        style: ButtonStyles.elevated(context, width: 240, radius: 24),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: const [
+            Icon(Icons.add),
+            SizedBox(width: 4),
+            Text('Add a New Account'),
+          ],
+        ),
       ),
     );
   }

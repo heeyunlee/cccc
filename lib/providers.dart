@@ -15,36 +15,36 @@ import 'package:cccc/widget_models/scan_receipt_bottom_sheet_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'services/cloud_functions.dart';
-import 'services/firebase_auth.dart';
-import 'services/firestore_database.dart';
+import 'services/firebase_auth_service.dart';
+import 'services/database.dart';
 import 'services/image_picker_service.dart';
 import 'services/local_authentication_service.dart';
 import 'services/logger_init.dart';
 import 'services/shared_preference_service.dart';
 
 /// Creates [FirebaseAuthService] provider which deals with Firebase Authentication
-final authProvider = Provider<FirebaseAuthService>(
+final firebaseAuthProvider = Provider<FirebaseAuthService>(
   (ref) => FirebaseAuthService(),
 );
 
 /// Creates [CloudFunctions] provider that uses HTTP Requests to call Google
 /// Cloud Functions written in Python
 final cloudFunctionsProvider = Provider.autoDispose<CloudFunctions>((ref) {
-  final auth = ref.watch(authProvider);
+  final auth = ref.watch(firebaseAuthProvider);
   final database = ref.watch(databaseProvider);
 
   return CloudFunctions(auth: auth, database: database);
 });
 
-/// Creates [FirestoreDatabase] provider that deals with Firebase Cloud Firestore
-final databaseProvider = Provider.autoDispose<FirestoreDatabase>(
+/// Creates [Database] provider that deals with Firebase Cloud Firestore
+final databaseProvider = Provider.autoDispose<Database>(
   (ref) {
-    final auth = ref.watch(authProvider);
+    final auth = ref.watch(firebaseAuthProvider);
     final uid = auth.currentUser!.uid;
 
     logger.d('uid from [databaseProvider]: $uid');
 
-    return FirestoreDatabase(uid: uid);
+    return Database(uid: uid);
   },
 );
 
@@ -161,7 +161,7 @@ final scanReceiptBottomSheetModelProvider = ChangeNotifierProvider.autoDispose(
 /// Creates [SignInModel] provider that manages the state of `SignIn` screen.
 final signInModelProvider = ChangeNotifierProvider<SignInModel>(
   (ref) => SignInModel(
-    auth: ref.watch(authProvider),
+    auth: ref.watch(firebaseAuthProvider),
   ),
 );
 

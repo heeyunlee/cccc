@@ -1,6 +1,6 @@
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/services/firestore_database.dart';
+import 'package:cccc/services/database.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/styles.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
@@ -16,7 +16,7 @@ class TransactionDetailModel with ChangeNotifier {
     required this.database,
   });
 
-  final FirestoreDatabase database;
+  final Database database;
   final Transaction transaction;
 
   Stream<Transaction?> transactionStream(String transactionId) {

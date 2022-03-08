@@ -8,11 +8,6 @@ const kInteractiveStates = <MaterialState>{
   MaterialState.error,
 };
 
-// const kDisabledStates = <MaterialState>{
-//   MaterialState.disabled,
-//   MaterialState.error,
-// };
-
 const kDividerWhite24Indent16 = Divider(
   color: Colors.white24,
   endIndent: 16,

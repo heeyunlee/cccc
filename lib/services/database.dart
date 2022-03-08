@@ -1,50 +1,73 @@
+import 'package:cloud_firestore/cloud_firestore.dart'
+    show DocumentSnapshot, Query;
+
 import 'package:cccc/models/merchant.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/models/user.dart';
-import 'package:cccc/services/firestore_path.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'
-    show DocumentSnapshot, Query;
 
 import 'firestore_service.dart';
 
-class FirestoreDatabase {
-  FirestoreDatabase({
-    this.uid,
-  });
+/// Creates a document path for Cloud Firestore
+class _FirestorePath {
+  static String user(String uid) => 'users/$uid';
 
+  static String transactions(String uid) => 'users/$uid/transactions';
+  static String transaction(String uid, String transactionId) =>
+      'users/$uid/transactions/$transactionId';
+
+  static String accounts(String uid) => 'users/$uid/accounts';
+  static String account(String uid, String accountId) =>
+      'users/$uid/accounts/$accountId';
+
+  static String institution(String id) => 'institutions/$id';
+
+  static String merchants() => 'merchants';
+}
+
+/// Creates a class that interacts with [FirestoreService] to create, update,
+/// delete documents and get the [Stream] or [Query] of documents
+class Database {
+  Database({this.uid});
+
+  /// Current user's uid
   final String? uid;
 
+  /// Instance that interacts with [FirestoreService]
   final FirestoreService _service = FirestoreService.instance;
 
+  /// Get [User] document in Firestore
   Future<User?> getUser(String uid) => _service.getDocument<User>(
-        path: FirestorePath.user(uid),
+        path: _FirestorePath.user(uid),
         fromBuilder: (json) => User.fromMap(json!),
         toBuilder: (model) => model.toMap(),
       );
 
+  /// Create [User] document in Firestore
   Future<void> setUser(User user) => _service.setData<User>(
-        path: FirestorePath.user(user.uid),
+        path: _FirestorePath.user(user.uid),
         data: user,
         fromBuilder: (json) => User.fromMap(json!),
         toBuilder: (model) => model.toMap(),
       );
 
-  Future<void> updateUser(User oldData, Map<String, dynamic> newData) =>
-      _service.updateData<User>(
-        path: FirestorePath.user(oldData.uid),
-        data: newData,
-        fromBuilder: (json) => User.fromMap(json!),
-        toBuilder: (model) => model.toMap(),
-      );
+  /// Update [User] document in Firestore
+  Future<void> updateUser(User oldData, Map<String, dynamic> newData) {
+    return _service.updateData<User>(
+      path: _FirestorePath.user(oldData.uid),
+      data: newData,
+      fromBuilder: (json) => User.fromMap(json!),
+      toBuilder: (model) => model.toMap(),
+    );
+  }
 
-  Future<void> deleteUser() => _service.deleteData(
-        path: FirestorePath.user(uid!),
-      );
+  Future<void> deleteUser() {
+    return _service.deleteData(path: _FirestorePath.user(uid!));
+  }
 
   Stream<User?> userStream() => _service.documentStream(
-        path: FirestorePath.user(uid!),
+        path: _FirestorePath.user(uid!),
         fromBuilder: (json) => User.fromMap(json!),
         toBuilder: (model) => model.toMap(),
       );
@@ -54,7 +77,7 @@ class FirestoreDatabase {
     Map<String, dynamic> newData,
   ) {
     return _service.updateData<Transaction>(
-      path: FirestorePath.transaction(uid!, oldData.transactionId),
+      path: _FirestorePath.transaction(uid!, oldData.transactionId),
       data: newData,
       fromBuilder: (json) => Transaction.fromMap(json!),
       toBuilder: (model) => model.toMap(),
@@ -63,7 +86,7 @@ class FirestoreDatabase {
 
   Stream<Transaction?> transactionStream(String transactionId) {
     return _service.documentStream<Transaction>(
-      path: FirestorePath.transaction(uid!, transactionId),
+      path: _FirestorePath.transaction(uid!, transactionId),
       fromBuilder: (json) => Transaction.fromMap(json!),
       toBuilder: (model) => model.toMap(),
     );
@@ -71,7 +94,7 @@ class FirestoreDatabase {
 
   Stream<List<Transaction?>> transactionsStream([int? limit]) {
     return _service.collectionStream<Transaction>(
-      path: FirestorePath.transactions(uid!),
+      path: _FirestorePath.transactions(uid!),
       fromBuilder: (json) => Transaction.fromMap(json!),
       toBuilder: (model) => model.toMap(),
       orderByField: 'date',
@@ -85,7 +108,7 @@ class FirestoreDatabase {
     int? limit,
   ]) {
     return _service.whereCollectionStream<Transaction>(
-      path: FirestorePath.transactions(uid!),
+      path: _FirestorePath.transactions(uid!),
       fromBuilder: (json) => Transaction.fromMap(json!),
       toBuilder: (model) => model.toMap(),
       orderByField: 'date',
@@ -98,7 +121,7 @@ class FirestoreDatabase {
 
   Stream<List<Transaction?>> transactionsStreamSpecificAmount(num amount) {
     return _service.whereCollectionStream<Transaction>(
-      path: FirestorePath.transactions(uid!),
+      path: _FirestorePath.transactions(uid!),
       fromBuilder: (json) => Transaction.fromMap(json!),
       toBuilder: (model) => model.toMap(),
       orderByField: 'date',
@@ -114,7 +137,7 @@ class FirestoreDatabase {
   }) {
     if (startAfterDocument == null) {
       return _service.query(
-        path: FirestorePath.transactions(uid!),
+        path: _FirestorePath.transactions(uid!),
         fromBuilder: (json) => Transaction.fromMap(json!),
         toBuilder: (model) => model.toMap(),
         orderByField: 'date',
@@ -122,7 +145,7 @@ class FirestoreDatabase {
       );
     } else {
       return _service.queryStartAfter(
-        path: FirestorePath.transactions(uid!),
+        path: _FirestorePath.transactions(uid!),
         fromBuilder: (json) => Transaction.fromMap(json!),
         toBuilder: (model) => model.toMap(),
         orderByField: 'date',
@@ -134,7 +157,7 @@ class FirestoreDatabase {
 
   Stream<List<Account?>> accountsStream() {
     return _service.collectionStream<Account>(
-      path: FirestorePath.accounts(uid!),
+      path: _FirestorePath.accounts(uid!),
       fromBuilder: (json) => Account.fromMap(json!),
       toBuilder: (model) => model.toMap(),
       orderByField: 'type',
@@ -144,7 +167,7 @@ class FirestoreDatabase {
 
   Future<Account?> accountGet(String accountId) {
     return _service.getDocument<Account>(
-      path: FirestorePath.account(uid!, accountId),
+      path: _FirestorePath.account(uid!, accountId),
       fromBuilder: (json) => Account.fromMap(json!),
       toBuilder: (model) => model.toMap(),
     );
@@ -152,7 +175,7 @@ class FirestoreDatabase {
 
   Stream<Account?> accountStream(String accountId) {
     return _service.documentStream<Account>(
-      path: FirestorePath.account(uid!, accountId),
+      path: _FirestorePath.account(uid!, accountId),
       fromBuilder: (json) => Account.fromMap(json!),
       toBuilder: (model) => model.toMap(),
     );
@@ -160,7 +183,7 @@ class FirestoreDatabase {
 
   Stream<Institution?> institutionStream(String institutionId) {
     return _service.documentStream<Institution?>(
-      path: FirestorePath.institution(institutionId),
+      path: _FirestorePath.institution(institutionId),
       fromBuilder: (json) => json != null ? Institution.fromMap(json) : null,
       toBuilder: (model) => model!.toMap(),
     );
@@ -172,7 +195,7 @@ class FirestoreDatabase {
   }) {
     if (startAfterDocument == null) {
       return _service.query<Merchant>(
-        path: FirestorePath.merchants(),
+        path: _FirestorePath.merchants(),
         fromBuilder: (json) => Merchant.fromMap(json!),
         toBuilder: (model) => model.toMap(),
         orderByField: 'name',
@@ -181,7 +204,7 @@ class FirestoreDatabase {
       );
     } else {
       return _service.queryStartAfter(
-        path: FirestorePath.merchants(),
+        path: _FirestorePath.merchants(),
         fromBuilder: (json) => Merchant.fromMap(json!),
         toBuilder: (model) => model.toMap(),
         orderByField: 'name',

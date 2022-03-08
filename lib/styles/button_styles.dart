@@ -93,7 +93,10 @@ class ButtonStyles {
           final colorScheme = Theme.of(context).colorScheme;
 
           if (states.any(kInteractiveStates.contains)) {
-            return (backgroundColor ?? colorScheme.primary).withOpacity(0.9);
+            return Color.alphaBlend(
+              Colors.black12,
+              backgroundColor ?? colorScheme.primary,
+            );
           }
 
           return backgroundColor ?? colorScheme.primary;

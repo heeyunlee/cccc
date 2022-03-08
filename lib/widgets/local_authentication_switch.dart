@@ -21,6 +21,7 @@ class _LocalAuthenticationSwitchState
   @override
   Widget build(BuildContext context) {
     final model = ref.watch(privacyAndSecuritySettingsModelProvider);
+
     return Switch.adaptive(
       value: model.switchValue,
       onChanged: (value) => model.switchOnChange(context, value),

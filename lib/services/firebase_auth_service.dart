@@ -1,37 +1,40 @@
-import 'package:firebase_auth/firebase_auth.dart' as fire_auth;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/services/shared_preference_service.dart';
 
+/// A class that interacts with [FirebaseAuth] to handle signing in and out
 class FirebaseAuthService {
-  final fire_auth.FirebaseAuth _auth = fire_auth.FirebaseAuth.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
-  final _sharedPreferencesService = SharedPreferencesService();
+  final SharedPreferencesService _prefs = SharedPreferencesService();
 
-  Stream<fire_auth.User?> authStateChanges() => _auth.authStateChanges();
+  /// get `Stream<User?>` from [FirebaseAuth]'s `authStateChanges()` instance
+  Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  fire_auth.User? get currentUser => _auth.currentUser;
+  /// Get current [User] from [FirebaseAuth]
+  User? get currentUser => _auth.currentUser;
 
-  fire_auth.User? _user;
+  User? _user;
 
-  void _setUser(fire_auth.User? value) {
-    _user = value;
-  }
-
-  Future<fire_auth.User?> signInAnonymously() async {
+  /// Calls `_auth.signInAnonymously()` method to sign in the user and change
+  /// [_user] value to the corresponding user
+  Future<User?> signInAnonymously() async {
     final userCredential = await _auth.signInAnonymously();
     final user = userCredential.user;
     final currentUser = _auth.currentUser;
 
     assert(user!.uid == currentUser!.uid);
 
-    _setUser(user!);
+    _user = user;
 
-    return user;
+    return _user;
   }
 
-  Future<fire_auth.User?> signInWithGoogle() async {
+  /// Calls [GoogleSignIn]'s sign in method to sign in the user and change the
+  /// [_user] value to the corresponding user
+  Future<User?> signInWithGoogle() async {
     final googleSignInAccount = await _googleSignIn.signIn();
 
     if (googleSignInAccount != null) {
@@ -39,7 +42,7 @@ class FirebaseAuthService {
       final googleAuth = await googleSignInAccount.authentication;
 
       if (googleAuth.idToken != null) {
-        final authCredential = fire_auth.GoogleAuthProvider.credential(
+        final authCredential = GoogleAuthProvider.credential(
           accessToken: googleAuth.accessToken,
           idToken: googleAuth.idToken,
         );
@@ -49,23 +52,26 @@ class FirebaseAuthService {
         final currentUser = _auth.currentUser;
         assert(user!.uid == currentUser!.uid);
 
-        _setUser(user!);
+        _user = user;
 
-        return user;
+        return _user;
       } else {
-        throw fire_auth.FirebaseAuthException(
+        throw FirebaseAuthException(
           code: 'ERROR_MISSING_GOOGLE_ID_TOKEN',
           message: 'Missing Google ID Token',
         );
       }
     } else {
-      throw fire_auth.FirebaseAuthException(
+      throw FirebaseAuthException(
         code: 'ERROR_ABORTED_BY_USER',
         message: 'Sign in aborted by user',
       );
     }
   }
 
+  /// Calls sign out method for each corresponding sign in method, i.e., if the
+  /// user signed in with Google, the function calls `signOut` method from [GoogleSignIn]
+  /// class
   Future<void> signOut() async {
     final signedInWithGoogle = await _googleSignIn.isSignedIn();
 
@@ -74,12 +80,9 @@ class FirebaseAuthService {
     }
     await _auth.signOut();
 
-    _setUser(null);
-    assert(_user == null);
+    _user = null;
 
-    final removeLocalAuth = await _sharedPreferencesService.remove(
-      'useLocalAuth',
-    );
+    final removeLocalAuth = await _prefs.remove('useLocalAuth');
 
     logger.d('''
       user: $_user,

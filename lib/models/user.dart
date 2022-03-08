@@ -5,54 +5,38 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class User {
   const User({
     required this.uid,
-    this.lastPlaidSyncTime,
     this.lastLoginDate,
-    this.favoriteAccountId,
   });
 
   final String uid;
-  final DateTime? lastPlaidSyncTime;
   final DateTime? lastLoginDate;
-  final String? favoriteAccountId;
 
   User copyWith({
     String? uid,
-    DateTime? lastPlaidSyncTime,
     DateTime? lastLoginDate,
-    String? favoriteAccountId,
   }) {
     return User(
       uid: uid ?? this.uid,
-      lastPlaidSyncTime: lastPlaidSyncTime ?? this.lastPlaidSyncTime,
       lastLoginDate: lastLoginDate ?? this.lastLoginDate,
-      favoriteAccountId: favoriteAccountId ?? this.favoriteAccountId,
     );
   }
 
   Map<String, dynamic> toMap() {
     return {
       'uid': uid,
-      'lastPlaidSyncTime': lastPlaidSyncTime,
       'lastLoginDate': lastLoginDate,
-      'favoriteAccountId': favoriteAccountId,
     };
   }
 
   factory User.fromMap(Map<String, dynamic> map) {
     final String uid = map['uid'] as String;
-    final DateTime? lastPlaidSyncTime = map['lastPlaidSyncTime'] == null
-        ? null
-        : (map['lastPlaidSyncTime'] as Timestamp).toDate().toUtc();
     final DateTime? lastLoginDate = map['lastLoginDate'] == null
         ? null
         : (map['lastLoginDate'] as Timestamp).toDate().toUtc();
-    final String? favoriteAccountId = map['favoriteAccountId'];
 
     return User(
       uid: uid,
-      lastPlaidSyncTime: lastPlaidSyncTime,
       lastLoginDate: lastLoginDate,
-      favoriteAccountId: favoriteAccountId,
     );
   }
 
@@ -61,9 +45,7 @@ class User {
   factory User.fromJson(String source) => User.fromMap(json.decode(source));
 
   @override
-  String toString() {
-    return 'User(uid: $uid, lastPlaidSyncTime: $lastPlaidSyncTime, lastLoginDate: $lastLoginDate, favoriteAccountId: $favoriteAccountId)';
-  }
+  String toString() => 'User(uid: $uid, lastLoginDate: $lastLoginDate)';
 
   @override
   bool operator ==(Object other) {
@@ -71,16 +53,9 @@ class User {
 
     return other is User &&
         other.uid == uid &&
-        other.lastPlaidSyncTime == lastPlaidSyncTime &&
-        other.lastLoginDate == lastLoginDate &&
-        other.favoriteAccountId == favoriteAccountId;
+        other.lastLoginDate == lastLoginDate;
   }
 
   @override
-  int get hashCode {
-    return uid.hashCode ^
-        lastPlaidSyncTime.hashCode ^
-        lastLoginDate.hashCode ^
-        favoriteAccountId.hashCode;
-  }
+  int get hashCode => uid.hashCode ^ lastLoginDate.hashCode;
 }

@@ -31,6 +31,7 @@ class PrivacyAndSecuritySettingsModel with ChangeNotifier {
   Future<void> getSwitchValue() async {
     final switchValue = await localAuth.getUseLocalAuth();
     _switchValue = switchValue;
+    notifyListeners();
     logger.d('_switchValue after future $_switchValue');
   }
 

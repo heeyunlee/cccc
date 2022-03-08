@@ -1,13 +1,15 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
 import 'package:cccc/constants/cloud_function_host.dart';
 import 'package:cccc/constants/cloud_functions_keys.dart';
 import 'package:cccc/models/receipt_response.dart';
-import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/models/user.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:cccc/services/logger_init.dart';
 
-import 'firebase_auth.dart';
-import 'firestore_database.dart';
+import 'database.dart';
+import 'firebase_auth_service.dart';
 
 class CloudFunctions {
   CloudFunctions({
@@ -16,7 +18,7 @@ class CloudFunctions {
   });
 
   final FirebaseAuthService auth;
-  final FirestoreDatabase database;
+  final Database database;
 
   Future<Map<String, dynamic>> createLinkToken() async {
     final uid = auth.currentUser!.uid;

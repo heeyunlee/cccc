@@ -11,7 +11,7 @@ import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/models/receipt_response.dart';
 import 'package:cccc/models/transaction_item.dart';
 import 'package:cccc/services/cloud_functions.dart';
-import 'package:cccc/services/firestore_database.dart';
+import 'package:cccc/services/database.dart';
 import 'package:cccc/services/image_picker_service.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
@@ -25,7 +25,7 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
 
   final ImagePickerService imagePicker;
   final CloudFunctions functions;
-  final FirestoreDatabase database;
+  final Database database;
 
   List<DateTime>? get dates => _dates;
   List<TransactionItem>? get transactionItems => _transactionItems;

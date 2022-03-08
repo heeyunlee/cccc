@@ -1,5 +1,4 @@
-import 'package:cccc/constants/image_assets.dart';
-import 'package:cccc/providers.dart' show authProvider;
+import 'package:cccc/providers.dart' show firebaseAuthProvider;
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/text_styles.dart';
@@ -22,7 +21,7 @@ class Settings extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     logger.d('[Settings] screen building...');
 
-    final auth = ref.watch(authProvider);
+    final auth = ref.watch(firebaseAuthProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -43,9 +42,13 @@ class Settings extends ConsumerWidget {
               showAboutDialog(
                 context: context,
                 applicationName: '',
-                applicationIcon: ImageAssets.logo,
+                applicationIcon: Image.asset(
+                  'assets/pictures/cccc_logo.png',
+                  width: 48,
+                  height: 48,
+                ),
                 // TODO: CHANGE VERSION
-                applicationVersion: '0.0.13',
+                applicationVersion: '0.0.14',
               );
             },
             title: const Text('About'),
@@ -69,7 +72,7 @@ class Settings extends ConsumerWidget {
           ),
           const SizedBox(height: 32),
           // TODO: CHANGE VERSION
-          const Text('v.0.0.13', style: TextStyles.overlineWhite54),
+          const Text('v.0.0.14', style: TextStyles.overlineWhite54),
         ],
       ),
     );

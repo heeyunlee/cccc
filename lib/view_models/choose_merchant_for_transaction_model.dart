@@ -1,6 +1,6 @@
 import 'package:cccc/models/merchant.dart';
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/services/firestore_database.dart';
+import 'package:cccc/services/database.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseException;
 import 'package:flutter/material.dart';
@@ -13,7 +13,7 @@ class ChooseMerchantForTransactionModel with ChangeNotifier {
     _selectedMerchantId = transaction.merchantId;
   }
 
-  final FirestoreDatabase database;
+  final Database database;
   final Transaction transaction;
 
   String? get selectedMerchantId => _selectedMerchantId;

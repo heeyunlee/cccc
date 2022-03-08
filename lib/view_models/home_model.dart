@@ -4,7 +4,7 @@ import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/models/user.dart';
 import 'package:cccc/services/cloud_functions.dart';
-import 'package:cccc/services/firestore_database.dart';
+import 'package:cccc/services/database.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +17,7 @@ class HomeModel with ChangeNotifier {
     required this.functions,
   });
 
-  final FirestoreDatabase database;
+  final Database database;
   final CloudFunctions functions;
 
   String get today {

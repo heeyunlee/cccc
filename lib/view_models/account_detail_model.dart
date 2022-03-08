@@ -2,7 +2,7 @@ import 'package:cccc/models/enum/account_connection_state.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/services/firestore_database.dart';
+import 'package:cccc/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:cccc/models/enum/account_subtype.dart';
@@ -16,7 +16,7 @@ class AccountDetailModel with ChangeNotifier {
   });
 
   final Account account;
-  final FirestoreDatabase database;
+  final Database database;
 
   String get name => account.officialName ?? account.name;
 

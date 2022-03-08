@@ -1,6 +1,6 @@
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
-import 'package:cccc/services/firestore_database.dart';
+import 'package:cccc/services/database.dart';
 import 'package:flutter/material.dart';
 
 class LinkedAccountsModel with ChangeNotifier {
@@ -10,7 +10,7 @@ class LinkedAccountsModel with ChangeNotifier {
   });
 
   final List<Account?> accounts;
-  final FirestoreDatabase database;
+  final Database database;
 
   Stream<List<Account?>> get accountsStream => database.accountsStream();
 

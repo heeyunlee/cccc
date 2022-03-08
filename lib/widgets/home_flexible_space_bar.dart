@@ -1,4 +1,3 @@
-import 'package:cccc/constants/image_assets.dart';
 import 'package:cccc/styles/decorations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -20,7 +19,11 @@ class _HomeFlexibleSpaceBarState extends ConsumerState<HomeFlexibleSpaceBar> {
       background: Stack(
         fit: StackFit.passthrough,
         children: [
-          ImageAssets.homeBG,
+          Image.asset(
+            'assets/pictures/home_bg.png',
+            height: 600,
+            fit: BoxFit.cover,
+          ),
           Column(
             children: [
               Container(

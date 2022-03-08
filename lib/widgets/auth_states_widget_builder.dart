@@ -1,5 +1,5 @@
 import 'package:cccc/providers.dart'
-    show authProvider, localAuthenticationServiceProvider;
+    show firebaseAuthProvider, localAuthenticationServiceProvider;
 
 import 'package:cccc/views/auth_state_error.dart';
 import 'package:cccc/views/local_authenticate_screen.dart';
@@ -17,10 +17,10 @@ class AuthStatesWidgetBuilder extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final auth = ref.watch(authProvider);
+    final auth = ref.watch(firebaseAuthProvider);
 
     return CustomStreamBuilder<fire_auth.User?>(
-      stream: auth.authStateChanges(),
+      stream: auth.authStateChanges,
       loadingWidget: const Splash(),
       errorBuilder: (context, error) => AuthStateError(error: error),
       builder: (context, user) {
@@ -49,7 +49,7 @@ class AuthStatesWidgetBuilder extends ConsumerWidget {
         }
       },
       errorBuilder: (context, e) => Text(e.toString()),
-      loadingWidget: const Center(child: CircularProgressIndicator.adaptive()),
+      loadingWidget: const Splash(),
     );
   }
 }

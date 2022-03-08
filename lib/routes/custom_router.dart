@@ -16,6 +16,8 @@ import 'package:cccc/views/transaction_detail.dart';
 import 'package:cccc/views/all_transactions.dart';
 import 'package:flutter/material.dart';
 
+/// Creates a custom route setting so that based on different [RouteNames],
+/// different screen is build when routing.
 class CustomRouter {
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {

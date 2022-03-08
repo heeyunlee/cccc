@@ -1,6 +1,6 @@
 import 'package:logger/logger.dart';
 
-PrefixPrinter prefixPrinter = PrefixPrinter(
+PrefixPrinter _prefixPrinter = PrefixPrinter(
   PrettyPrinter(
     methodCount: 2, // number of method calls to be displayed
     errorMethodCount: 8, // number of method calls if stacktrace is provided
@@ -17,12 +17,12 @@ PrefixPrinter prefixPrinter = PrefixPrinter(
 
 Logger logger = Logger(
   level: Level.nothing,
-  printer: prefixPrinter,
+  printer: _prefixPrinter,
 );
 
 void initLogger(Level level) {
   logger = Logger(
     level: level,
-    printer: prefixPrinter,
+    printer: _prefixPrinter,
   );
 }
