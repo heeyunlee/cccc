@@ -84,6 +84,8 @@ Future<ReceiptResponse?> extractTexts() async {
 }
 ```
 
+Adding this for the text
+
 
 ## **Architecture**
 
