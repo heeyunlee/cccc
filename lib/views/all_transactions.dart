@@ -26,6 +26,19 @@ class AllTransactions extends ConsumerWidget {
         headerSliver: const SliverAppBar(
           backgroundColor: Colors.black,
           title: Text('Transactions'),
+          // collapsedHeight: 0,
+          // expandedHeight: 120,
+          // bottom: PreferredSize(
+          //   child: Row(
+          //     children: const [
+          //       SizedBox(width: 24),
+          //       Chip(
+          //         label: Text('asd'),
+          //       ),
+          //     ],
+          //   ),
+          //   preferredSize: const Size.fromHeight(24),
+          // ),
           pinned: true,
         ),
         query: ref.read(databaseProvider).transactionsQuery(),
