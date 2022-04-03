@@ -1,3 +1,4 @@
+import 'package:cccc/widgets/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -38,11 +39,22 @@ class SignIn extends ConsumerWidget {
               ),
             ),
             const Spacer(),
-            OutlinedButton(
-              onPressed: model.isLoading
+            Button(
+              onPress: () {},
+              child: const Icon(
+                Icons.abc_outlined,
+                size: 120,
+              ),
+            ),
+            const Spacer(),
+            Button.outlined(
+              key: const ValueKey('GoogleSignInButton'),
+              width: size.width - 64,
+              height: 48,
+              borderRadius: 16,
+              onPress: model.isLoading
                   ? null
-                  : () => model.signInWithGoogle(context, ref),
-              style: ButtonStyles.outline(context, height: 48),
+                  : () async => await model.signInWithGoogle(context, ref),
               child: Stack(
                 children: [
                   Align(

@@ -3,7 +3,7 @@ import 'package:cccc/providers.dart'
 
 import 'package:cccc/views/auth_state_error.dart';
 import 'package:cccc/views/local_authenticate_screen.dart';
-import 'package:cccc/views/sign_in.dart';
+import 'package:cccc/views/sign_in/sign_in.dart';
 import 'package:cccc/views/splash.dart';
 import 'package:cccc/views/home.dart';
 import 'package:cccc/widgets/custom_future_builder.dart';
