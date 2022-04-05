@@ -1,4 +1,4 @@
-import 'package:cccc/widgets/button.dart';
+import 'package:cccc/widgets/button/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -40,7 +40,8 @@ class SignIn extends ConsumerWidget {
             ),
             const Spacer(),
             Button(
-              onPress: () {},
+              onPressed: () {},
+              onLongPressed: () {},
               child: const Icon(
                 Icons.abc_outlined,
                 size: 120,
@@ -52,7 +53,7 @@ class SignIn extends ConsumerWidget {
               width: size.width - 64,
               height: 48,
               borderRadius: 16,
-              onPress: model.isLoading
+              onPressed: model.isLoading
                   ? null
                   : () async => await model.signInWithGoogle(context, ref),
               child: Stack(
@@ -71,17 +72,23 @@ class SignIn extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             const Text('or', style: TextStyles.overlineGrey),
-            SizedBox(
-              height: 48,
-              child: Center(
-                child: TextButton(
-                  onPressed: model.isLoading
-                      ? null
-                      : () => model.signInAnonymously(context, ref),
-                  style: ButtonStyles.text(textStyle: TextStyles.button2),
-                  child: const Text('Sign in Anonymously'),
-                ),
+            Center(
+              child: Button.text(
+                height: 48,
+                textStyle: TextStyles.button2,
+                text: 'Sign in Anonymously',
+                onPressed: () {},
+                // onPressed: model.isLoading
+                //     ? null
+                //     : () => model.signInAnonymously(context, ref),
               ),
+              // child: TextButton(
+              //   onPressed: model.isLoading
+              //       ? null
+              //       : () => model.signInAnonymously(context, ref),
+              //   style: ButtonStyles.text(textStyle: TextStyles.button2),
+              //   child: const Text('Sign in Anonymously'),
+              // ),
             ),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom + 48,

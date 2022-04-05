@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+const kHorizontalPadding = 16.0;
+const kVerticalPadding = 4.0;
+
 const kInteractiveStates = <MaterialState>{
   MaterialState.pressed,
   MaterialState.hovered,

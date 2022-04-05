@@ -1,14 +1,18 @@
+import 'package:cccc/constants/constants.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-const kHorizontalPadding = 16.0;
-const kVerticalPadding = 4.0;
+part 'outlined_button.dart';
+part 'text_button.dart';
 
+/// Creates a customizable and tappable widget that bounces and increase in opacity,
+///  similar to Spotify's iOS app.
 class Button extends StatefulWidget {
   const Button({
     required this.child,
-    required this.onPress,
+    required this.onPressed,
+    this.onLongPressed,
     this.vibrateOnPress = true,
     this.animationDuration = const Duration(milliseconds: 100),
     this.animationCurve = Curves.linear,
@@ -29,7 +33,8 @@ class Button extends StatefulWidget {
         super(key: key);
 
   final Widget child;
-  final VoidCallback? onPress;
+  final VoidCallback? onPressed;
+  final VoidCallback? onLongPressed;
   final bool vibrateOnPress;
   final Duration animationDuration;
   final Curve animationCurve;
@@ -42,7 +47,8 @@ class Button extends StatefulWidget {
 
   factory Button.outlined({
     required Widget child,
-    required VoidCallback? onPress,
+    required VoidCallback? onPressed,
+    VoidCallback? onLongPressed,
     bool vibrateOnPress,
     Duration animationDuration,
     Curve animationCurve,
@@ -57,6 +63,24 @@ class Button extends StatefulWidget {
     double height,
     Key? key,
   }) = _OutlinedButton;
+
+  factory Button.text({
+    required VoidCallback? onPressed,
+    Widget? child,
+    String? text,
+    TextStyle? textStyle,
+    VoidCallback? onLongPressed,
+    bool vibrateOnPress,
+    Duration animationDuration,
+    Curve animationCurve,
+    double scaleDownTo,
+    double opacityTo,
+    EdgeInsets padding,
+    EdgeInsets margin,
+    double width,
+    double height,
+    Key? key,
+  }) = _TextButton;
 
   @override
   State<Button> createState() => _ButtonState();
@@ -123,7 +147,7 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
       onTapUp: (detail) {
         _log('onTapUp');
 
-        widget.onPress?.call();
+        widget.onPressed?.call();
         _animationController.reverse();
         _setIsPressed(false);
       },
@@ -138,11 +162,13 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
       },
       onLongPressStart: (detail) {
         _log('onLongPressStart');
+
+        widget.onLongPressed?.call();
       },
       onLongPressUp: () {
         _log('onLongPressUp');
 
-        widget.onPress?.call();
+        widget.onPressed?.call();
         _animationController.reverse();
         _setIsPressed(false);
       },
@@ -150,6 +176,21 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
         _log('onLongPressCancel');
 
         _animationController.reverse();
+      },
+      onForcePressStart: (detail) {
+        _log('onForcePressStart');
+      },
+      onForcePressEnd: (detail) {
+        _log('onForcePressEnd');
+      },
+      onForcePressPeak: (detail) {
+        _log('onForcePressPeak');
+      },
+      onForcePressUpdate: (detail) {
+        _log('onForcePressUpdate');
+      },
+      onTertiaryLongPress: () {
+        _log('onTertiaryLongPress');
       },
       child: AnimatedBuilder(
         animation: _animationController,
@@ -170,83 +211,6 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
             child: widget.child,
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _OutlinedButton extends Button {
-  _OutlinedButton({
-    required Widget child,
-    required VoidCallback? onPress,
-    bool vibrateOnPress = true,
-    Duration animationDuration = const Duration(milliseconds: 100),
-    Curve animationCurve = Curves.linear,
-    double scaleDownTo = 0.975,
-    double opacityTo = 0.9,
-    EdgeInsets padding = const EdgeInsets.symmetric(
-      horizontal: kHorizontalPadding,
-      vertical: kVerticalPadding,
-    ),
-    Color borderColor = Colors.white,
-    double borderWidth = 1,
-    double borderRadius = 8,
-    EdgeInsets margin = EdgeInsets.zero,
-    double? width,
-    double? height,
-    Key? key,
-  }) : super(
-          onPress: onPress,
-          animationCurve: animationCurve,
-          animationDuration: animationDuration,
-          key: key,
-          opacityTo: opacityTo,
-          scaleDownTo: scaleDownTo,
-          vibrateOnPress: vibrateOnPress,
-          padding: padding,
-          margin: margin,
-          width: width,
-          height: height,
-          child: _OutlinedButtonChild(
-            child: child,
-            borderColor: borderColor,
-            borderWidth: borderWidth,
-            borderRadius: borderRadius,
-            padding: padding,
-          ),
-        );
-}
-
-class _OutlinedButtonChild extends StatelessWidget {
-  const _OutlinedButtonChild({
-    Key? key,
-    required this.child,
-    required this.padding,
-    required this.borderColor,
-    required this.borderWidth,
-    required this.borderRadius,
-  }) : super(key: key);
-
-  final Widget child;
-  final EdgeInsets padding;
-  final Color borderColor;
-  final double borderWidth;
-  final double borderRadius;
-
-  @override
-  Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border.fromBorderSide(
-          BorderSide(color: borderColor, width: borderWidth),
-        ),
-        borderRadius: BorderRadius.all(
-          Radius.circular(borderRadius),
-        ),
-      ),
-      child: Padding(
-        padding: padding,
-        child: child,
       ),
     );
   }
