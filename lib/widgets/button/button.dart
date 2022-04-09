@@ -5,11 +5,12 @@ import 'package:flutter/services.dart';
 
 part 'outlined_button.dart';
 part 'text_button.dart';
+part 'icon_button.dart';
 
 /// Creates a customizable and tappable widget that bounces and increase in opacity,
 ///  similar to Spotify's iOS app.
 class Button extends StatefulWidget {
-  const Button({
+  const Button._({
     required this.child,
     required this.onPressed,
     this.onLongPressed,
@@ -25,12 +26,10 @@ class Button extends StatefulWidget {
     ),
     this.width,
     this.height,
-    Key? key,
   })  : assert(0 <= scaleDownTo && scaleDownTo <= 1,
             'scaleDownTo has to be between 0 and 1'),
         assert(0 <= opacityTo && opacityTo <= 1,
-            'opacityTo has to be between 0 and 1'),
-        super(key: key);
+            'opacityTo has to be between 0 and 1');
 
   final Widget child;
   final VoidCallback? onPressed;
@@ -81,6 +80,23 @@ class Button extends StatefulWidget {
     double height,
     Key? key,
   }) = _TextButton;
+
+  factory Button.icon({
+    required IconData icon,
+    required VoidCallback? onPressed,
+    Color iconColor,
+    VoidCallback? onLongPressed,
+    Curve animationCurve,
+    bool vibrateOnPress,
+    Duration animationDuration,
+    double scaleDownTo,
+    double opacityTo,
+    EdgeInsets padding,
+    EdgeInsets margin,
+    double size,
+    String? semanticLabel,
+    Key? key,
+  }) = _IconButton;
 
   @override
   State<Button> createState() => _ButtonState();

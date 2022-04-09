@@ -21,12 +21,11 @@ class _OutlinedButton extends Button {
     double? width,
     double? height,
     Key? key,
-  }) : super(
+  }) : super._(
           onPressed: onPressed,
           onLongPressed: onLongPressed,
           animationCurve: animationCurve,
           animationDuration: animationDuration,
-          key: key,
           opacityTo: opacityTo,
           scaleDownTo: scaleDownTo,
           vibrateOnPress: vibrateOnPress,
@@ -40,6 +39,7 @@ class _OutlinedButton extends Button {
             borderWidth: borderWidth,
             borderRadius: borderRadius,
             padding: padding,
+            key: key,
           ),
         );
 }

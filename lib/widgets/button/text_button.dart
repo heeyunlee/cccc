@@ -13,19 +13,18 @@ class _TextButton extends Button {
     double scaleDownTo = 0.975,
     double opacityTo = 0.9,
     EdgeInsets padding = const EdgeInsets.symmetric(
-      horizontal: kHorizontalPadding / 2,
-      vertical: kVerticalPadding,
+      horizontal: kHorizontalPadding,
+      vertical: kVerticalPadding * 2,
     ),
     EdgeInsets margin = EdgeInsets.zero,
     double? width,
     double? height,
     Key? key,
-  }) : super(
+  }) : super._(
           onPressed: onPressed,
           onLongPressed: onLongPressed,
           animationCurve: animationCurve,
           animationDuration: animationDuration,
-          key: key,
           opacityTo: opacityTo,
           scaleDownTo: scaleDownTo,
           vibrateOnPress: vibrateOnPress,
@@ -37,6 +36,8 @@ class _TextButton extends Button {
             child: child,
             text: text,
             textStyle: textStyle,
+            padding: padding,
+            key: key,
           ),
         );
 }
@@ -47,21 +48,26 @@ class _TextButtonChild extends StatelessWidget {
     this.child,
     this.text,
     this.textStyle,
+    required this.padding,
   })  : assert(child != null || text != null, 'provide either child or text'),
         super(key: key);
 
   final Widget? child;
   final String? text;
   final TextStyle? textStyle;
+  final EdgeInsets padding;
 
   @override
   Widget build(BuildContext context) {
     if (child != null) return child!;
 
     return Center(
-      child: Text(
-        text!,
-        style: textStyle,
+      child: Padding(
+        padding: padding,
+        child: Text(
+          text!,
+          style: textStyle,
+        ),
       ),
     );
   }

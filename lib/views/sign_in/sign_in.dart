@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 
 import 'package:cccc/providers.dart' show signInModelProvider;
 import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/styles/button_styles.dart';
 import 'package:cccc/styles/text_styles.dart';
 
 class SignIn extends ConsumerWidget {
@@ -39,15 +38,6 @@ class SignIn extends ConsumerWidget {
               ),
             ),
             const Spacer(),
-            Button(
-              onPressed: () {},
-              onLongPressed: () {},
-              child: const Icon(
-                Icons.abc_outlined,
-                size: 120,
-              ),
-            ),
-            const Spacer(),
             Button.outlined(
               key: const ValueKey('GoogleSignInButton'),
               width: size.width - 64,
@@ -72,23 +62,13 @@ class SignIn extends ConsumerWidget {
             ),
             const SizedBox(height: 16),
             const Text('or', style: TextStyles.overlineGrey),
-            Center(
-              child: Button.text(
-                height: 48,
-                textStyle: TextStyles.button2,
-                text: 'Sign in Anonymously',
-                onPressed: () {},
-                // onPressed: model.isLoading
-                //     ? null
-                //     : () => model.signInAnonymously(context, ref),
-              ),
-              // child: TextButton(
-              //   onPressed: model.isLoading
-              //       ? null
-              //       : () => model.signInAnonymously(context, ref),
-              //   style: ButtonStyles.text(textStyle: TextStyles.button2),
-              //   child: const Text('Sign in Anonymously'),
-              // ),
+            Button.text(
+              height: 48,
+              textStyle: TextStyles.button2,
+              text: 'Sign in Anonymously',
+              onPressed: model.isLoading
+                  ? null
+                  : () => model.signInAnonymously(context, ref),
             ),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom + 48,
