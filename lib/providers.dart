@@ -1,6 +1,7 @@
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/accounts_institution.dart';
 import 'package:cccc/models/plaid/transaction.dart';
+import 'package:cccc/services/widget_visibility.dart';
 import 'package:cccc/view_models/account_detail_bottom_sheet_model.dart';
 import 'package:cccc/view_models/account_detail_model.dart';
 import 'package:cccc/view_models/choose_merchant_for_transaction_model.dart';
@@ -187,4 +188,8 @@ final institutionCardModelProvider = ChangeNotifierProvider.autoDispose
     institution: accountsInstitution?.institution,
     accounts: accountsInstitution?.accounts,
   );
+});
+
+final widgetVisibilityProvider = Provider((ref) {
+  return WidgetVisibility();
 });

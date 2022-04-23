@@ -1,5 +1,5 @@
 import 'package:cccc/styles/styles.dart';
-import 'package:cccc/views/connect_plaid.dart';
+import 'package:cccc/views/add_account/add_account.dart';
 import 'package:flutter/material.dart';
 
 class AddAccountButton extends StatelessWidget {
@@ -13,7 +13,7 @@ class AddAccountButton extends StatelessWidget {
       ),
       child: TextButton(
         style: ButtonStyles.text(textStyle: TextStyles.button2),
-        onPressed: () => ConnectPlaid.show(context),
+        onPressed: () => AddAccount.show(context),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: const [

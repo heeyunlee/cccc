@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/providers.dart' show accountDetailBottomSheetModelProvider;
 import 'package:cccc/styles/styles.dart';
-import 'package:cccc/views/linked_accounts.dart';
+import 'package:cccc/views/settings/linked_accounts.dart';
 
 import 'bottom_sheet_card.dart';
 

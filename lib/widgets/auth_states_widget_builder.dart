@@ -1,11 +1,11 @@
 import 'package:cccc/providers.dart'
     show firebaseAuthProvider, localAuthenticationServiceProvider;
 
-import 'package:cccc/views/auth_state_error.dart';
-import 'package:cccc/views/local_authenticate_screen.dart';
+import 'package:cccc/views/error/auth_state_error.dart';
+import 'package:cccc/views/settings/local_authenticate_screen.dart';
 import 'package:cccc/views/sign_in/sign_in.dart';
-import 'package:cccc/views/splash.dart';
-import 'package:cccc/views/home.dart';
+import 'package:cccc/views/sign_in/splash.dart';
+import 'package:cccc/views/home/home.dart';
 import 'package:cccc/widgets/custom_future_builder.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fire_auth;

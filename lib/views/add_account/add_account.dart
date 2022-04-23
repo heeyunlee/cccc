@@ -1,15 +1,14 @@
+import 'package:cccc/widgets/button/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
 
 import 'package:cccc/providers.dart' show connectPlaidModelProvider;
 import 'package:cccc/routes/route_names.dart';
-import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/styles/button_styles.dart';
 import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
 
-class ConnectPlaid extends ConsumerStatefulWidget {
-  const ConnectPlaid({Key? key}) : super(key: key);
+class AddAccount extends ConsumerStatefulWidget {
+  const AddAccount({Key? key}) : super(key: key);
 
   static void show(BuildContext context) {
     Navigator.of(context).pushNamed(
@@ -18,10 +17,10 @@ class ConnectPlaid extends ConsumerStatefulWidget {
   }
 
   @override
-  _ConnectPlaidState createState() => _ConnectPlaidState();
+  _AddAccountState createState() => _AddAccountState();
 }
 
-class _ConnectPlaidState extends ConsumerState<ConnectPlaid> {
+class _AddAccountState extends ConsumerState<AddAccount> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -34,8 +33,7 @@ class _ConnectPlaidState extends ConsumerState<ConnectPlaid> {
 
   @override
   Widget build(BuildContext context) {
-    logger.d('[ConnectPlaid] screen building...');
-
+    final size = MediaQuery.of(context).size;
     final model = ref.watch(connectPlaidModelProvider);
 
     return Scaffold(
@@ -58,17 +56,14 @@ class _ConnectPlaidState extends ConsumerState<ConnectPlaid> {
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          OutlinedButton(
-            onPressed: model.isLoading ? null : () => model.openLink(context),
-            style: ButtonStyles.outline(context),
-            child: model.isLoading
-                ? const CustomAdaptiveProgressIndicator(color: Colors.white)
-                : const Text('Accept & Continue'),
-          ),
-        ],
+      floatingActionButton: Button.outlined(
+        borderRadius: 16,
+        width: size.width - 48,
+        height: 56,
+        onPressed: model.isLoading ? null : () => model.openLink(context),
+        child: model.isLoading
+            ? const CustomAdaptiveProgressIndicator(color: Colors.white)
+            : const Text('Accept & Continue'),
       ),
     );
   }

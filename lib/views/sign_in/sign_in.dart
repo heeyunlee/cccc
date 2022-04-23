@@ -4,16 +4,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
 import 'package:cccc/providers.dart' show signInModelProvider;
-import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/text_styles.dart';
 
-class SignIn extends ConsumerWidget {
+class SignIn extends ConsumerStatefulWidget {
   const SignIn({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    logger.d('[SignIn] Screen building...');
+  ConsumerState<ConsumerStatefulWidget> createState() => _SignInState();
+}
 
+class _SignInState extends ConsumerState<SignIn> {
+  @override
+  Widget build(BuildContext context) {
     final model = ref.watch(signInModelProvider);
     final size = MediaQuery.of(context).size;
 

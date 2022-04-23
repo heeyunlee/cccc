@@ -3,17 +3,17 @@ import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/routes/adaptive_page_route.dart';
 import 'package:cccc/routes/route_names.dart';
-import 'package:cccc/views/account_detail.dart';
-import 'package:cccc/views/choose_merchant_for_transaction.dart';
-import 'package:cccc/views/connect_plaid.dart';
-import 'package:cccc/views/home.dart';
-import 'package:cccc/views/linked_accounts.dart';
-import 'package:cccc/views/local_authenticate_screen.dart';
-import 'package:cccc/views/privacy_and_security_settings.dart';
-import 'package:cccc/views/scan_receipt.dart';
-import 'package:cccc/views/settings.dart';
-import 'package:cccc/views/transaction_detail.dart';
-import 'package:cccc/views/all_transactions.dart';
+import 'package:cccc/views/details/account_detail.dart';
+import 'package:cccc/views/details/choose_merchant_for_transaction.dart';
+import 'package:cccc/views/add_account/add_account.dart';
+import 'package:cccc/views/home/home.dart';
+import 'package:cccc/views/settings/linked_accounts.dart';
+import 'package:cccc/views/settings/local_authenticate_screen.dart';
+import 'package:cccc/views/settings/privacy_and_security_settings.dart';
+import 'package:cccc/views/scan_receipt/scan_receipt.dart';
+import 'package:cccc/views/settings/settings.dart';
+import 'package:cccc/views/details/transaction_detail.dart';
+import 'package:cccc/views/home/all_transactions.dart';
 import 'package:flutter/material.dart';
 
 /// Creates a custom route setting so that based on different [RouteNames],
@@ -33,7 +33,7 @@ class CustomRouter {
           rootNavigator: true,
           maintainState: true,
           settings: settings,
-          builder: (context) => const ConnectPlaid(),
+          builder: (context) => const AddAccount(),
         );
       case RouteNames.settings:
         return adaptiveRoute(

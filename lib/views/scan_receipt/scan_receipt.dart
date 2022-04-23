@@ -3,8 +3,8 @@ import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/providers.dart' show scanReceiptBottomSheetModelProvider;
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/styles/button_styles.dart';
-import 'package:cccc/views/transaction_detail.dart';
+import 'package:cccc/views/details/transaction_detail.dart';
+import 'package:cccc/widgets/button/button.dart';
 import 'package:cccc/widgets/receipt_widget.dart';
 import 'package:cccc/widgets/scan_receipt/scan_receipt_bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -122,18 +122,19 @@ class _ScanReceiptState extends State<ScanReceipt>
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          OutlinedButton(
+          Button.outlined(
+            borderRadius: 16,
+            width: (size.width - 56) / 2,
+            height: 48,
             onPressed: () => Navigator.of(context).pop(),
-            style: ButtonStyles.outline(
-              context,
-              width: (size.width - 56) / 2,
-              height: 48,
-            ),
             child: const Text('Cancel'),
           ),
           Consumer(
             builder: (context, ref, child) {
-              return ElevatedButton(
+              return Button.elevated(
+                height: 48,
+                width: (size.width - 56) / 2,
+                borderRadius: 16,
                 onPressed: () async {
                   final updated = await showModalBottomSheet<bool?>(
                     context: context,
@@ -152,11 +153,6 @@ class _ScanReceiptState extends State<ScanReceipt>
                     );
                   }
                 },
-                style: ButtonStyles.elevated(
-                  context,
-                  width: (size.width - 56) / 2,
-                  radius: 16,
-                ),
                 child: const FittedBox(child: Text('Upload a Receipt')),
               );
             },
