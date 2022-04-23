@@ -46,7 +46,7 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
     notifyListeners();
   }
 
-  List<Map<String, dynamic>> _getTextsWithOffsets(RecognisedText texts) {
+  List<Map<String, dynamic>> _getTextsWithOffsets(RecognizedText texts) {
     logger.d('`_getTextsWithOffsets` function called');
 
     final nestedLines = texts.blocks.map((e) => e.lines).toList();
@@ -62,7 +62,7 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
   Future<ReceiptResponse?> _extractTexts(File imageFile) async {
     logger.d('File exists. Start using [GoogleMlKit]');
 
-    final textDetector = GoogleMlKit.vision.textDetector();
+    final textDetector = GoogleMlKit.vision.textRecognizer();
     final inputImage = InputImage.fromFile(imageFile);
     final recognisedText = await textDetector.processImage(inputImage);
     final textsWithOffsets = _getTextsWithOffsets(recognisedText);

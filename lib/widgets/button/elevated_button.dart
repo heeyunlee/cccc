@@ -1,10 +1,11 @@
 part of 'button.dart';
 
-class _OutlinedButton extends Button {
-  _OutlinedButton({
+class _ElevatedButton extends Button {
+  _ElevatedButton({
     required Widget child,
     required VoidCallback? onPressed,
     VoidCallback? onLongPressed,
+    Color? backgroundColor,
     bool vibrateOnPress = true,
     Duration animationDuration = const Duration(milliseconds: 100),
     Curve animationCurve = Curves.linear,
@@ -14,8 +15,6 @@ class _OutlinedButton extends Button {
       horizontal: kHorizontalPadding,
       vertical: kVerticalPadding,
     ),
-    Color borderColor = Colors.white,
-    double borderWidth = 1,
     double borderRadius = 8,
     EdgeInsets margin = EdgeInsets.zero,
     double? width,
@@ -23,57 +22,53 @@ class _OutlinedButton extends Button {
     Key? key,
   }) : super._(
           onPressed: onPressed,
-          onLongPressed: onLongPressed,
           animationCurve: animationCurve,
           animationDuration: animationDuration,
+          margin: margin,
+          onLongPressed: onLongPressed,
           opacityTo: opacityTo,
+          height: height,
           scaleDownTo: scaleDownTo,
           vibrateOnPress: vibrateOnPress,
-          padding: padding,
-          margin: margin,
           width: width,
-          height: height,
-          child: _OutlinedButtonChild(
-            child: child,
-            borderColor: borderColor,
-            borderWidth: borderWidth,
+          child: _ElevatedButtonChild(
+            key: key,
+            backgroundColor: backgroundColor,
             borderRadius: borderRadius,
             padding: padding,
-            key: key,
+            child: child,
           ),
         );
 }
 
-class _OutlinedButtonChild extends StatelessWidget {
-  const _OutlinedButtonChild({
-    Key? key,
-    required this.child,
-    required this.padding,
-    required this.borderColor,
-    required this.borderWidth,
+class _ElevatedButtonChild extends StatelessWidget {
+  const _ElevatedButtonChild({
+    required this.backgroundColor,
     required this.borderRadius,
+    required this.padding,
+    required this.child,
+    Key? key,
   }) : super(key: key);
 
-  final Widget child;
-  final EdgeInsets padding;
-  final Color borderColor;
-  final double borderWidth;
+  final Color? backgroundColor;
   final double borderRadius;
+  final EdgeInsets padding;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return DecoratedBox(
       decoration: BoxDecoration(
-        border: Border.fromBorderSide(
-          BorderSide(color: borderColor, width: borderWidth),
-        ),
+        color: backgroundColor ?? theme.primaryColor,
         borderRadius: BorderRadius.all(
           Radius.circular(borderRadius),
         ),
       ),
       child: Padding(
         padding: padding,
-        child: Center(child: child),
+        child: child,
       ),
     );
   }

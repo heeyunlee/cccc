@@ -1,6 +1,6 @@
 import 'package:cccc/providers.dart'
     show databaseProvider, transactionDetailModelProvider;
-import 'package:cccc/views/choose_merchant_for_transaction.dart';
+import 'package:cccc/views/details/choose_merchant_for_transaction.dart';
 import 'package:cccc/widgets/custom_future_builder.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/scan_receipt/scan_receipt_bottom_sheet.dart';

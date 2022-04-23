@@ -1,7 +1,7 @@
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/styles/button_styles.dart';
 import 'package:cccc/styles/text_styles.dart';
-import 'package:cccc/views/all_transactions.dart';
+import 'package:cccc/views/home/all_transactions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:local_auth/auth_strings.dart';
-import 'package:local_auth/local_auth.dart';
 import 'package:cccc/extensions/string_extension.dart';
 
 import 'package:cccc/services/shared_preference_service.dart';
+import 'package:local_auth/local_auth.dart';
 
 /// A class that deals with [LocalAuthentication] and its related functions
 class LocalAuthenticationService with ChangeNotifier {
@@ -57,16 +56,9 @@ class LocalAuthenticationService with ChangeNotifier {
     final result = <String, dynamic>{};
 
     try {
-      const iosStrings = IOSAuthMessages(
-        cancelButton: 'cancel',
-        goToSettingsButton: 'settings',
-        goToSettingsDescription: 'Please set up your Touch ID.',
-        lockOut: 'Please reenable your Touch ID',
-      );
-
       final authenticated = await _auth.authenticate(
         localizedReason: 'Enable Local Auth',
-        iOSAuthStrings: iosStrings,
+        authMessages: [],
       );
 
       result['authenticated'] = authenticated;

@@ -1,5 +1,4 @@
 import 'package:cccc/services/logger_init.dart';
-import 'package:device_preview/device_preview.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +11,8 @@ import 'widgets/auth_states_widget_builder.dart';
 import 'routes/custom_router.dart';
 import 'styles/styles.dart';
 
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -20,13 +21,7 @@ Future<void> main() async {
   );
 
   runApp(
-    DevicePreview(
-      // enabled: !kReleaseMode,
-      enabled: false,
-      builder: (context) => const ProviderScope(
-        child: MyApp(),
-      ),
-    ),
+    const ProviderScope(child: MyApp()),
   );
 }
 
@@ -61,9 +56,8 @@ class MyApp extends StatelessWidget {
     }
 
     return MaterialApp(
+      navigatorObservers: [routeObserver],
       useInheritedMediaQuery: true,
-      locale: DevicePreview.locale(context),
-      builder: DevicePreview.appBuilder,
       title: 'CCCC: Credit Card Calorie Counter',
       home: const AuthStatesWidgetBuilder(),
       theme: ThemeData(

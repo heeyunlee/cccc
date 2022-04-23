@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 part 'outlined_button.dart';
 part 'text_button.dart';
 part 'icon_button.dart';
+part 'elevated_button.dart';
 
 /// Creates a customizable and tappable widget that bounces and increase in opacity,
 ///  similar to Spotify's iOS app.
@@ -44,6 +45,7 @@ class Button extends StatefulWidget {
   final double? width;
   final double? height;
 
+  /// Creates outlined button
   factory Button.outlined({
     required Widget child,
     required VoidCallback? onPressed,
@@ -63,6 +65,7 @@ class Button extends StatefulWidget {
     Key? key,
   }) = _OutlinedButton;
 
+  /// Creates text button
   factory Button.text({
     required VoidCallback? onPressed,
     Widget? child,
@@ -81,6 +84,7 @@ class Button extends StatefulWidget {
     Key? key,
   }) = _TextButton;
 
+  /// Creates icon button
   factory Button.icon({
     required IconData icon,
     required VoidCallback? onPressed,
@@ -97,6 +101,25 @@ class Button extends StatefulWidget {
     String? semanticLabel,
     Key? key,
   }) = _IconButton;
+
+  /// Creates outlined button
+  factory Button.elevated({
+    required Widget child,
+    required VoidCallback? onPressed,
+    VoidCallback? onLongPressed,
+    Color backgroundColor,
+    bool vibrateOnPress,
+    Duration animationDuration,
+    Curve animationCurve,
+    double scaleDownTo,
+    double opacityTo,
+    EdgeInsets padding,
+    EdgeInsets margin,
+    double borderRadius,
+    double width,
+    double height,
+    Key? key,
+  }) = _ElevatedButton;
 
   @override
   State<Button> createState() => _ButtonState();

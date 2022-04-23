@@ -4,7 +4,7 @@ import 'package:cccc/providers.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/styles.dart';
-import 'package:cccc/views/connect_plaid.dart';
+import 'package:cccc/views/add_account/add_account.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/institution_card.dart';
 import 'package:cccc/widgets/show_error_widget.dart';
@@ -75,7 +75,7 @@ class LinkedAccounts extends ConsumerWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: ElevatedButton(
-        onPressed: () => ConnectPlaid.show(context),
+        onPressed: () => AddAccount.show(context),
         style: ButtonStyles.elevated(context, width: 240, radius: 24),
         child: Row(
           mainAxisSize: MainAxisSize.min,

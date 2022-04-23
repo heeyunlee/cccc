@@ -1,7 +1,7 @@
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/styles/styles.dart';
-import 'package:cccc/views/account_detail.dart';
+import 'package:cccc/views/details/account_detail.dart';
 import 'package:flutter/material.dart';
 
 class AccountListTileCompact extends StatelessWidget {

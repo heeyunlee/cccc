@@ -1,7 +1,7 @@
 import 'package:cccc/constants/constants.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/styles/styles.dart';
-import 'package:cccc/views/transaction_detail.dart';
+import 'package:cccc/views/details/transaction_detail.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';

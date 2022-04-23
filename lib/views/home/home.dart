@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -9,13 +10,13 @@ import 'package:cccc/models/user.dart';
 import 'package:cccc/providers.dart' show homeModelProvider;
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/view_models/home_model.dart';
-import 'package:cccc/views/scan_receipt.dart';
-import 'package:cccc/views/settings.dart';
+import 'package:cccc/views/scan_receipt/scan_receipt.dart';
+import 'package:cccc/views/settings/settings.dart';
 import 'package:cccc/widgets/recent_transactions_card.dart';
 
-import '../widgets/accounts_card.dart';
-import '../widgets/custom_stream_builder.dart';
-import '../widgets/home_flexible_space_bar.dart';
+import '../../widgets/accounts_card.dart';
+import '../../widgets/custom_stream_builder.dart';
+import '../../widgets/home_flexible_space_bar.dart';
 
 class Home extends ConsumerStatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -38,11 +39,11 @@ class _HomeState extends ConsumerState<Home> {
         errorBuilder: (context, error) => Center(
           child: Text('An Error Occurred. Error code: ${error.toString()}'),
         ),
-        loadingWidget: const Center(child: CircularProgressIndicator()),
+        loadingWidget: const CustomAdaptiveProgressIndicator(),
         stream: model.userStream,
         builder: (context, user) {
           if (user != null) {
-            final ThemeData theme = Theme.of(context);
+            final theme = Theme.of(context);
 
             switch (theme.platform) {
               case TargetPlatform.iOS:
@@ -58,9 +59,7 @@ class _HomeState extends ConsumerState<Home> {
                 );
             }
           } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return const CustomAdaptiveProgressIndicator();
           }
         },
       ),
