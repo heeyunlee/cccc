@@ -1,3 +1,4 @@
+import 'package:cccc/widgets/button/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
@@ -111,13 +112,13 @@ class _InstitutionCardState extends ConsumerState<InstitutionCard> {
               ),
             ),
           if (model.isConnectionError)
-            OutlinedButton(
-              onPressed: () => model.openLinkUpdateMode(context),
-              style: ButtonStyles.outline(
-                context,
-                width: size.width - 64,
-                height: 40,
-              ),
+            Button.outlined(
+              margin: const EdgeInsets.only(top: 16, bottom: 8),
+              width: size.width - 64,
+              height: 40,
+              onPressed: model.isLoading
+                  ? null
+                  : () => model.openLinkUpdateMode(context),
               child: model.isLoading
                   ? const CustomAdaptiveProgressIndicator()
                   : const Text('Re-authenticate'),

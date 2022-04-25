@@ -60,6 +60,7 @@ class Settings extends ConsumerWidget {
                 title: 'Sign Out',
                 content: 'Sign out?',
                 defaultActionText: 'Yes',
+                isDefaultDestructiveAction: true,
                 cancelAcitionText: 'No',
               );
 

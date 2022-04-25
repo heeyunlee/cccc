@@ -59,16 +59,9 @@ class _TextButtonChild extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (child != null) return child!;
-
-    return Center(
-      child: Padding(
-        padding: padding,
-        child: Text(
-          text!,
-          style: textStyle,
-        ),
-      ),
+    return Padding(
+      padding: padding,
+      child: child ?? Text(text!, style: textStyle),
     );
   }
 }

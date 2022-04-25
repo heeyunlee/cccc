@@ -1,7 +1,7 @@
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/styles/button_styles.dart';
 import 'package:cccc/styles/text_styles.dart';
 import 'package:cccc/views/home/all_transactions.dart';
+import 'package:cccc/widgets/button/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -32,12 +32,11 @@ class RecentTransactionsCard extends ConsumerWidget {
             children: [
               Text('Transactions', style: titleTextStyle),
               const Spacer(),
-              TextButton(
+              Button.text(
                 onPressed: () => AllTransactions.show(context),
-                style: ButtonStyles.text(textStyle: TextStyles.button2),
                 child: Row(
                   children: const [
-                    Text('View More'),
+                    Text('View More', style: TextStyles.button2),
                     SizedBox(width: 4),
                     Icon(Icons.arrow_forward, size: 16)
                   ],

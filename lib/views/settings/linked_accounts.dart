@@ -3,8 +3,8 @@ import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/providers.dart';
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/styles/styles.dart';
 import 'package:cccc/views/add_account/add_account.dart';
+import 'package:cccc/widgets/button/button.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/institution_card.dart';
 import 'package:cccc/widgets/show_error_widget.dart';
@@ -74,9 +74,7 @@ class LinkedAccounts extends ConsumerWidget {
         },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: ElevatedButton(
-        onPressed: () => AddAccount.show(context),
-        style: ButtonStyles.elevated(context, width: 240, radius: 24),
+      floatingActionButton: Button.elevated(
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: const [
@@ -85,7 +83,23 @@ class LinkedAccounts extends ConsumerWidget {
             Text('Add a New Account'),
           ],
         ),
+        height: 48,
+        width: 240,
+        borderRadius: 24,
+        onPressed: () => AddAccount.show(context),
       ),
+      // floatingActionButton: ElevatedButton(
+      //   onPressed: () => AddAccount.show(context),
+      //   style: ButtonStyles.elevated(context, width: 240, radius: 24),
+      //   child: Row(
+      //     mainAxisSize: MainAxisSize.min,
+      //     children: const [
+      //       Icon(Icons.add),
+      //       SizedBox(width: 4),
+      //       Text('Add a New Account'),
+      //     ],
+      //   ),
+      // ),
     );
   }
 }

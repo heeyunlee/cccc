@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:cccc/styles/button_styles.dart';
+import 'package:cccc/styles/styles.dart';
+import 'package:cccc/widgets/button/button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -13,8 +14,6 @@ Future<bool?> showAdaptiveDialog(
   String? cancelAcitionText,
   bool isCancelDestructiveAction = false,
 }) {
-  final theme = Theme.of(context);
-
   if (!Platform.isIOS) {
     return showDialog<bool>(
       context: context,
@@ -23,20 +22,20 @@ Future<bool?> showAdaptiveDialog(
         content: Text(content),
         actions: <Widget>[
           if (cancelAcitionText != null)
-            TextButton(
-              style: isCancelDestructiveAction
-                  ? ButtonStyles.text(foregroundColor: Colors.red)
-                  : ButtonStyles.text(),
+            Button.text(
               onPressed: () => Navigator.of(context).pop(false),
-              child: Text(cancelAcitionText),
+              text: cancelAcitionText,
+              textStyle: isCancelDestructiveAction
+                  ? TextStyles.button1Red
+                  : TextStyles.button1,
             ),
           const SizedBox(width: 8),
-          TextButton(
-            style: isDefaultDestructiveAction
-                ? ButtonStyles.text(foregroundColor: Colors.red)
-                : ButtonStyles.text(foregroundColor: theme.primaryColor),
+          Button.text(
             onPressed: () => Navigator.of(context).pop(true),
-            child: Text(defaultActionText),
+            text: defaultActionText,
+            textStyle: isDefaultDestructiveAction
+                ? TextStyles.button1Red
+                : TextStyles.button1,
           ),
         ],
       ),

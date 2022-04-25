@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
 Route adaptiveRoute({
@@ -11,8 +10,6 @@ Route adaptiveRoute({
   required Function(BuildContext context) builder,
   required RouteSettings settings,
 }) {
-  HapticFeedback.mediumImpact();
-
   if (!kIsWeb && Platform.isIOS) {
     return CupertinoPageRoute(
       fullscreenDialog: rootNavigator,

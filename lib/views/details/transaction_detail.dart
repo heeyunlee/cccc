@@ -1,6 +1,7 @@
 import 'package:cccc/providers.dart'
     show databaseProvider, transactionDetailModelProvider;
 import 'package:cccc/views/details/choose_merchant_for_transaction.dart';
+import 'package:cccc/widgets/button/button.dart';
 import 'package:cccc/widgets/custom_future_builder.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/scan_receipt/scan_receipt_bottom_sheet.dart';
@@ -341,7 +342,6 @@ class TransactionDetail extends ConsumerWidget {
 
   Widget _buildItemsWidget(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final theme = Theme.of(context);
 
     if (transaction.transactionItems != null) {
       return ReceiptWidget(
@@ -364,7 +364,7 @@ class TransactionDetail extends ConsumerWidget {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 16),
-              TextButton(
+              Button.text(
                 onPressed: () => showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
@@ -372,7 +372,6 @@ class TransactionDetail extends ConsumerWidget {
                     transaction: transaction,
                   ),
                 ),
-                style: ButtonStyles.text(foregroundColor: theme.primaryColor),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: const [
@@ -382,6 +381,24 @@ class TransactionDetail extends ConsumerWidget {
                   ],
                 ),
               ),
+              // TextButton(
+              //   onPressed: () => showModalBottomSheet(
+              //     context: context,
+              //     isScrollControlled: true,
+              //     builder: (context) => ScanReceiptBottomSheet(
+              //       transaction: transaction,
+              //     ),
+              //   ),
+              //   style: ButtonStyles.text(foregroundColor: theme.primaryColor),
+              //   child: Row(
+              //     mainAxisSize: MainAxisSize.min,
+              //     children: const [
+              //       Icon(Icons.camera_alt),
+              //       SizedBox(width: 16),
+              //       Text('Scan Now'),
+              //     ],
+              //   ),
+              // ),
             ],
           ),
         ),

@@ -176,6 +176,7 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      behavior: HitTestBehavior.opaque,
       onTapDown: (detail) {
         _log('onTapDown');
 
@@ -242,11 +243,11 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
             ),
           );
         },
-        child: SizedBox(
-          width: widget.width,
-          height: widget.height,
-          child: Padding(
-            padding: widget.margin,
+        child: Padding(
+          padding: widget.margin,
+          child: SizedBox(
+            width: widget.width,
+            height: widget.height,
             child: widget.child,
           ),
         ),

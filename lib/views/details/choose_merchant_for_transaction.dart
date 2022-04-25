@@ -5,6 +5,7 @@ import 'package:cccc/providers.dart'
 import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/styles.dart';
+import 'package:cccc/widgets/button/button.dart';
 import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
 import 'package:cccc/widgets/merchant_list_tile.dart';
 import 'package:cccc/widgets/paginated_custom_scroll_view.dart';
@@ -31,6 +32,7 @@ class ChooseMerchantForTransaction extends ConsumerWidget {
     logger.d('[ChooseMerchantForTransaction] screen building...');
 
     final padding = MediaQuery.of(context).padding;
+    final size = MediaQuery.of(context).size;
 
     return Scaffold(
       body: PaginatedCustomScrollView(
@@ -90,11 +92,13 @@ class ChooseMerchantForTransaction extends ConsumerWidget {
             chooseMerchantForTransactionModelProvider(transaction),
           );
 
-          return ElevatedButton(
+          return Button.elevated(
+            height: 48,
+            width: size.width - 64,
+            borderRadius: 16,
             onPressed: model.isLoading
                 ? null
                 : () => model.updateTransactionMerchant(context),
-            style: ButtonStyles.elevated(context, height: 48, radius: 16),
             child: model.isLoading
                 ? const CustomAdaptiveProgressIndicator(color: Colors.white)
                 : const Text('SELECT'),

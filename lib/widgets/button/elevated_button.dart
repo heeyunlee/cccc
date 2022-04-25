@@ -68,7 +68,7 @@ class _ElevatedButtonChild extends StatelessWidget {
       ),
       child: Padding(
         padding: padding,
-        child: child,
+        child: Center(child: child),
       ),
     );
   }
