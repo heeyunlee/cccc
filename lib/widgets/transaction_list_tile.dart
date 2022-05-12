@@ -8,12 +8,12 @@ import 'package:intl/intl.dart';
 
 class TransactionListTile extends StatelessWidget {
   const TransactionListTile({
-    Key? key,
+    super.key,
     required this.transaction,
     this.enableOnTap = true,
     this.onTap,
     this.color,
-  }) : super(key: key);
+  });
 
   final Transaction transaction;
   final bool? enableOnTap;
@@ -109,7 +109,7 @@ class TransactionListTile extends StatelessWidget {
         ),
       ),
       onTap: enableOnTap!
-          ? onTap ?? () => TransactionDetail.show(context, transaction)
+          ? onTap ?? () => TransactionDetails.show(context, transaction)
           : null,
     );
   }

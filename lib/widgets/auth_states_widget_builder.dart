@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AuthStatesWidgetBuilder extends ConsumerWidget {
-  const AuthStatesWidgetBuilder({Key? key}) : super(key: key);
+  const AuthStatesWidgetBuilder({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

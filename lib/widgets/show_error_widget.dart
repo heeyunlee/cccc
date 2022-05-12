@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 class ShowErrorWidget extends StatelessWidget {
   const ShowErrorWidget({
-    Key? key,
+    super.key,
     required this.error,
-  }) : super(key: key);
+  });
 
   final Object? error;
 

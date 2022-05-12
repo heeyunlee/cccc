@@ -15,7 +15,7 @@ class Formatter {
     final f = NumberFormat.simpleCurrency(name: locale, decimalDigits: 2);
 
     if (amount < 0) {
-      return '+ ' + f.format(amount).substring(1);
+      return '+ ${f.format(amount).substring(1)}';
     } else {
       return f.format(amount);
     }

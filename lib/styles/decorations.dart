@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class Decorations {
   static BoxDecoration gradientFromHexString(String? hex) {
     final hexCode = hex?.substring(1) ?? '000000';
-    final fullHexCode = 'FF' + hexCode;
+    final fullHexCode = 'FF$hexCode';
     final hexCodeInt = int.parse(fullHexCode, radix: 16);
 
     return BoxDecoration(

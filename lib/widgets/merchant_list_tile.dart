@@ -8,10 +8,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class MerchantListTile extends ConsumerWidget {
   const MerchantListTile({
-    Key? key,
+    super.key,
     required this.merchant,
     required this.transaction,
-  }) : super(key: key);
+  });
 
   final Merchant merchant;
   final Transaction transaction;

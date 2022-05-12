@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:cccc/extensions/enum_extension.dart';
 import 'package:cccc/extensions/string_extension.dart';
-import 'package:cccc/models/enum/transaction_item_type.dart';
+import 'package:cccc/enum/transaction_item_type.dart';
 
 class TransactionItem {
   const TransactionItem({

@@ -2,7 +2,7 @@ import 'package:cccc/styles/theme_colors.dart';
 import 'package:flutter/material.dart';
 
 class BottomSheetCard extends StatelessWidget {
-  const BottomSheetCard({Key? key, required this.child}) : super(key: key);
+  const BottomSheetCard({super.key, required this.child});
 
   final Widget child;
 

@@ -3,8 +3,8 @@ part of 'button.dart';
 class _OutlinedButton extends Button {
   _OutlinedButton({
     required Widget child,
-    required VoidCallback? onPressed,
-    VoidCallback? onLongPressed,
+    super.onPressed,
+    super.onLongPressed,
     bool vibrateOnPress = true,
     Duration animationDuration = const Duration(milliseconds: 100),
     Curve animationCurve = Curves.linear,
@@ -20,10 +20,8 @@ class _OutlinedButton extends Button {
     EdgeInsets margin = EdgeInsets.zero,
     double? width,
     double? height,
-    Key? key,
+    super.key,
   }) : super._(
-          onPressed: onPressed,
-          onLongPressed: onLongPressed,
           animationCurve: animationCurve,
           animationDuration: animationDuration,
           opacityTo: opacityTo,
@@ -34,25 +32,25 @@ class _OutlinedButton extends Button {
           width: width,
           height: height,
           child: _OutlinedButtonChild(
-            child: child,
             borderColor: borderColor,
             borderWidth: borderWidth,
             borderRadius: borderRadius,
             padding: padding,
             key: key,
+            child: child,
           ),
         );
 }
 
 class _OutlinedButtonChild extends StatelessWidget {
   const _OutlinedButtonChild({
-    Key? key,
+    super.key,
     required this.child,
     required this.padding,
     required this.borderColor,
     required this.borderWidth,
     required this.borderRadius,
-  }) : super(key: key);
+  });
 
   final Widget child;
   final EdgeInsets padding;

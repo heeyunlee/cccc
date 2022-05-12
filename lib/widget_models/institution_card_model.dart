@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
 
 import 'package:cccc/extensions/datetime_extension.dart';
-import 'package:cccc/models/enum/account_connection_state.dart';
+import 'package:cccc/enum/account_connection_state.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/services/cloud_functions.dart';
 import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 
 class InstitutionCardModel with ChangeNotifier {
   InstitutionCardModel({
@@ -20,8 +19,6 @@ class InstitutionCardModel with ChangeNotifier {
   final Institution? institution;
   final List<Account?>? accounts;
 
-  bool get isLoading => _isLoading;
-
   String get name => institution?.name ?? 'Name';
 
   Account? get firstAccount => accounts?.first;
@@ -30,26 +27,26 @@ class InstitutionCardModel with ChangeNotifier {
       AccountConnectionState.error == firstAccount?.accountConnectionState;
 
   String get lastSyncedTime =>
-      'Last synced ' +
-      (firstAccount?.accountLastSyncedTime?.timeago ?? 'date not available..');
+      'Last synced ${firstAccount?.accountLastSyncedTime?.timeago ?? 'date not available..'}';
 
   bool _isLoading = false;
 
-  void _toggleLoading() {
-    _isLoading = !_isLoading;
-    notifyListeners();
+  bool get isLoading => _isLoading;
 
-    logger.d('_toggleLoading. Currently isLoading? $_isLoading');
+  set isLoading(bool value) {
+    _isLoading = value;
+    notifyListeners();
   }
 
-  Future<void> openLinkUpdateMode(BuildContext context) async {
-    _toggleLoading();
+  Future<bool> openLinkUpdateMode() async {
+    isLoading = true;
 
     try {
       final response = await functions.createLinkTokenUpdateMode(
         institution!.institutionId,
       );
-      _toggleLoading();
+
+      isLoading = false;
 
       logger.d('createLinkTokenUpdateMode response: $response');
       final linkToken = response['link_token'] as String?;
@@ -59,27 +56,19 @@ class InstitutionCardModel with ChangeNotifier {
         final linkTokenConfiguration = LinkTokenConfiguration(token: linkToken);
 
         await PlaidLink.open(configuration: linkTokenConfiguration);
+
+        return true;
       } else {
         logger.e('Error Response. $response');
-        final errorMessage = response['error_message'];
 
-        showAdaptiveDialog(
-          context,
-          title: 'Error',
-          content:
-              'An Error Occurred. An error code is "$errorMessage". Please try again.',
-          defaultActionText: 'OK',
-        );
+        return false;
       }
     } catch (e) {
+      isLoading = false;
+
       logger.e(e);
 
-      showAdaptiveDialog(
-        context,
-        title: 'An Error Occurred',
-        content: 'Could not open a Plaid Link. Please try again.',
-        defaultActionText: 'OK',
-      );
+      return false;
     }
   }
 
@@ -115,36 +104,15 @@ class InstitutionCardModel with ChangeNotifier {
     }
   }
 
-  Future<void> unlinkAccount(BuildContext context) async {
+  Future<int> unlinkAccount() async {
     final institutionId = institution?.institutionId;
 
-    final confirmUnlinking = await showAdaptiveDialog(
-      context,
-      title: 'Unlink this institution?',
-      content:
-          'All the accounts associated with this institution will be permanently deleted, as well as all the transactions. You will NOT be able to undo this',
-      defaultActionText: 'Delete',
-      isDefaultDestructiveAction: true,
-      cancelAcitionText: 'Cancel',
-    );
+    logger.d('Confirmed to unlink. Calling the function now');
 
-    if (confirmUnlinking ?? false) {
-      logger.d('Confirmed to unlink. Calling the function now');
+    final response = await functions.unlinkAccount(institutionId);
 
-      final response = await functions.unlinkAccount(institutionId);
+    final status = response.statusCode;
 
-      final status = response.statusCode;
-
-      switch (status) {
-        case 404:
-          showAdaptiveDialog(
-            context,
-            title: 'Error',
-            content:
-                'An Error occurred during unlinking the institution. Please try again',
-            defaultActionText: 'OK',
-          );
-      }
-    }
+    return status;
   }
 }

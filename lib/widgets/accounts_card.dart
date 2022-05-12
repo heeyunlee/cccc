@@ -9,9 +9,9 @@ import 'add_account_button.dart';
 
 class AccountsCard extends ConsumerWidget {
   const AccountsCard({
-    Key? key,
+    super.key,
     required this.model,
-  }) : super(key: key);
+  });
 
   final HomeModel model;
 

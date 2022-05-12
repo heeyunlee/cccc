@@ -5,11 +5,14 @@ import 'package:cccc/widgets/button/button.dart';
 import 'package:cccc/widgets/custom_future_builder.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/scan_receipt/scan_receipt_bottom_sheet.dart';
+import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
+import 'package:cccc/widgets/show_adaptive_date_picker.dart';
 import 'package:cccc/widgets/transaction_mark_as_duplicate_list_tile.dart';
+import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseException;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:cccc/models/enum/payment_channel.dart';
+import 'package:cccc/enum/payment_channel.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/routes/route_names.dart';
@@ -18,11 +21,11 @@ import 'package:cccc/styles/styles.dart';
 import 'package:cccc/widgets/receipt_widget.dart';
 import 'package:cccc/widgets/transaction_detail_title.dart';
 
-class TransactionDetail extends ConsumerWidget {
-  const TransactionDetail({
-    Key? key,
+class TransactionDetails extends ConsumerStatefulWidget {
+  const TransactionDetails({
+    super.key,
     required this.transaction,
-  }) : super(key: key);
+  });
 
   final Transaction transaction;
 
@@ -34,8 +37,15 @@ class TransactionDetail extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    logger.d('[TransactionDetail][${transaction.transactionId}] building... ');
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _TransactionDetailsState();
+}
+
+class _TransactionDetailsState extends ConsumerState<TransactionDetails> {
+  @override
+  Widget build(BuildContext context) {
+    logger.d(
+        '[TransactionDetail][${widget.transaction.transactionId}] building... ');
 
     final size = MediaQuery.of(context).size;
 
@@ -43,7 +53,7 @@ class TransactionDetail extends ConsumerWidget {
       body: CustomStreamBuilder<Transaction?>(
         stream: ref
             .read(databaseProvider)
-            .transactionStream(transaction.transactionId),
+            .transactionStream(widget.transaction.transactionId),
         errorBuilder: (context, error) {
           logger.e('error: ${error.toString()}');
 
@@ -246,8 +256,48 @@ class TransactionDetail extends ConsumerWidget {
                         ),
                       ),
                       ListTile(
-                        onTap: () async =>
-                            await model.updateTransactionDate(context),
+                        onTap: () async {
+                          final pickedDate = await showAdaptiveDatePicker(
+                            context,
+                            initialDate: transaction.date,
+                          );
+
+                          if (pickedDate != null) {
+                            try {
+                              final newTransaction = {
+                                'date': pickedDate,
+                              };
+
+                              await ref
+                                  .read(databaseProvider)
+                                  .updateTransaction(
+                                    transaction,
+                                    newTransaction,
+                                  );
+                            } on FirebaseException catch (e) {
+                              logger.e('Error: ${e.message}');
+                              if (!mounted) return;
+
+                              await showAdaptiveDialog(
+                                context,
+                                title: 'Error',
+                                content:
+                                    'An error occurred. Message: ${e.message}',
+                                defaultActionText: 'OK',
+                              );
+                            } catch (e) {
+                              if (!mounted) return;
+
+                              await showAdaptiveDialog(
+                                context,
+                                title: 'Error',
+                                content:
+                                    'An error occurred. Message: ${e.toString()}',
+                                defaultActionText: 'OK',
+                              );
+                            }
+                          }
+                        },
                         leading: const SizedBox(
                           height: 64,
                           width: 56,
@@ -343,9 +393,9 @@ class TransactionDetail extends ConsumerWidget {
   Widget _buildItemsWidget(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    if (transaction.transactionItems != null) {
+    if (widget.transaction.transactionItems != null) {
       return ReceiptWidget(
-        transactionItems: transaction.transactionItems!,
+        transactionItems: widget.transaction.transactionItems!,
         color: ThemeColors.primary500.withOpacity(0.24),
       );
     } else {
@@ -369,7 +419,7 @@ class TransactionDetail extends ConsumerWidget {
                   context: context,
                   isScrollControlled: true,
                   builder: (context) => ScanReceiptBottomSheet(
-                    transaction: transaction,
+                    transaction: widget.transaction,
                   ),
                 ),
                 child: Row(

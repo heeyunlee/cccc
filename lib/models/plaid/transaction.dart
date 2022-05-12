@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 
 import 'package:cccc/extensions/enum_extension.dart';
 import 'package:cccc/extensions/string_extension.dart';
-import 'package:cccc/models/enum/payment_channel.dart';
+import 'package:cccc/enum/payment_channel.dart';
 import 'package:cccc/models/transaction_item.dart';
 
 import 'payment_meta.dart';

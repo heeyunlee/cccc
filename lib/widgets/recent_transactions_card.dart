@@ -10,11 +10,11 @@ import 'transaction_list_tile.dart';
 
 class RecentTransactionsCard extends ConsumerWidget {
   const RecentTransactionsCard({
-    Key? key,
+    super.key,
     required this.transactionsStream,
     this.titleTextStyle = TextStyles.h6,
     this.bottomPaddingHeight = 0,
-  }) : super(key: key);
+  });
 
   final Stream<List<Transaction?>> transactionsStream;
   final TextStyle titleTextStyle;

@@ -7,7 +7,7 @@ import 'package:cccc/providers.dart' show signInModelProvider;
 import 'package:cccc/styles/text_styles.dart';
 
 class SignIn extends ConsumerStatefulWidget {
-  const SignIn({Key? key}) : super(key: key);
+  const SignIn({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SignInState();

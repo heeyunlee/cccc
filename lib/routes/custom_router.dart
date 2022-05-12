@@ -55,7 +55,7 @@ class CustomRouter {
         return adaptiveRoute(
           rootNavigator: false,
           maintainState: true,
-          builder: (context) => TransactionDetail(transaction: args),
+          builder: (context) => TransactionDetails(transaction: args),
           settings: settings,
         );
       case RouteNames.account:

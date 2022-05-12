@@ -1,8 +1,6 @@
 import 'package:cccc/models/merchant.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/services/database.dart';
-import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart' show FirebaseException;
 import 'package:flutter/material.dart';
 
 class ChooseMerchantForTransactionModel with ChangeNotifier {
@@ -36,7 +34,7 @@ class ChooseMerchantForTransactionModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateTransactionMerchant(BuildContext context) async {
+  Future<bool> updateTransactionMerchant() async {
     if (_selectedMerchant != null) {
       _toggleIsLoading();
 
@@ -49,22 +47,14 @@ class ChooseMerchantForTransactionModel with ChangeNotifier {
         await database.updateTransaction(transaction, newTransaction);
         _toggleIsLoading();
 
-        Navigator.of(context).pop();
-      } on FirebaseException catch (e) {
-        await showAdaptiveDialog(
-          context,
-          title: 'Error',
-          content: 'An error occurred! ${e.message}',
-          defaultActionText: 'OK',
-        );
+        return true;
       } catch (e) {
-        await showAdaptiveDialog(
-          context,
-          title: 'Error',
-          content: 'An error occurred! ${e.toString()}',
-          defaultActionText: 'OK',
-        );
+        _toggleIsLoading();
+
+        return false;
       }
     }
+
+    return false;
   }
 }

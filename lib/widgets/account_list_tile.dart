@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:cccc/models/enum/account_subtype.dart';
+import 'package:cccc/enum/account_subtype.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/providers.dart' show databaseProvider;
@@ -15,9 +15,9 @@ import 'shimmers.dart';
 
 class AccountListTile extends ConsumerWidget {
   const AccountListTile({
-    Key? key,
+    super.key,
     required this.account,
-  }) : super(key: key);
+  });
 
   final Account account;
 

@@ -1,4 +1,5 @@
 import 'package:cccc/widgets/button/button.dart';
+import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
@@ -8,7 +9,7 @@ import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
 
 class AddAccount extends ConsumerStatefulWidget {
-  const AddAccount({Key? key}) : super(key: key);
+  const AddAccount({super.key});
 
   static void show(BuildContext context) {
     Navigator.of(context).pushNamed(
@@ -17,7 +18,7 @@ class AddAccount extends ConsumerStatefulWidget {
   }
 
   @override
-  _AddAccountState createState() => _AddAccountState();
+  ConsumerState<AddAccount> createState() => _AddAccountState();
 }
 
 class _AddAccountState extends ConsumerState<AddAccount> {
@@ -60,7 +61,22 @@ class _AddAccountState extends ConsumerState<AddAccount> {
         borderRadius: 16,
         width: size.width - 48,
         height: 56,
-        onPressed: model.isLoading ? null : () => model.openLink(context),
+        onPressed: model.isLoading
+            ? null
+            : () async {
+                final successful = await model.openLink();
+
+                if (!mounted) return;
+
+                if (!successful) {
+                  await showAdaptiveDialog(
+                    context,
+                    title: 'Error',
+                    content: 'An Error Occurred. Please try again.',
+                    defaultActionText: 'OK',
+                  );
+                }
+              },
         child: model.isLoading
             ? const CustomAdaptiveProgressIndicator(color: Colors.white)
             : const Text('Accept & Continue'),

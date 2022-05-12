@@ -14,10 +14,10 @@ import 'package:cccc/widgets/recent_transactions_card.dart';
 
 class AccountDetail extends ConsumerStatefulWidget {
   const AccountDetail({
-    Key? key,
     required this.account,
     required this.institution,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Account account;
   final Institution? institution;

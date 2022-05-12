@@ -10,9 +10,9 @@ import 'bottom_sheet_card.dart';
 
 class AccountDetailBottomSheet extends ConsumerStatefulWidget {
   const AccountDetailBottomSheet({
-    Key? key,
+    super.key,
     required this.account,
-  }) : super(key: key);
+  });
 
   final Account account;
 

@@ -19,7 +19,7 @@ class _TextButton extends Button {
     EdgeInsets margin = EdgeInsets.zero,
     double? width,
     double? height,
-    Key? key,
+    super.key,
   }) : super._(
           onPressed: onPressed,
           onLongPressed: onLongPressed,
@@ -33,24 +33,23 @@ class _TextButton extends Button {
           width: width,
           height: height,
           child: _TextButtonChild(
-            child: child,
             text: text,
             textStyle: textStyle,
             padding: padding,
             key: key,
+            child: child,
           ),
         );
 }
 
 class _TextButtonChild extends StatelessWidget {
   const _TextButtonChild({
-    Key? key,
     this.child,
     this.text,
     this.textStyle,
     required this.padding,
-  })  : assert(child != null || text != null, 'provide either child or text'),
-        super(key: key);
+    super.key,
+  }) : assert(child != null || text != null, 'provide either child or text');
 
   final Widget? child;
   final String? text;

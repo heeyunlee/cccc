@@ -13,14 +13,14 @@ import 'package:flutter/material.dart';
 /// This widget will NOT work if you wrap it inside another scrollable widget.
 class PaginatedListView<T> extends StatefulWidget {
   const PaginatedListView({
-    Key? key,
+    super.key,
     required this.query,
     required this.listItemBuilder,
     this.listViewPadding,
     this.headerWidget,
     this.emptyWidget,
     this.loadingFooterWidget,
-  }) : super(key: key);
+  });
 
   /// Query for the [ListView.builder]
   final Query<T> query;
@@ -43,7 +43,7 @@ class PaginatedListView<T> extends StatefulWidget {
   final Widget? loadingFooterWidget;
 
   @override
-  _PaginatedListViewState createState() => _PaginatedListViewState();
+  State<PaginatedListView<T>> createState() => _PaginatedListViewState();
 }
 
 class _PaginatedListViewState<T> extends State<PaginatedListView<T>> {

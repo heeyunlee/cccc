@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LocalAuthenticationSwitch extends ConsumerStatefulWidget {
-  const LocalAuthenticationSwitch({Key? key}) : super(key: key);
+  const LocalAuthenticationSwitch({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>

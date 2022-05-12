@@ -1,5 +1,4 @@
 import 'package:cccc/constants/constants.dart';
-import 'package:cccc/services/logger_init.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -27,6 +26,7 @@ class Button extends StatefulWidget {
     ),
     this.width,
     this.height,
+    super.key,
   })  : assert(0 <= scaleDownTo && scaleDownTo <= 1,
             'scaleDownTo has to be between 0 and 1'),
         assert(0 <= opacityTo && opacityTo <= 1,
@@ -131,15 +131,12 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
   late Animation<double> _opacityAnimation;
 
   bool get isPressed => _isPressed;
-  String? get _widgetKey => (widget.key as ValueKey?)?.value;
 
   bool _isPressed = false;
 
   void _setIsPressed(bool value) {
     setState(() => _isPressed = value);
   }
-
-  void _log(String log) => logger.d('[$_widgetKey] function: $log');
 
   @override
   void initState() {
@@ -149,17 +146,17 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
       duration: widget.animationDuration,
     );
 
-    final _scaleTween = Tween<double>(begin: 1, end: widget.scaleDownTo);
-    final _opacityTween = Tween<double>(begin: 1, end: widget.opacityTo);
+    final scaleTween = Tween<double>(begin: 1, end: widget.scaleDownTo);
+    final opacityTween = Tween<double>(begin: 1, end: widget.opacityTo);
 
-    _scaleAnimation = _scaleTween.animate(
+    _scaleAnimation = scaleTween.animate(
       CurvedAnimation(
         parent: _animationController,
         curve: widget.animationCurve,
       ),
     );
 
-    _opacityAnimation = _opacityTween.animate(
+    _opacityAnimation = opacityTween.animate(
       CurvedAnimation(
         parent: _animationController,
         curve: widget.animationCurve,
@@ -178,60 +175,34 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
     return GestureDetector(
       behavior: HitTestBehavior.opaque,
       onTapDown: (detail) {
-        _log('onTapDown');
-
         if (widget.vibrateOnPress) HapticFeedback.mediumImpact();
         _animationController.forward();
         _setIsPressed(true);
       },
       onTapUp: (detail) {
-        _log('onTapUp');
-
         widget.onPressed?.call();
         _animationController.reverse();
         _setIsPressed(false);
       },
-      onTapCancel: () {
-        _log('onTapCancel');
-      },
-      onLongPressDown: (details) {
-        _log('onLongPressDown');
-      },
-      onLongPressEnd: (detail) {
-        _log('onLongPressEnd');
-      },
+      onTapCancel: () {},
+      onLongPressDown: (details) {},
+      onLongPressEnd: (detail) {},
       onLongPressStart: (detail) {
-        _log('onLongPressStart');
-
         widget.onLongPressed?.call();
       },
       onLongPressUp: () {
-        _log('onLongPressUp');
-
         widget.onPressed?.call();
         _animationController.reverse();
         _setIsPressed(false);
       },
       onLongPressCancel: () {
-        _log('onLongPressCancel');
-
         _animationController.reverse();
       },
-      onForcePressStart: (detail) {
-        _log('onForcePressStart');
-      },
-      onForcePressEnd: (detail) {
-        _log('onForcePressEnd');
-      },
-      onForcePressPeak: (detail) {
-        _log('onForcePressPeak');
-      },
-      onForcePressUpdate: (detail) {
-        _log('onForcePressUpdate');
-      },
-      onTertiaryLongPress: () {
-        _log('onTertiaryLongPress');
-      },
+      onForcePressStart: (detail) {},
+      onForcePressEnd: (detail) {},
+      onForcePressPeak: (detail) {},
+      onForcePressUpdate: (detail) {},
+      onTertiaryLongPress: () {},
       child: AnimatedBuilder(
         animation: _animationController,
         builder: (context, child) {

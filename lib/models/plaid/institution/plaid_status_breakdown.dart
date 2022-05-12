@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:cccc/extensions/string_extension.dart';
-import 'package:cccc/models/enum/plaid_institution_refresh_interval.dart';
+import 'package:cccc/enum/plaid_institution_refresh_interval.dart';
 
 class PlaidStatusBreakdown {
   const PlaidStatusBreakdown({

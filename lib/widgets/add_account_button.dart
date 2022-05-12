@@ -3,7 +3,7 @@ import 'package:cccc/widgets/button/button.dart';
 import 'package:flutter/material.dart';
 
 class AddAccountButton extends StatelessWidget {
-  const AddAccountButton({Key? key}) : super(key: key);
+  const AddAccountButton({super.key});
 
   @override
   Widget build(BuildContext context) {

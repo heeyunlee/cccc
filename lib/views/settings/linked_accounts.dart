@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LinkedAccounts extends ConsumerWidget {
-  const LinkedAccounts({Key? key}) : super(key: key);
+  const LinkedAccounts({super.key});
 
   static void show(BuildContext context) {
     Navigator.of(context).pushNamed(
@@ -75,6 +75,10 @@ class LinkedAccounts extends ConsumerWidget {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: Button.elevated(
+        height: 48,
+        width: 240,
+        borderRadius: 24,
+        onPressed: () => AddAccount.show(context),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: const [
@@ -83,23 +87,7 @@ class LinkedAccounts extends ConsumerWidget {
             Text('Add a New Account'),
           ],
         ),
-        height: 48,
-        width: 240,
-        borderRadius: 24,
-        onPressed: () => AddAccount.show(context),
       ),
-      // floatingActionButton: ElevatedButton(
-      //   onPressed: () => AddAccount.show(context),
-      //   style: ButtonStyles.elevated(context, width: 240, radius: 24),
-      //   child: Row(
-      //     mainAxisSize: MainAxisSize.min,
-      //     children: const [
-      //       Icon(Icons.add),
-      //       SizedBox(width: 4),
-      //       Text('Add a New Account'),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }

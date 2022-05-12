@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 import 'package:cccc/extensions/string_extension.dart';
-import 'package:cccc/models/enum/plaid_product.dart';
+import 'package:cccc/enum/plaid_product.dart';
 import 'package:cccc/models/plaid/institution/auth_metadata.dart';
 import 'package:cccc/models/plaid/institution/payment_initiation_metadata.dart';
 import 'package:cccc/models/plaid/institution/plaid_institution_status.dart';

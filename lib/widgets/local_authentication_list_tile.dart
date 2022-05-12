@@ -8,8 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'local_authentication_switch.dart';
 
 class LocalAuthenticationListTile extends StatelessWidget {
-  const LocalAuthenticationListTile({Key? key})
-      : super(key: const ValueKey('LocalAuthenticationListTile'));
+  const LocalAuthenticationListTile({super.key});
 
   @override
   Widget build(BuildContext context) {

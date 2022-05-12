@@ -1,5 +1,5 @@
-import 'package:cccc/models/enum/payment_channel.dart';
-import 'package:cccc/models/enum/transaction_item_type.dart';
+import 'package:cccc/enum/payment_channel.dart';
+import 'package:cccc/enum/transaction_item_type.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/models/transaction_item.dart';
 

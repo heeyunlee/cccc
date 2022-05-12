@@ -6,15 +6,15 @@ import 'package:flutter/material.dart';
 
 class AccountListTileCompact extends StatelessWidget {
   const AccountListTileCompact({
-    Key? key,
+    super.key,
     required this.account,
     this.institution,
-  }) : super(key: key);
+  });
 
   final Account account;
   final Institution? institution;
 
-  String get mask => '**' + (account.mask ?? '0000');
+  String get mask => '**${account.mask ?? '0000'}';
 
   String get name => account.officialName ?? account.name;
 

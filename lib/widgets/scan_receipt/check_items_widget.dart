@@ -7,7 +7,7 @@ import 'package:cccc/widgets/scan_receipt/transaction_item_listtile.dart';
 import 'package:cccc/widgets/scan_receipt/transaction_subtotal_item_list_tile.dart';
 
 class CheckItemsWidget extends ConsumerWidget {
-  const CheckItemsWidget({Key? key, this.transaction}) : super(key: key);
+  const CheckItemsWidget({super.key, this.transaction});
 
   final Transaction? transaction;
 

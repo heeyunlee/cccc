@@ -17,7 +17,7 @@ const _shimmerGradient = LinearGradient(
 );
 
 class LoadingWidget extends StatelessWidget {
-  const LoadingWidget({Key? key, required this.child}) : super(key: key);
+  const LoadingWidget({super.key, required this.child});
 
   final Widget child;
 

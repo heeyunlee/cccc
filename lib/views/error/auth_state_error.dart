@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AuthStateError extends StatelessWidget {
-  const AuthStateError({Key? key, required this.error}) : super(key: key);
+  const AuthStateError({super.key, required this.error});
 
   final Object? error;
 

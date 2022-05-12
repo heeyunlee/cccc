@@ -15,7 +15,7 @@ class _IconButton extends Button {
     EdgeInsets margin = const EdgeInsets.all(4),
     bool vibrateOnPress = true,
     String? semanticLabel,
-    Key? key,
+    super.key,
   }) : super._(
           onPressed: onPressed,
           animationCurve: animationCurve,
@@ -42,8 +42,8 @@ class _IconButtonChild extends StatelessWidget {
     required this.iconColor,
     required this.size,
     this.semanticLabel,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final IconData icon;
   final Color iconColor;

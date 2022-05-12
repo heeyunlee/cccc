@@ -10,8 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class AllTransactions extends ConsumerWidget {
   const AllTransactions({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   static void show(BuildContext context) {
     Navigator.of(context).pushNamed(RouteNames.allTransactions);

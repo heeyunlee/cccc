@@ -13,9 +13,9 @@ import 'package:flutter_svg/svg.dart';
 
 class ScanReceipt extends StatefulWidget {
   const ScanReceipt({
-    Key? key,
+    super.key,
     required this.transaction,
-  }) : super(key: key);
+  });
 
   final Transaction? transaction;
 
@@ -144,8 +144,10 @@ class _ScanReceiptState extends State<ScanReceipt>
                     ),
                   );
 
+                  if (!mounted) return;
+
                   if (updated ?? false) {
-                    TransactionDetail.show(
+                    TransactionDetails.show(
                       context,
                       ref
                           .read(scanReceiptBottomSheetModelProvider)

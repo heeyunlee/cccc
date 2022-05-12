@@ -1,14 +1,14 @@
-import 'package:cccc/models/enum/account_type.dart';
+import 'package:cccc/enum/account_type.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/widgets/account_list_tile.dart';
 import 'package:flutter/material.dart';
 
 class AccountsExpansionTile extends StatelessWidget {
   const AccountsExpansionTile({
-    Key? key,
+    super.key,
     required this.accountType,
     required this.accounts,
-  }) : super(key: key);
+  });
 
   final AccountType accountType;
   final List<Account?> accounts;

@@ -19,7 +19,7 @@ class _ElevatedButton extends Button {
     EdgeInsets margin = EdgeInsets.zero,
     double? width,
     double? height,
-    Key? key,
+    super.key,
   }) : super._(
           onPressed: onPressed,
           animationCurve: animationCurve,
@@ -47,8 +47,8 @@ class _ElevatedButtonChild extends StatelessWidget {
     required this.borderRadius,
     required this.padding,
     required this.child,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Color? backgroundColor;
   final double borderRadius;

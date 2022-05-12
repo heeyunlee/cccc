@@ -8,10 +8,10 @@ import 'package:cccc/styles/text_styles.dart';
 
 class TransactionItemListTile extends ConsumerStatefulWidget {
   const TransactionItemListTile({
-    Key? key,
+    super.key,
     required this.transactionItem,
     required this.index,
-  }) : super(key: key);
+  });
 
   final TransactionItem transactionItem;
   final int index;

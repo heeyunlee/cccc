@@ -1,6 +1,5 @@
 import 'package:cccc/providers.dart' show firebaseAuthProvider;
 import 'package:cccc/routes/route_names.dart';
-import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/text_styles.dart';
 import 'package:cccc/views/settings/linked_accounts.dart';
 import 'package:cccc/views/settings/privacy_and_security_settings.dart';
@@ -8,8 +7,8 @@ import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Settings extends ConsumerWidget {
-  const Settings({Key? key}) : super(key: key);
+class Settings extends ConsumerStatefulWidget {
+  const Settings({super.key});
 
   static void show(BuildContext context) {
     Navigator.of(context).pushNamed(
@@ -18,9 +17,12 @@ class Settings extends ConsumerWidget {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    logger.d('[Settings] screen building...');
+  ConsumerState<ConsumerStatefulWidget> createState() => _SettingsState();
+}
 
+class _SettingsState extends ConsumerState<Settings> {
+  @override
+  Widget build(BuildContext context) {
     final auth = ref.watch(firebaseAuthProvider);
 
     return Scaffold(
@@ -66,6 +68,9 @@ class Settings extends ConsumerWidget {
 
               if (shouldSignOut ?? false) {
                 await auth.signOut();
+
+                if (!mounted) return;
+
                 Navigator.of(context).pop();
               }
             },

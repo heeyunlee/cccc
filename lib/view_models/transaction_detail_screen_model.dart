@@ -1,14 +1,10 @@
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/services/database.dart';
-import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/styles.dart';
-import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
-import 'package:cccc/widgets/show_adaptive_date_picker.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cccc/models/enum/payment_channel.dart';
+import 'package:cccc/enum/payment_channel.dart';
 
 class TransactionDetailModel with ChangeNotifier {
   TransactionDetailModel({
@@ -84,37 +80,4 @@ class TransactionDetailModel with ChangeNotifier {
   }
 
   Future<Account?> get accountFuture => database.accountGet(accountId);
-
-  Future<void> updateTransactionDate(BuildContext context) async {
-    final pickedDate = await showAdaptiveDatePicker(
-      context,
-      initialDate: transaction.date,
-    );
-
-    if (pickedDate != null) {
-      try {
-        final newTransaction = {
-          'date': pickedDate,
-        };
-
-        await database.updateTransaction(transaction, newTransaction);
-      } on FirebaseException catch (e) {
-        logger.e('Error: ${e.message}');
-
-        await showAdaptiveDialog(
-          context,
-          title: 'Error',
-          content: 'An error occurred. Message: ${e.message}',
-          defaultActionText: 'OK',
-        );
-      } catch (e) {
-        await showAdaptiveDialog(
-          context,
-          title: 'Error',
-          content: 'An error occurred. Message: ${e.toString()}',
-          defaultActionText: 'OK',
-        );
-      }
-    }
-  }
 }
