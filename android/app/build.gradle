@@ -43,7 +43,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.nextsportif.cccc"
+        applicationId "com.heeyunlee.cccc"
         minSdkVersion 21
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()

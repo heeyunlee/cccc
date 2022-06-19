@@ -1,6 +1,7 @@
+import 'package:cccc/extensions/context_extension.dart';
 import 'package:cccc/providers.dart'
     show databaseProvider, transactionDetailModelProvider;
-import 'package:cccc/views/details/choose_merchant_for_transaction.dart';
+import 'package:cccc/routes/router.dart';
 import 'package:cccc/widgets/button/button.dart';
 import 'package:cccc/widgets/custom_future_builder.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
@@ -15,7 +16,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cccc/enum/payment_channel.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/styles.dart';
 import 'package:cccc/widgets/receipt_widget.dart';
@@ -28,13 +28,6 @@ class TransactionDetails extends ConsumerStatefulWidget {
   });
 
   final Transaction transaction;
-
-  static void show(BuildContext context, Transaction transaction) {
-    Navigator.of(context).pushNamed(
-      RouteNames.transaction,
-      arguments: transaction,
-    );
-  }
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -234,9 +227,9 @@ class _TransactionDetailsState extends ConsumerState<TransactionDetails> {
                         ),
                       ),
                       ListTile(
-                        onTap: () => ChooseMerchantForTransaction.show(
-                          context,
-                          transaction: transaction,
+                        onTap: () => context.pushRoute(
+                          AppRoutes.chooseMerchant,
+                          extra: transaction,
                         ),
                         contentPadding: const EdgeInsets.symmetric(vertical: 4),
                         leading: const SizedBox(

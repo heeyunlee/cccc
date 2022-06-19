@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/providers.dart' show accountDetailModelProvider;
-import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/decorations.dart';
 import 'package:cccc/styles/text_styles.dart';
@@ -21,17 +20,6 @@ class AccountDetail extends ConsumerStatefulWidget {
 
   final Account account;
   final Institution? institution;
-
-  static Future<void> show(
-    BuildContext context, {
-    required Account account,
-    required Institution? institution,
-  }) async {
-    await Navigator.of(context).pushNamed(
-      RouteNames.account,
-      arguments: {'account': account, 'institution': institution},
-    );
-  }
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _AccountDetailState();

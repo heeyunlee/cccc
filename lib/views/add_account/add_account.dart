@@ -5,17 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
 
 import 'package:cccc/providers.dart' show connectPlaidModelProvider;
-import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
 
 class AddAccount extends ConsumerStatefulWidget {
   const AddAccount({super.key});
-
-  static void show(BuildContext context) {
-    Navigator.of(context).pushNamed(
-      RouteNames.addAccounts,
-    );
-  }
 
   @override
   ConsumerState<AddAccount> createState() => _AddAccountState();

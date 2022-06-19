@@ -2,14 +2,8 @@ import 'package:cccc/providers.dart' show localAuthenticationServiceProvider;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:cccc/routes/route_names.dart';
-
 class LocalAuthenticationScreen extends ConsumerStatefulWidget {
   const LocalAuthenticationScreen({super.key});
-
-  static void show(BuildContext context) {
-    Navigator.of(context).pushNamed(RouteNames.authenticate);
-  }
 
   @override
   ConsumerState<LocalAuthenticationScreen> createState() =>

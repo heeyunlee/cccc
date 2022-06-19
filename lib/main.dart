@@ -1,3 +1,4 @@
+import 'package:cccc/routes/router.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -7,11 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
 import 'firebase_options.dart';
-import 'widgets/auth_states_widget_builder.dart';
-import 'routes/custom_router.dart';
 import 'styles/styles.dart';
-
-final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,11 +22,11 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     /// Disable landscape mode
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
@@ -55,11 +52,13 @@ class MyApp extends StatelessWidget {
       initLogger(Level.debug);
     }
 
-    return MaterialApp(
-      navigatorObservers: [routeObserver],
+    final goRouter = buildGoRouter(context, ref);
+
+    return MaterialApp.router(
+      routerDelegate: goRouter.routerDelegate,
+      routeInformationParser: goRouter.routeInformationParser,
       useInheritedMediaQuery: true,
       title: 'CCCC: Credit Card Calorie Counter',
-      home: const AuthStatesWidgetBuilder(),
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSwatch(
@@ -76,7 +75,6 @@ class MyApp extends StatelessWidget {
         cardTheme: Themes.card,
         dividerTheme: Themes.divider,
       ),
-      onGenerateRoute: CustomRouter.onGenerateRoute,
     );
   }
 }

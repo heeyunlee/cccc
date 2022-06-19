@@ -1,9 +1,9 @@
+import 'package:cccc/extensions/context_extension.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/providers.dart';
-import 'package:cccc/routes/route_names.dart';
+import 'package:cccc/routes/router.dart';
 import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/views/add_account/add_account.dart';
 import 'package:cccc/widgets/button/button.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/institution_card.dart';
@@ -13,12 +13,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LinkedAccounts extends ConsumerWidget {
   const LinkedAccounts({super.key});
-
-  static void show(BuildContext context) {
-    Navigator.of(context).pushNamed(
-      RouteNames.linkedAccounts,
-    );
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -78,7 +72,7 @@ class LinkedAccounts extends ConsumerWidget {
         height: 48,
         width: 240,
         borderRadius: 24,
-        onPressed: () => AddAccount.show(context),
+        onPressed: () => context.pushRoute(AppRoutes.addAccount),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: const [

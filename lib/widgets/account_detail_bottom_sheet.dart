@@ -1,10 +1,11 @@
+import 'package:cccc/extensions/context_extension.dart';
+import 'package:cccc/routes/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/providers.dart' show accountDetailBottomSheetModelProvider;
 import 'package:cccc/styles/styles.dart';
-import 'package:cccc/views/settings/linked_accounts.dart';
 
 import 'bottom_sheet_card.dart';
 
@@ -62,7 +63,7 @@ class _AccountDetailBottomSheetState
               visualDensity: VisualDensity.compact,
               leading: const Icon(Icons.build, size: 20),
               title: const Text('Fix the account connectivity issue'),
-              onTap: () => LinkedAccounts.show(context),
+              onTap: () => context.pushRoute(AppRoutes.linkedAccounts),
             ),
           ListTile(
             visualDensity: VisualDensity.compact,
@@ -81,7 +82,7 @@ class _AccountDetailBottomSheetState
               'Unlink',
               style: TextStyles.body2Red,
             ),
-            onTap: () => LinkedAccounts.show(context),
+            onTap: () => context.pushRoute(AppRoutes.linkedAccounts),
           ),
         ],
       ),

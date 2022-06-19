@@ -2,7 +2,6 @@ import 'package:cccc/models/merchant.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/providers.dart'
     show chooseMerchantForTransactionModelProvider, databaseProvider;
-import 'package:cccc/routes/route_names.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/styles.dart';
 import 'package:cccc/widgets/button/button.dart';
@@ -19,13 +18,6 @@ class ChooseMerchantForTransaction extends StatefulWidget {
   });
 
   final Transaction transaction;
-
-  static void show(BuildContext context, {required Transaction transaction}) {
-    Navigator.of(context).pushNamed(
-      RouteNames.chooseMerchant,
-      arguments: transaction,
-    );
-  }
 
   @override
   State<ChooseMerchantForTransaction> createState() =>

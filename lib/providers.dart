@@ -13,6 +13,7 @@ import 'package:cccc/view_models/sign_in_model.dart';
 import 'package:cccc/view_models/transaction_detail_screen_model.dart';
 import 'package:cccc/widget_models/institution_card_model.dart';
 import 'package:cccc/widget_models/scan_receipt_bottom_sheet_model.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'services/cloud_functions.dart';
@@ -26,6 +27,11 @@ import 'services/shared_preference_service.dart';
 /// Creates [FirebaseAuthService] provider which deals with Firebase Authentication
 final firebaseAuthProvider = Provider<FirebaseAuthService>(
   (ref) => FirebaseAuthService(),
+);
+
+/// [Stream] of [User] from [FirebaseAuthService]
+final authStateChangesProvider = StreamProvider<User?>(
+  (ref) => ref.watch(firebaseAuthProvider).authStateChanges,
 );
 
 /// Creates [CloudFunctions] provider that uses HTTP Requests to call Google
@@ -61,6 +67,10 @@ final localAuthenticationServiceProvider = ChangeNotifierProvider((ref) {
 
   return LocalAuthenticationService(sharedPref: sharedPref);
 });
+
+final useLocalAuthFutureProvider = FutureProvider(
+  (ref) => ref.watch(localAuthenticationServiceProvider).getUseLocalAuth(),
+);
 
 /// Creates [SharedPreferencesService] provider that deals with `SharedPreferences`
 /// package

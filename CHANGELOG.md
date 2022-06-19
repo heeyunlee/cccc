@@ -1,5 +1,11 @@
 # Change Log
 
+## [0.0.15]
+- Upgrade to Flutter 3.0.2 and Dart 2.17.3
+- Use GoRouter for navigations
+- Upgrade dependencies
+
+
 ## [0.0.14]
 ### New Features & Screens
 - Update `InstitutionCircleAvatar` widget to show account connection state with circle border color

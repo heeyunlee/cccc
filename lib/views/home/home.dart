@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:cccc/extensions/context_extension.dart';
+import 'package:cccc/routes/router.dart';
 import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,8 +13,6 @@ import 'package:cccc/models/user.dart';
 import 'package:cccc/providers.dart' show homeModelProvider;
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/view_models/home_model.dart';
-import 'package:cccc/views/scan_receipt/scan_receipt.dart';
-import 'package:cccc/views/settings/settings.dart';
 import 'package:cccc/widgets/recent_transactions_card.dart';
 
 import '../../widgets/accounts_card.dart';
@@ -117,11 +117,11 @@ class _HomeState extends ConsumerState<Home> {
           title: Text(model.today),
           leading: IconButton(
             icon: const Icon(Icons.photo_camera),
-            onPressed: () => ScanReceipt.show(context),
+            onPressed: () => context.pushRoute(AppRoutes.scanReceipts),
           ),
           actions: [
             IconButton(
-              onPressed: () => Settings.show(context),
+              onPressed: () => context.pushRoute(AppRoutes.settings),
               icon: const Icon(Icons.settings),
             ),
             const SizedBox(width: 8),

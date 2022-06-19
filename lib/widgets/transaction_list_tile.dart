@@ -1,7 +1,8 @@
 import 'package:cccc/constants/constants.dart';
+import 'package:cccc/extensions/context_extension.dart';
 import 'package:cccc/models/plaid/transaction.dart';
+import 'package:cccc/routes/router.dart';
 import 'package:cccc/styles/styles.dart';
-import 'package:cccc/views/details/transaction_detail.dart';
 import 'package:flutter/material.dart';
 
 import 'package:intl/intl.dart';
@@ -109,7 +110,14 @@ class TransactionListTile extends StatelessWidget {
         ),
       ),
       onTap: enableOnTap!
-          ? onTap ?? () => TransactionDetails.show(context, transaction)
+          ? onTap ??
+              () => context.pushRoute(
+                    AppRoutes.transactionDetails,
+                    extra: transaction,
+                    params: {
+                      'transactionId': transaction.transactionId,
+                    },
+                  )
           : null,
     );
   }
