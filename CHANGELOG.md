@@ -1,7 +1,7 @@
 # Change Log
 
 ## [0.0.15]
-- Upgrade to Flutter 3.0.2 and Dart 2.17.3
+- Upgrade to Flutter 3.3.0 and Dart 2.18.0
 - Use GoRouter for navigations
 - Upgrade dependencies
 
