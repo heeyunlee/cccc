@@ -8,14 +8,14 @@ import 'package:flutter/material.dart';
 /// put SliverAppBar as a header, for example.
 class PaginatedCustomScrollView<T> extends StatefulWidget {
   const PaginatedCustomScrollView({
-    Key? key,
+    super.key,
     required this.query,
     required this.listItemBuilder,
     this.listViewPadding,
     this.headerSliver,
     this.emptyWidget,
     this.loadingFooterSliver,
-  }) : super(key: key);
+  });
 
   /// Query for the [ListView.builder]
   final Query<T> query;
@@ -38,7 +38,7 @@ class PaginatedCustomScrollView<T> extends StatefulWidget {
   final Widget? loadingFooterSliver;
 
   @override
-  _PaginatedCustomScrollViewState createState() =>
+  State<PaginatedCustomScrollView<T>> createState() =>
       _PaginatedCustomScrollViewState();
 }
 

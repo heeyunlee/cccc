@@ -1,9 +1,9 @@
 import 'package:cccc/extensions/enum_extension.dart';
-import 'package:cccc/models/enum/account_subtype.dart';
-import 'package:cccc/models/enum/plaid_institution_health_incident_status.dart';
-import 'package:cccc/models/enum/plaid_institution_refresh_interval.dart';
-import 'package:cccc/models/enum/plaid_product.dart';
-import 'package:cccc/models/enum/standing_order_interval.dart';
+import 'package:cccc/enum/account_subtype.dart';
+import 'package:cccc/enum/plaid_institution_health_incident_status.dart';
+import 'package:cccc/enum/plaid_institution_refresh_interval.dart';
+import 'package:cccc/enum/plaid_product.dart';
+import 'package:cccc/enum/standing_order_interval.dart';
 
 extension CapExtension on String {
   String get title {

@@ -1,23 +1,24 @@
+import 'package:cccc/extensions/context_extension.dart';
+import 'package:cccc/routes/extra.dart';
+import 'package:cccc/routes/router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:cccc/models/enum/account_subtype.dart';
+import 'package:cccc/enum/account_subtype.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/providers.dart' show databaseProvider;
 import 'package:cccc/styles/formatter.dart';
 import 'package:cccc/styles/text_styles.dart';
-import 'package:cccc/views/details/account_detail.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 
 import 'account_circle_avatar.dart';
-import 'shimmers.dart';
 
 class AccountListTile extends ConsumerWidget {
   const AccountListTile({
-    Key? key,
+    super.key,
     required this.account,
-  }) : super(key: key);
+  });
 
   final Account account;
 
@@ -31,12 +32,17 @@ class AccountListTile extends ConsumerWidget {
         leading: Icon(Icons.error),
         title: Text('An Error has occurred'),
       ),
-      loadingWidget: Shimmers.accountListTile,
+      loadingWidget: const CircularProgressIndicator.adaptive(),
       builder: (context, institution) => ListTile(
-        onTap: () => AccountDetail.show(
-          context,
-          account: account,
-          institution: institution,
+        onTap: () => context.pushRoute(
+          AppRoutes.accountDetails,
+          extra: AccountDetailsScreenExtra(
+            account: account,
+            institution: institution,
+          ),
+          params: {
+            'accountId': account.accountId,
+          },
         ),
         leading: InstitutionCircleAvatar(
           institution: institution,

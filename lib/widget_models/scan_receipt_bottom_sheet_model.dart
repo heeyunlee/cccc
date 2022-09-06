@@ -6,7 +6,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:cccc/extensions/list_extension.dart';
 import 'package:cccc/extensions/text_element_extension.dart';
-import 'package:cccc/models/enum/scan_receipt_state.dart';
+import 'package:cccc/enum/scan_receipt_state.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/models/receipt_response.dart';
 import 'package:cccc/models/transaction_item.dart';

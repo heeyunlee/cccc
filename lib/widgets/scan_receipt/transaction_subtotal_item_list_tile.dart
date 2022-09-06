@@ -6,7 +6,7 @@ import 'package:cccc/providers.dart' show scanReceiptBottomSheetModelProvider;
 import 'package:cccc/styles/text_styles.dart';
 
 class TransactionSubtotalItemListTile extends ConsumerWidget {
-  const TransactionSubtotalItemListTile({Key? key}) : super(key: key);
+  const TransactionSubtotalItemListTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

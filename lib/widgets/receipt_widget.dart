@@ -1,4 +1,4 @@
-import 'package:cccc/models/enum/transaction_item_type.dart';
+import 'package:cccc/enum/transaction_item_type.dart';
 import 'package:cccc/models/transaction_item.dart';
 import 'package:cccc/styles/text_styles.dart';
 import 'package:flutter/material.dart';
@@ -6,13 +6,13 @@ import 'package:intl/intl.dart';
 
 class ReceiptWidget extends StatelessWidget {
   const ReceiptWidget({
-    Key? key,
+    super.key,
     required this.transactionItems,
     this.date,
     this.name,
     this.color,
     this.enableEdit = false,
-  }) : super(key: key);
+  });
 
   final List<TransactionItem> transactionItems;
   final DateTime? date;

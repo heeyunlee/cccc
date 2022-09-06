@@ -8,7 +8,7 @@ String enumToTitle<T>(T e) {
   final camelCase = enumToString(e);
   final camelToSentence = camelCase.replaceAllMapped(
     exp,
-    (m) => ' ' + m.group(0)!,
+    (m) => ' ${m.group(0)!}',
   );
   final result = camelToSentence.title;
 

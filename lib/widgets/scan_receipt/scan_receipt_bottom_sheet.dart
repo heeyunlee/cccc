@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:cccc/models/enum/scan_receipt_state.dart';
+import 'package:cccc/enum/scan_receipt_state.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/providers.dart' show scanReceiptBottomSheetModelProvider;
 import 'package:cccc/services/logger_init.dart';
@@ -15,9 +15,9 @@ import 'match_transaction_with_items_widget.dart';
 
 class ScanReceiptBottomSheet extends ConsumerStatefulWidget {
   const ScanReceiptBottomSheet({
-    Key? key,
+    super.key,
     this.transaction,
-  }) : super(key: key);
+  });
 
   final Transaction? transaction;
 

@@ -1,12 +1,12 @@
-import 'package:cccc/models/enum/account_connection_state.dart';
+import 'package:cccc/enum/account_connection_state.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/services/database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:cccc/models/enum/account_subtype.dart';
-import 'package:cccc/models/enum/account_type.dart';
+import 'package:cccc/enum/account_subtype.dart';
+import 'package:cccc/enum/account_type.dart';
 import 'package:cccc/extensions/datetime_extension.dart';
 
 class AccountDetailModel with ChangeNotifier {

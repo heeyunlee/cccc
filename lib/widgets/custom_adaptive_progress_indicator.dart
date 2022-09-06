@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 class CustomAdaptiveProgressIndicator extends StatelessWidget {
   const CustomAdaptiveProgressIndicator({
-    Key? key,
+    super.key,
     this.diameter = 24,
     this.color,
-  }) : super(key: key);
+  });
 
   final double diameter;
   final Color? color;

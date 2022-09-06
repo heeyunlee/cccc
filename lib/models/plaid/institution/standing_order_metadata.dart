@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:cccc/extensions/string_extension.dart';
-import 'package:cccc/models/enum/standing_order_interval.dart';
+import 'package:cccc/enum/standing_order_interval.dart';
 
 /// Metadata specifically related to valid Payment Initiation standing order
 /// configurations for the institution.

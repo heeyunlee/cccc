@@ -1,26 +1,21 @@
+import 'package:cccc/extensions/context_extension.dart';
 import 'package:cccc/providers.dart' show firebaseAuthProvider;
-import 'package:cccc/routes/route_names.dart';
-import 'package:cccc/services/logger_init.dart';
+import 'package:cccc/routes/router.dart';
 import 'package:cccc/styles/text_styles.dart';
-import 'package:cccc/views/settings/linked_accounts.dart';
-import 'package:cccc/views/settings/privacy_and_security_settings.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Settings extends ConsumerWidget {
-  const Settings({Key? key}) : super(key: key);
-
-  static void show(BuildContext context) {
-    Navigator.of(context).pushNamed(
-      RouteNames.settings,
-    );
-  }
+class Settings extends ConsumerStatefulWidget {
+  const Settings({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    logger.d('[Settings] screen building...');
+  ConsumerState<ConsumerStatefulWidget> createState() => _SettingsState();
+}
 
+class _SettingsState extends ConsumerState<Settings> {
+  @override
+  Widget build(BuildContext context) {
     final auth = ref.watch(firebaseAuthProvider);
 
     return Scaffold(
@@ -30,11 +25,11 @@ class Settings extends ConsumerWidget {
       body: Column(
         children: [
           ListTile(
-            onTap: () => LinkedAccounts.show(context),
+            onTap: () => context.pushRoute(AppRoutes.linkedAccounts),
             title: const Text('Linked Accounts'),
           ),
           ListTile(
-            onTap: () => PrivacyAndSecuritySettings.show(context),
+            onTap: () => context.pushRoute(AppRoutes.privacyAndSecurity),
             title: const Text('Privacy & Security'),
           ),
           ListTile(
@@ -47,8 +42,8 @@ class Settings extends ConsumerWidget {
                   width: 48,
                   height: 48,
                 ),
-                // TODO: CHANGE VERSION
-                applicationVersion: '0.0.14',
+                // TODO(heeyunlee): Update version
+                applicationVersion: '0.0.15',
               );
             },
             title: const Text('About'),
@@ -60,19 +55,23 @@ class Settings extends ConsumerWidget {
                 title: 'Sign Out',
                 content: 'Sign out?',
                 defaultActionText: 'Yes',
+                isDefaultDestructiveAction: true,
                 cancelAcitionText: 'No',
               );
 
               if (shouldSignOut ?? false) {
                 await auth.signOut();
+
+                if (!mounted) return;
+
                 Navigator.of(context).pop();
               }
             },
             title: const Text('Sign Out', style: TextStyles.body2Red),
           ),
           const SizedBox(height: 32),
-          // TODO: CHANGE VERSION
-          const Text('v.0.0.14', style: TextStyles.overlineWhite54),
+          // TODO(heeyunlee): Update version
+          const Text('v.0.0.15', style: TextStyles.overlineWhite54),
         ],
       ),
     );

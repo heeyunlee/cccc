@@ -7,15 +7,15 @@ Future<DateTime?> showAdaptiveDatePicker(
   required DateTime initialDate,
 }) async {
   if (defaultTargetPlatform == TargetPlatform.iOS) {
-    DateTime? _pickedDate;
+    DateTime? pickedDate;
 
     CupertinoDatePicker(
       onDateTimeChanged: (date) {
-        _pickedDate = date;
+        pickedDate = date;
       },
     );
 
-    return _pickedDate;
+    return pickedDate;
   } else {
     final firstDate = initialDate.subtract(const Duration(days: 365 * 5));
     final lastDate = initialDate.add(const Duration(days: 365 * 5));

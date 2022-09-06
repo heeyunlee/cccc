@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cccc/models/enum/account_connection_state.dart';
+import 'package:cccc/enum/account_connection_state.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:flutter/material.dart';
 
@@ -9,11 +9,11 @@ import 'package:cccc/styles/styles.dart';
 
 class InstitutionCircleAvatar extends StatelessWidget {
   const InstitutionCircleAvatar({
-    Key? key,
+    super.key,
     required this.institution,
     required this.account,
     this.diameter = 32,
-  }) : super(key: const ValueKey('InstitutionCircleAvatar'));
+  });
 
   final Institution? institution;
   final Account account;
@@ -71,7 +71,7 @@ class InstitutionCircleAvatar extends StatelessWidget {
 
     if (institution!.logo == null) {
       final hexCode = institution!.primaryColor?.substring(1) ?? '000000';
-      final fullHexCode = 'FF' + hexCode;
+      final fullHexCode = 'FF$hexCode';
       final hexCodeInt = int.parse(fullHexCode, radix: 16);
 
       return Container(

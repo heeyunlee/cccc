@@ -1,14 +1,10 @@
-import 'dart:io';
-import 'package:cccc/models/enum/account_type.dart';
+import 'package:cccc/enum/account_type.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/models/user.dart';
 import 'package:cccc/services/cloud_functions.dart';
 import 'package:cccc/services/database.dart';
-import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class HomeModel with ChangeNotifier {
@@ -45,54 +41,13 @@ class HomeModel with ChangeNotifier {
     return map;
   }
 
-  Future<void> transactionsRefresh(BuildContext context, User user) async {
+  Future<int> transactionsRefresh(User user) async {
     try {
       final response = await functions.transactionsRefresh(user);
 
-      if (response.statusCode == 404) {
-        showAdaptiveDialog(
-          context,
-          title: 'Refresh Error',
-          content:
-              'We could not refresh the data. Please re-authenticate your account using the Plaid Link',
-          defaultActionText: 'OK',
-        );
-      }
-    } on http.Response catch (response) {
-      if (response.statusCode == 404) {
-        logger.e(response);
-
-        showAdaptiveDialog(
-          context,
-          title: 'An Error Occurred',
-          content: 'An Error Occurred',
-          defaultActionText: 'OK',
-        );
-      }
-      throw showAdaptiveDialog(
-        context,
-        title: 'An Error Occurred',
-        content: 'An Error Occurred',
-        defaultActionText: 'OK',
-      );
-    } on SocketException catch (e) {
-      logger.e('SocketException: $e');
-
-      showAdaptiveDialog(
-        context,
-        title: 'An Error Occurred',
-        content: 'An Error Occurred',
-        defaultActionText: 'OK',
-      );
+      return response.statusCode;
     } catch (e) {
-      logger.e(e);
-
-      showAdaptiveDialog(
-        context,
-        title: 'An Error Occurred',
-        content: 'An Error Occurred',
-        defaultActionText: 'OK',
-      );
+      return 404;
     }
   }
 }

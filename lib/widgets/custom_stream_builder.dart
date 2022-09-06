@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 /// Creates a custom [StreamBuilder] widget.
 class CustomStreamBuilder<T> extends StatelessWidget {
   const CustomStreamBuilder({
-    Key? key,
+    super.key,
     required this.stream,
     required this.builder,
     this.initialData,
     required this.loadingWidget,
     required this.errorBuilder,
-  }) : super(key: key);
+  });
 
   /// [Stream] for the [StreamBuilder]
   final Stream<T> stream;

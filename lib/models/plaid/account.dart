@@ -4,9 +4,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:cccc/extensions/enum_extension.dart';
 import 'package:cccc/extensions/string_extension.dart';
-import 'package:cccc/models/enum/account_connection_state.dart';
-import 'package:cccc/models/enum/account_subtype.dart';
-import 'package:cccc/models/enum/account_type.dart';
+import 'package:cccc/enum/account_connection_state.dart';
+import 'package:cccc/enum/account_subtype.dart';
+import 'package:cccc/enum/account_type.dart';
 
 import 'balance.dart';
 

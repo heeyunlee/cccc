@@ -1,4 +1,4 @@
-import 'package:cccc/models/enum/account_connection_state.dart';
+import 'package:cccc/enum/account_connection_state.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/services/cloud_functions.dart';
 import 'package:flutter/material.dart';

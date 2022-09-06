@@ -1,3 +1,5 @@
+import 'package:cccc/widgets/button/button.dart';
+import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
@@ -12,14 +14,13 @@ import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
 import 'package:cccc/widgets/show_custom_action_sheet.dart';
 
 import 'account_circle_avatar.dart';
-// import 'account_connection_state_icon.dart';
 
 class InstitutionCard extends ConsumerStatefulWidget {
   const InstitutionCard({
-    Key? key,
+    super.key,
     required this.accounts,
     required this.institution,
-  }) : super(key: key);
+  });
 
   final List<Account?> accounts;
   final Institution? institution;
@@ -63,10 +64,6 @@ class _InstitutionCardState extends ConsumerState<InstitutionCard> {
               children: [
                 Text(model.name),
                 const SizedBox(width: 16),
-                // AccountConnectionStateIcon(
-                //   account: model.firstAccount,
-                //   size: 24,
-                // ),
               ],
             ),
             trailing: IconButton(
@@ -80,8 +77,34 @@ class _InstitutionCardState extends ConsumerState<InstitutionCard> {
                   actionResults: [true],
                 );
 
+                if (!mounted) return;
+
                 if (actionSheetResult == true) {
-                  await model.unlinkAccount(context);
+                  final confirmed = await showAdaptiveDialog(
+                    context,
+                    title: 'Unlink this institution?',
+                    content:
+                        'All the accounts associated with this institution will be permanently deleted, as well as all the transactions. You will NOT be able to undo this',
+                    defaultActionText: 'Delete',
+                    isDefaultDestructiveAction: true,
+                    cancelAcitionText: 'Cancel',
+                  );
+                  if (confirmed ?? false) {
+                    final status = await model.unlinkAccount();
+
+                    if (!mounted) return;
+
+                    switch (status) {
+                      case 404:
+                        showAdaptiveDialog(
+                          context,
+                          title: 'Error',
+                          content:
+                              'An Error occurred during unlinking the institution. Please try again',
+                          defaultActionText: 'OK',
+                        );
+                    }
+                  }
                 }
               },
               icon: const Icon(
@@ -111,13 +134,26 @@ class _InstitutionCardState extends ConsumerState<InstitutionCard> {
               ),
             ),
           if (model.isConnectionError)
-            OutlinedButton(
-              onPressed: () => model.openLinkUpdateMode(context),
-              style: ButtonStyles.outline(
-                context,
-                width: size.width - 64,
-                height: 40,
-              ),
+            Button.outlined(
+              margin: const EdgeInsets.only(top: 16, bottom: 8),
+              width: size.width - 64,
+              height: 40,
+              onPressed: model.isLoading
+                  ? null
+                  : () async {
+                      final successful = await model.openLinkUpdateMode();
+
+                      if (!mounted) return;
+
+                      if (!successful) {
+                        await showAdaptiveDialog(
+                          context,
+                          title: 'Error',
+                          content: 'An Error Occurred. Please try again.',
+                          defaultActionText: 'OK',
+                        );
+                      }
+                    },
               child: model.isLoading
                   ? const CustomAdaptiveProgressIndicator()
                   : const Text('Re-authenticate'),

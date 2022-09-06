@@ -1,13 +1,13 @@
-// import 'package:cccc/models/enum/account_connection_state.dart';
+// import 'package:cccc/enum/account_connection_state.dart';
 // import 'package:cccc/models/plaid/account.dart';
 // import 'package:flutter/material.dart';
 
 // class AccountConnectionStateIcon extends StatelessWidget {
 //   const AccountConnectionStateIcon({
-//     Key? key,
+//     super. key,
 //     required this.account,
 //     this.size = 16,
-//   }) : super(key: key);
+//   }) ;
 
 //   final Account? account;
 //   final double size;

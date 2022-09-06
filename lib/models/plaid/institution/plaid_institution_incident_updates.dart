@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:cccc/models/enum/plaid_institution_health_incident_status.dart';
+import 'package:cccc/enum/plaid_institution_health_incident_status.dart';
 import 'package:cccc/extensions/string_extension.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

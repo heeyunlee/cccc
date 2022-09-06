@@ -1,6 +1,5 @@
 import 'package:cccc/services/cloud_functions.dart';
 import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:plaid_flutter/plaid_flutter.dart';
 
@@ -19,7 +18,7 @@ class ConnectPlaidModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> openLink(BuildContext context) async {
+  Future<bool> openLink() async {
     toggleLoading();
 
     try {
@@ -31,30 +30,39 @@ class ConnectPlaidModel with ChangeNotifier {
         final linkTokenConfiguration = LinkTokenConfiguration(token: linkToken);
 
         await PlaidLink.open(configuration: linkTokenConfiguration);
-      } else {
-        logger.e('Error Response. $response');
-        final errorMessage = response['error_message'];
 
-        showAdaptiveDialog(
-          context,
-          title: 'Error',
-          content:
-              'An Error Occurred. An error code is "$errorMessage". Please try again.',
-          defaultActionText: 'OK',
-        );
+        toggleLoading();
+
+        return true;
+      } else {
+        toggleLoading();
+
+        return false;
+        // logger.e('Error Response. $response');
+        // final errorMessage = response['error_message'];
+
+        // await showAdaptiveDialog(
+        //   context,
+        //   title: 'Error',
+        //   content:
+        //       'An Error Occurred. An error code is "$errorMessage". Please try again.',
+        //   defaultActionText: 'OK',
+        // );
       }
     } catch (e) {
+      toggleLoading();
+
       logger.e(e);
 
-      showAdaptiveDialog(
-        context,
-        title: 'An Error Occurred',
-        content: 'Could not open a Plaid Link. Please try again.',
-        defaultActionText: 'OK',
-      );
-    }
+      return true;
 
-    toggleLoading();
+      // showAdaptiveDialog(
+      //   context,
+      //   title: 'An Error Occurred',
+      //   content: 'Could not open a Plaid Link. Please try again.',
+      //   defaultActionText: 'OK',
+      // );
+    }
   }
 
   Future<void> onSuccessCallback(

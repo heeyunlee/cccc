@@ -6,10 +6,10 @@ import 'package:cccc/providers.dart' show scanReceiptBottomSheetModelProvider;
 
 class ChooseImageToScanWidget extends ConsumerWidget {
   const ChooseImageToScanWidget({
-    Key? key,
+    super.key,
     this.title,
     this.subtitle,
-  }) : super(key: key);
+  });
 
   final Widget? title;
   final String? subtitle;

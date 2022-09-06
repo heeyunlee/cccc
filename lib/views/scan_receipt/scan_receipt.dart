@@ -1,9 +1,9 @@
 import 'package:cccc/constants/dummy_data.dart';
+import 'package:cccc/extensions/context_extension.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/providers.dart' show scanReceiptBottomSheetModelProvider;
-import 'package:cccc/routes/route_names.dart';
+import 'package:cccc/routes/router.dart';
 import 'package:cccc/services/logger_init.dart';
-import 'package:cccc/views/details/transaction_detail.dart';
 import 'package:cccc/widgets/button/button.dart';
 import 'package:cccc/widgets/receipt_widget.dart';
 import 'package:cccc/widgets/scan_receipt/scan_receipt_bottom_sheet.dart';
@@ -13,18 +13,11 @@ import 'package:flutter_svg/svg.dart';
 
 class ScanReceipt extends StatefulWidget {
   const ScanReceipt({
-    Key? key,
+    super.key,
     required this.transaction,
-  }) : super(key: key);
+  });
 
   final Transaction? transaction;
-
-  static void show(BuildContext context, {Transaction? transaction}) {
-    Navigator.of(context).pushNamed(
-      RouteNames.scanReceipts,
-      arguments: transaction,
-    );
-  }
 
   @override
   State<ScanReceipt> createState() => _ScanReceiptState();
@@ -144,12 +137,14 @@ class _ScanReceiptState extends State<ScanReceipt>
                     ),
                   );
 
+                  if (!mounted) return;
+
                   if (updated ?? false) {
-                    TransactionDetail.show(
-                      context,
-                      ref
+                    context.pushRoute(
+                      AppRoutes.transactionDetails,
+                      extra: ref
                           .read(scanReceiptBottomSheetModelProvider)
-                          .transaction!,
+                          .transaction,
                     );
                   }
                 },

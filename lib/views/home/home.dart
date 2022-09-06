@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:cccc/extensions/context_extension.dart';
+import 'package:cccc/routes/router.dart';
 import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
+import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
@@ -10,8 +13,6 @@ import 'package:cccc/models/user.dart';
 import 'package:cccc/providers.dart' show homeModelProvider;
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/view_models/home_model.dart';
-import 'package:cccc/views/scan_receipt/scan_receipt.dart';
-import 'package:cccc/views/settings/settings.dart';
 import 'package:cccc/widgets/recent_transactions_card.dart';
 
 import '../../widgets/accounts_card.dart';
@@ -19,13 +20,29 @@ import '../../widgets/custom_stream_builder.dart';
 import '../../widgets/home_flexible_space_bar.dart';
 
 class Home extends ConsumerStatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _HomeState();
 }
 
 class _HomeState extends ConsumerState<Home> {
+  Future<void> onRefresh(BuildContext context, User user) async {
+    final status = await ref.read(homeModelProvider).transactionsRefresh(user);
+
+    if (!mounted) return;
+
+    if (status == 404) {
+      showAdaptiveDialog(
+        context,
+        title: 'Refresh Error',
+        content:
+            'We could not refresh the data. Please re-authenticate your account using the Plaid Link',
+        defaultActionText: 'OK',
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     logger.d('[Home] building... on Web? $kIsWeb');
@@ -54,7 +71,7 @@ class _HomeState extends ConsumerState<Home> {
               case TargetPlatform.linux:
               case TargetPlatform.windows:
                 return RefreshIndicator(
-                  onRefresh: () => model.transactionsRefresh(context, user),
+                  onRefresh: () => onRefresh(context, user),
                   child: _customScrollWidget(context, user, model),
                 );
             }
@@ -78,7 +95,7 @@ class _HomeState extends ConsumerState<Home> {
       slivers: [
         if (!kIsWeb && Platform.isIOS)
           CupertinoSliverRefreshControl(
-            onRefresh: () => model.transactionsRefresh(context, user),
+            onRefresh: () => onRefresh(context, user),
             builder: (context, mode, __, ___, ____) {
               return Container(
                 height: media.padding.top + 136,
@@ -100,11 +117,11 @@ class _HomeState extends ConsumerState<Home> {
           title: Text(model.today),
           leading: IconButton(
             icon: const Icon(Icons.photo_camera),
-            onPressed: () => ScanReceipt.show(context),
+            onPressed: () => context.pushRoute(AppRoutes.scanReceipts),
           ),
           actions: [
             IconButton(
-              onPressed: () => Settings.show(context),
+              onPressed: () => context.pushRoute(AppRoutes.settings),
               icon: const Icon(Icons.settings),
             ),
             const SizedBox(width: 8),

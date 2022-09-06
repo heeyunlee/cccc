@@ -1,38 +1,45 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
-Route adaptiveRoute({
-  required bool rootNavigator,
-  required bool maintainState,
-  required Function(BuildContext context) builder,
-  required RouteSettings settings,
+Page adaptivePage(
+  BuildContext context, {
+  required Widget child,
+  Object? arguments,
+  bool fullscreenDialog = false,
+  LocalKey? key,
+  bool maintainState = true,
+  String? name,
+  String? restorationId,
+  String? title,
 }) {
-  HapticFeedback.mediumImpact();
+  final platform = Theme.of(context).platform;
 
-  if (!kIsWeb && Platform.isIOS) {
-    return CupertinoPageRoute(
-      fullscreenDialog: rootNavigator,
-      settings: settings,
-      maintainState: maintainState,
-      builder: (context) => builder(context),
-    );
-  } else if (!kIsWeb && Platform.isAndroid) {
-    return MaterialPageRoute(
-      fullscreenDialog: rootNavigator,
-      settings: settings,
-      maintainState: maintainState,
-      builder: (context) => builder(context),
-    );
-  } else {
-    return MaterialPageRoute(
-      fullscreenDialog: rootNavigator,
-      settings: settings,
-      maintainState: maintainState,
-      builder: (context) => builder(context),
-    );
+  switch (platform) {
+    case TargetPlatform.android:
+    case TargetPlatform.fuchsia:
+    case TargetPlatform.windows:
+    case TargetPlatform.linux:
+      return MaterialPage(
+        arguments: arguments,
+        fullscreenDialog: fullscreenDialog,
+        key: key,
+        maintainState: maintainState,
+        name: name,
+        restorationId: restorationId,
+        child: child,
+      );
+
+    case TargetPlatform.iOS:
+    case TargetPlatform.macOS:
+      return CupertinoPage(
+        arguments: arguments,
+        fullscreenDialog: fullscreenDialog,
+        key: key,
+        maintainState: maintainState,
+        name: name,
+        restorationId: restorationId,
+        title: title,
+        child: child,
+      );
   }
 }

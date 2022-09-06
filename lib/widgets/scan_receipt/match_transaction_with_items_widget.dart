@@ -1,21 +1,22 @@
+import 'package:cccc/widgets/button/button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:cccc/models/enum/scan_receipt_state.dart';
+import 'package:cccc/enum/scan_receipt_state.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/providers.dart' show scanReceiptBottomSheetModelProvider;
-import 'package:cccc/styles/styles.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
 import 'package:cccc/widgets/transaction_list_tile.dart';
 
 class MatchTransactionWithItemsWidget extends ConsumerWidget {
   const MatchTransactionWithItemsWidget({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final padding = MediaQuery.of(context).padding;
+    final size = MediaQuery.of(context).size;
     final model = ref.watch(scanReceiptBottomSheetModelProvider);
 
     return CustomStreamBuilder<List<Transaction?>>(
@@ -76,12 +77,13 @@ class MatchTransactionWithItemsWidget extends ConsumerWidget {
                   ),
                 ),
               ),
-              OutlinedButton(
-                style: ButtonStyles.outline(context, height: 48),
+              Button.outlined(
+                height: 48,
+                width: size.width - 64,
+                child: const Text('Scan Different Receipt'),
                 onPressed: () => ref
                     .read(scanReceiptBottomSheetModelProvider)
                     .toggleState(ScanReceiptState.start),
-                child: const Text('Scan Different Receipt'),
               ),
               const SizedBox(height: 16),
             ],

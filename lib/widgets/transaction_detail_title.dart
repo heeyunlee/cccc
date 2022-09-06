@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 
 class TransactionDetailTitle extends StatelessWidget {
   const TransactionDetailTitle({
-    Key? key,
+    super.key,
     required this.name,
-  }) : super(key: key);
+  });
 
   final String name;
 

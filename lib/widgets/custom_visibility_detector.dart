@@ -7,8 +7,8 @@ class CustomVisibilityDetector extends ConsumerWidget {
   const CustomVisibilityDetector({
     required this.child,
     required this.widgetName,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Widget child;
   final String widgetName;

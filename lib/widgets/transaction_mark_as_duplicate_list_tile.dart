@@ -10,9 +10,9 @@ import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 
 class TransactionMarkAsDuplicateListTile extends ConsumerStatefulWidget {
   const TransactionMarkAsDuplicateListTile({
-    Key? key,
+    super.key,
     required this.transaction,
-  }) : super(key: key);
+  });
 
   final Transaction transaction;
 

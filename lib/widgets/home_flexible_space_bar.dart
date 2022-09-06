@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class HomeFlexibleSpaceBar extends ConsumerStatefulWidget {
-  const HomeFlexibleSpaceBar({Key? key}) : super(key: key);
+  const HomeFlexibleSpaceBar({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
