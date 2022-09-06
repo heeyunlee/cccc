@@ -55,6 +55,7 @@ class MyApp extends ConsumerWidget {
     final goRouter = buildGoRouter(context, ref);
 
     return MaterialApp.router(
+      routeInformationProvider: goRouter.routeInformationProvider,
       routerDelegate: goRouter.routerDelegate,
       routeInformationParser: goRouter.routeInformationParser,
       useInheritedMediaQuery: true,

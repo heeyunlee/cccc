@@ -1,4 +1,3 @@
-import 'package:cccc/models/merchant.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/providers.dart'
     show chooseMerchantForTransactionModelProvider, databaseProvider;
@@ -78,11 +77,9 @@ class _ChooseMerchantForTransactionState
               ),
             ),
             listItemBuilder: (context, merchant) {
-              final merch = merchant as Merchant;
-
               return MerchantListTile(
                 transaction: widget.transaction,
-                merchant: merch,
+                merchant: merchant,
               );
             },
           ),

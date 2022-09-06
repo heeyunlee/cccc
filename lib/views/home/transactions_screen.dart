@@ -1,4 +1,3 @@
-import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/providers.dart';
 import 'package:cccc/widgets/paginated_custom_scroll_view.dart';
@@ -29,7 +28,7 @@ class TransactionsScreen extends ConsumerWidget {
         ),
         listItemBuilder: (context, transaction) {
           return TransactionListTile(
-            transaction: transaction as Transaction,
+            transaction: transaction,
           );
         },
       ),
