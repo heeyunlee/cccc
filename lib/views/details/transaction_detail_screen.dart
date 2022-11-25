@@ -1,7 +1,9 @@
-import 'package:cccc/extensions/context_extension.dart';
 import 'package:cccc/providers.dart'
-    show databaseProvider, transactionDetailModelProvider;
-import 'package:cccc/routes/router.dart';
+    show
+        databaseProvider,
+        transactionDetailModelProvider,
+        transactionStreamProvider;
+import 'package:cccc/routes/go_routes.dart';
 import 'package:cccc/widgets/button/button.dart';
 import 'package:cccc/widgets/custom_future_builder.dart';
 import 'package:cccc/widgets/custom_stream_builder.dart';
@@ -21,32 +23,28 @@ import 'package:cccc/styles/styles.dart';
 import 'package:cccc/widgets/receipt_widget.dart';
 import 'package:cccc/widgets/transaction_detail_title.dart';
 
-class TransactionDetails extends ConsumerStatefulWidget {
-  const TransactionDetails({
+class TransactionDetailsScreen extends ConsumerStatefulWidget {
+  const TransactionDetailsScreen({
     super.key,
-    required this.transaction,
+    required this.transactionId,
   });
 
-  final Transaction transaction;
+  final String transactionId;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
       _TransactionDetailsState();
 }
 
-class _TransactionDetailsState extends ConsumerState<TransactionDetails> {
+class _TransactionDetailsState extends ConsumerState<TransactionDetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    logger.d(
-        '[TransactionDetail][${widget.transaction.transactionId}] building... ');
-
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
       body: CustomStreamBuilder<Transaction?>(
-        stream: ref
-            .read(databaseProvider)
-            .transactionStream(widget.transaction.transactionId),
+        stream:
+            ref.read(databaseProvider).transactionStream(widget.transactionId),
         errorBuilder: (context, error) {
           logger.e('error: ${error.toString()}');
 
@@ -227,10 +225,10 @@ class _TransactionDetailsState extends ConsumerState<TransactionDetails> {
                         ),
                       ),
                       ListTile(
-                        onTap: () => context.pushRoute(
-                          AppRoutes.chooseMerchant,
-                          extra: transaction,
-                        ),
+                        onTap: () => ChooseMerchantRoute(
+                          transactionId: transaction.transactionId,
+                          id: 12,
+                        ).push(context),
                         contentPadding: const EdgeInsets.symmetric(vertical: 4),
                         leading: const SizedBox(
                           height: 64,
@@ -386,66 +384,78 @@ class _TransactionDetailsState extends ConsumerState<TransactionDetails> {
   Widget _buildItemsWidget(BuildContext context) {
     final size = MediaQuery.of(context).size;
 
-    if (widget.transaction.transactionItems != null) {
-      return ReceiptWidget(
-        transactionItems: widget.transaction.transactionItems!,
-        color: ThemeColors.primary500.withOpacity(0.24),
-      );
-    } else {
-      return Container(
-        height: 160,
-        width: size.width - 32,
-        decoration: Decorations.white24Radius8,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'Scan your receipts now to get individual items',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 16),
-              Button.text(
-                onPressed: () => showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  builder: (context) => ScanReceiptBottomSheet(
-                    transaction: widget.transaction,
+    final transactionStream = ref.watch(
+      transactionStreamProvider(widget.transactionId),
+    );
+
+    return transactionStream.when<Widget>(
+      data: (transaction) {
+        if (transaction == null) return const Placeholder();
+
+        if (transaction.transactionItems != null) {
+          return ReceiptWidget(
+            transactionItems: transaction.transactionItems!,
+            color: ThemeColors.primary500.withOpacity(0.24),
+          );
+        } else {
+          return Container(
+            height: 160,
+            width: size.width - 32,
+            decoration: Decorations.white24Radius8,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Scan your receipts now to get individual items',
+                    textAlign: TextAlign.center,
                   ),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: const [
-                    Icon(Icons.camera_alt),
-                    SizedBox(width: 16),
-                    Text('Scan Now'),
-                  ],
-                ),
+                  const SizedBox(height: 16),
+                  Button.text(
+                    onPressed: () => showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) => ScanReceiptBottomSheet(
+                        transaction: transaction,
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(Icons.camera_alt),
+                        SizedBox(width: 16),
+                        Text('Scan Now'),
+                      ],
+                    ),
+                  ),
+                  // TextButton(
+                  //   onPressed: () => showModalBottomSheet(
+                  //     context: context,
+                  //     isScrollControlled: true,
+                  //     builder: (context) => ScanReceiptBottomSheet(
+                  //       transaction: transaction,
+                  //     ),
+                  //   ),
+                  //   style: ButtonStyles.text(foregroundColor: theme.primaryColor),
+                  //   child: Row(
+                  //     mainAxisSize: MainAxisSize.min,
+                  //     children: const [
+                  //       Icon(Icons.camera_alt),
+                  //       SizedBox(width: 16),
+                  //       Text('Scan Now'),
+                  //     ],
+                  //   ),
+                  // ),
+                ],
               ),
-              // TextButton(
-              //   onPressed: () => showModalBottomSheet(
-              //     context: context,
-              //     isScrollControlled: true,
-              //     builder: (context) => ScanReceiptBottomSheet(
-              //       transaction: transaction,
-              //     ),
-              //   ),
-              //   style: ButtonStyles.text(foregroundColor: theme.primaryColor),
-              //   child: Row(
-              //     mainAxisSize: MainAxisSize.min,
-              //     children: const [
-              //       Icon(Icons.camera_alt),
-              //       SizedBox(width: 16),
-              //       Text('Scan Now'),
-              //     ],
-              //   ),
-              // ),
-            ],
-          ),
-        ),
-      );
-    }
+            ),
+          );
+        }
+      },
+      error: (error, stackTrace) => const Placeholder(),
+      loading: () => const CircularProgressIndicator.adaptive(),
+    );
   }
 }

@@ -1,5 +1,6 @@
 // coverage:ignore-file
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
 part of 'payment_meta.dart';
@@ -11,44 +12,11 @@ part of 'payment_meta.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
 PaymentMeta _$PaymentMetaFromJson(Map<String, dynamic> json) {
   return _PaymentMeta.fromJson(json);
 }
-
-/// @nodoc
-class _$PaymentMetaTearOff {
-  const _$PaymentMetaTearOff();
-
-  _PaymentMeta call(
-      {String? referenceNumber,
-      String? ppdId,
-      String? payee,
-      String? byOrderOf,
-      String? payer,
-      String? paymentMethod,
-      String? paymentProcessor,
-      String? reason}) {
-    return _PaymentMeta(
-      referenceNumber: referenceNumber,
-      ppdId: ppdId,
-      payee: payee,
-      byOrderOf: byOrderOf,
-      payer: payer,
-      paymentMethod: paymentMethod,
-      paymentProcessor: paymentProcessor,
-      reason: reason,
-    );
-  }
-
-  PaymentMeta fromJson(Map<String, Object?> json) {
-    return PaymentMeta.fromJson(json);
-  }
-}
-
-/// @nodoc
-const $PaymentMeta = _$PaymentMetaTearOff();
 
 /// @nodoc
 mixin _$PaymentMeta {
@@ -87,7 +55,8 @@ mixin _$PaymentMeta {
 abstract class $PaymentMetaCopyWith<$Res> {
   factory $PaymentMetaCopyWith(
           PaymentMeta value, $Res Function(PaymentMeta) then) =
-      _$PaymentMetaCopyWithImpl<$Res>;
+      _$PaymentMetaCopyWithImpl<$Res, PaymentMeta>;
+  @useResult
   $Res call(
       {String? referenceNumber,
       String? ppdId,
@@ -100,13 +69,16 @@ abstract class $PaymentMetaCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$PaymentMetaCopyWithImpl<$Res> implements $PaymentMetaCopyWith<$Res> {
+class _$PaymentMetaCopyWithImpl<$Res, $Val extends PaymentMeta>
+    implements $PaymentMetaCopyWith<$Res> {
   _$PaymentMetaCopyWithImpl(this._value, this._then);
 
-  final PaymentMeta _value;
   // ignore: unused_field
-  final $Res Function(PaymentMeta) _then;
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
 
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? referenceNumber = freezed,
@@ -119,49 +91,50 @@ class _$PaymentMetaCopyWithImpl<$Res> implements $PaymentMetaCopyWith<$Res> {
     Object? reason = freezed,
   }) {
     return _then(_value.copyWith(
-      referenceNumber: referenceNumber == freezed
+      referenceNumber: freezed == referenceNumber
           ? _value.referenceNumber
           : referenceNumber // ignore: cast_nullable_to_non_nullable
               as String?,
-      ppdId: ppdId == freezed
+      ppdId: freezed == ppdId
           ? _value.ppdId
           : ppdId // ignore: cast_nullable_to_non_nullable
               as String?,
-      payee: payee == freezed
+      payee: freezed == payee
           ? _value.payee
           : payee // ignore: cast_nullable_to_non_nullable
               as String?,
-      byOrderOf: byOrderOf == freezed
+      byOrderOf: freezed == byOrderOf
           ? _value.byOrderOf
           : byOrderOf // ignore: cast_nullable_to_non_nullable
               as String?,
-      payer: payer == freezed
+      payer: freezed == payer
           ? _value.payer
           : payer // ignore: cast_nullable_to_non_nullable
               as String?,
-      paymentMethod: paymentMethod == freezed
+      paymentMethod: freezed == paymentMethod
           ? _value.paymentMethod
           : paymentMethod // ignore: cast_nullable_to_non_nullable
               as String?,
-      paymentProcessor: paymentProcessor == freezed
+      paymentProcessor: freezed == paymentProcessor
           ? _value.paymentProcessor
           : paymentProcessor // ignore: cast_nullable_to_non_nullable
               as String?,
-      reason: reason == freezed
+      reason: freezed == reason
           ? _value.reason
           : reason // ignore: cast_nullable_to_non_nullable
               as String?,
-    ));
+    ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$PaymentMetaCopyWith<$Res>
+abstract class _$$_PaymentMetaCopyWith<$Res>
     implements $PaymentMetaCopyWith<$Res> {
-  factory _$PaymentMetaCopyWith(
-          _PaymentMeta value, $Res Function(_PaymentMeta) then) =
-      __$PaymentMetaCopyWithImpl<$Res>;
+  factory _$$_PaymentMetaCopyWith(
+          _$_PaymentMeta value, $Res Function(_$_PaymentMeta) then) =
+      __$$_PaymentMetaCopyWithImpl<$Res>;
   @override
+  @useResult
   $Res call(
       {String? referenceNumber,
       String? ppdId,
@@ -174,15 +147,14 @@ abstract class _$PaymentMetaCopyWith<$Res>
 }
 
 /// @nodoc
-class __$PaymentMetaCopyWithImpl<$Res> extends _$PaymentMetaCopyWithImpl<$Res>
-    implements _$PaymentMetaCopyWith<$Res> {
-  __$PaymentMetaCopyWithImpl(
-      _PaymentMeta _value, $Res Function(_PaymentMeta) _then)
-      : super(_value, (v) => _then(v as _PaymentMeta));
+class __$$_PaymentMetaCopyWithImpl<$Res>
+    extends _$PaymentMetaCopyWithImpl<$Res, _$_PaymentMeta>
+    implements _$$_PaymentMetaCopyWith<$Res> {
+  __$$_PaymentMetaCopyWithImpl(
+      _$_PaymentMeta _value, $Res Function(_$_PaymentMeta) _then)
+      : super(_value, _then);
 
-  @override
-  _PaymentMeta get _value => super._value as _PaymentMeta;
-
+  @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? referenceNumber = freezed,
@@ -194,36 +166,36 @@ class __$PaymentMetaCopyWithImpl<$Res> extends _$PaymentMetaCopyWithImpl<$Res>
     Object? paymentProcessor = freezed,
     Object? reason = freezed,
   }) {
-    return _then(_PaymentMeta(
-      referenceNumber: referenceNumber == freezed
+    return _then(_$_PaymentMeta(
+      referenceNumber: freezed == referenceNumber
           ? _value.referenceNumber
           : referenceNumber // ignore: cast_nullable_to_non_nullable
               as String?,
-      ppdId: ppdId == freezed
+      ppdId: freezed == ppdId
           ? _value.ppdId
           : ppdId // ignore: cast_nullable_to_non_nullable
               as String?,
-      payee: payee == freezed
+      payee: freezed == payee
           ? _value.payee
           : payee // ignore: cast_nullable_to_non_nullable
               as String?,
-      byOrderOf: byOrderOf == freezed
+      byOrderOf: freezed == byOrderOf
           ? _value.byOrderOf
           : byOrderOf // ignore: cast_nullable_to_non_nullable
               as String?,
-      payer: payer == freezed
+      payer: freezed == payer
           ? _value.payer
           : payer // ignore: cast_nullable_to_non_nullable
               as String?,
-      paymentMethod: paymentMethod == freezed
+      paymentMethod: freezed == paymentMethod
           ? _value.paymentMethod
           : paymentMethod // ignore: cast_nullable_to_non_nullable
               as String?,
-      paymentProcessor: paymentProcessor == freezed
+      paymentProcessor: freezed == paymentProcessor
           ? _value.paymentProcessor
           : paymentProcessor // ignore: cast_nullable_to_non_nullable
               as String?,
-      reason: reason == freezed
+      reason: freezed == reason
           ? _value.reason
           : reason // ignore: cast_nullable_to_non_nullable
               as String?,
@@ -247,38 +219,37 @@ class _$_PaymentMeta implements _PaymentMeta {
   factory _$_PaymentMeta.fromJson(Map<String, dynamic> json) =>
       _$$_PaymentMetaFromJson(json);
 
-  @override
-
   /// The transaction reference number supplied by the financial institution.
-  final String? referenceNumber;
   @override
+  final String? referenceNumber;
 
   /// The ACH PPD ID for the payer.
-  final String? ppdId;
   @override
+  final String? ppdId;
 
   /// For transfers, the party that is receiving the transaction.
-  final String? payee;
   @override
+  final String? payee;
 
   /// The party initiating a wire transfer. Will be null if the transaction
   /// is not a wire transfer.
-  final String? byOrderOf;
   @override
+  final String? byOrderOf;
 
   /// For transfers, the party that is paying the transaction.
-  final String? payer;
   @override
+  final String? payer;
 
   /// The type of transfer, e.g. 'ACH'
-  final String? paymentMethod;
   @override
+  final String? paymentMethod;
 
   /// The name of the payment processor
-  final String? paymentProcessor;
   @override
+  final String? paymentProcessor;
 
   /// The payer-supplied description of the transfer.
+  @override
   final String? reason;
 
   @override
@@ -290,53 +261,50 @@ class _$_PaymentMeta implements _PaymentMeta {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _PaymentMeta &&
-            const DeepCollectionEquality()
-                .equals(other.referenceNumber, referenceNumber) &&
-            const DeepCollectionEquality().equals(other.ppdId, ppdId) &&
-            const DeepCollectionEquality().equals(other.payee, payee) &&
-            const DeepCollectionEquality().equals(other.byOrderOf, byOrderOf) &&
-            const DeepCollectionEquality().equals(other.payer, payer) &&
-            const DeepCollectionEquality()
-                .equals(other.paymentMethod, paymentMethod) &&
-            const DeepCollectionEquality()
-                .equals(other.paymentProcessor, paymentProcessor) &&
-            const DeepCollectionEquality().equals(other.reason, reason));
+            other is _$_PaymentMeta &&
+            (identical(other.referenceNumber, referenceNumber) ||
+                other.referenceNumber == referenceNumber) &&
+            (identical(other.ppdId, ppdId) || other.ppdId == ppdId) &&
+            (identical(other.payee, payee) || other.payee == payee) &&
+            (identical(other.byOrderOf, byOrderOf) ||
+                other.byOrderOf == byOrderOf) &&
+            (identical(other.payer, payer) || other.payer == payer) &&
+            (identical(other.paymentMethod, paymentMethod) ||
+                other.paymentMethod == paymentMethod) &&
+            (identical(other.paymentProcessor, paymentProcessor) ||
+                other.paymentProcessor == paymentProcessor) &&
+            (identical(other.reason, reason) || other.reason == reason));
   }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType,
-      const DeepCollectionEquality().hash(referenceNumber),
-      const DeepCollectionEquality().hash(ppdId),
-      const DeepCollectionEquality().hash(payee),
-      const DeepCollectionEquality().hash(byOrderOf),
-      const DeepCollectionEquality().hash(payer),
-      const DeepCollectionEquality().hash(paymentMethod),
-      const DeepCollectionEquality().hash(paymentProcessor),
-      const DeepCollectionEquality().hash(reason));
 
   @JsonKey(ignore: true)
   @override
-  _$PaymentMetaCopyWith<_PaymentMeta> get copyWith =>
-      __$PaymentMetaCopyWithImpl<_PaymentMeta>(this, _$identity);
+  int get hashCode => Object.hash(runtimeType, referenceNumber, ppdId, payee,
+      byOrderOf, payer, paymentMethod, paymentProcessor, reason);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$_PaymentMetaCopyWith<_$_PaymentMeta> get copyWith =>
+      __$$_PaymentMetaCopyWithImpl<_$_PaymentMeta>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_PaymentMetaToJson(this);
+    return _$$_PaymentMetaToJson(
+      this,
+    );
   }
 }
 
 abstract class _PaymentMeta implements PaymentMeta {
   const factory _PaymentMeta(
-      {String? referenceNumber,
-      String? ppdId,
-      String? payee,
-      String? byOrderOf,
-      String? payer,
-      String? paymentMethod,
-      String? paymentProcessor,
-      String? reason}) = _$_PaymentMeta;
+      {final String? referenceNumber,
+      final String? ppdId,
+      final String? payee,
+      final String? byOrderOf,
+      final String? payer,
+      final String? paymentMethod,
+      final String? paymentProcessor,
+      final String? reason}) = _$_PaymentMeta;
 
   factory _PaymentMeta.fromJson(Map<String, dynamic> json) =
       _$_PaymentMeta.fromJson;
@@ -376,6 +344,6 @@ abstract class _PaymentMeta implements PaymentMeta {
   String? get reason;
   @override
   @JsonKey(ignore: true)
-  _$PaymentMetaCopyWith<_PaymentMeta> get copyWith =>
+  _$$_PaymentMetaCopyWith<_$_PaymentMeta> get copyWith =>
       throw _privateConstructorUsedError;
 }

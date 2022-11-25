@@ -1,31 +1,36 @@
+import 'package:cccc/enum/account_type.dart';
+import 'package:cccc/extensions/datetime_extension.dart';
+import 'package:cccc/models/plaid/account.dart';
 import 'package:flutter/material.dart';
+import 'package:cccc/enum/account_subtype.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:cccc/models/plaid/account.dart';
-import 'package:cccc/models/plaid/institution/institution.dart';
-import 'package:cccc/providers.dart' show accountDetailModelProvider;
+import 'package:cccc/providers.dart'
+    show
+        accountProvider,
+        accountTransactionsStreamProvider,
+        institutionProvider;
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/styles/decorations.dart';
 import 'package:cccc/styles/text_styles.dart';
 import 'package:cccc/widgets/account_circle_avatar.dart';
 import 'package:cccc/widgets/account_detail_bottom_sheet.dart';
 import 'package:cccc/widgets/recent_transactions_card.dart';
+import 'package:intl/intl.dart';
 
-class AccountDetail extends ConsumerStatefulWidget {
-  const AccountDetail({
-    required this.account,
-    required this.institution,
+class AccountDetailScreen extends ConsumerStatefulWidget {
+  const AccountDetailScreen({
+    required this.accountId,
     super.key,
   });
 
-  final Account account;
-  final Institution? institution;
+  final String accountId;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _AccountDetailState();
 }
 
-class _AccountDetailState extends ConsumerState<AccountDetail>
+class _AccountDetailState extends ConsumerState<AccountDetailScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
   late Animation<double> _opacityTween;
@@ -68,9 +73,37 @@ class _AccountDetailState extends ConsumerState<AccountDetail>
   Widget build(BuildContext context) {
     logger.d('[AccountDetail] screen building...');
 
+    final asyncAccount = ref.watch(accountProvider(widget.accountId));
+
+    return asyncAccount.when<Widget>(
+      data: (account) {
+        if (account == null) return const Placeholder();
+
+        return _buildScaffold(account);
+      },
+      error: (error, stackTrace) => const Placeholder(),
+      loading: () => const CircularProgressIndicator.adaptive(),
+    );
+  }
+
+  Widget _buildScaffold(Account account) {
     final size = MediaQuery.of(context).size;
     final padding = MediaQuery.of(context).padding;
-    final model = ref.watch(accountDetailModelProvider(widget.account));
+
+    final mask =
+        '**${account.mask} • ${account.subtype?.title ?? account.type.str}';
+    final f = NumberFormat.simpleCurrency(
+      name: account.balance.isoCurrencyCode,
+      decimalDigits: 2,
+    );
+    final currentAmount = f.format(account.balance.current);
+    final accountLastSyncedTime = account.accountLastSyncedTime;
+
+    // if (accountLastSyncedTime != null) {
+    //   return 'Last synced ${accountLastSyncedTime.timeago}';
+    // } else {
+    //   return 'Last synced time not available';
+    // }
 
     return Scaffold(
       body: CustomScrollView(
@@ -93,14 +126,14 @@ class _AccountDetailState extends ConsumerState<AccountDetail>
                   ),
                 );
               },
-              child: Text(model.name),
+              child: Text(account.name),
             ),
             actions: [
               IconButton(
                 onPressed: () => showModalBottomSheet(
                   context: context,
                   builder: (context) => AccountDetailBottomSheet(
-                    account: widget.account,
+                    accountId: widget.accountId,
                   ),
                 ),
                 icon: const Icon(Icons.more_vert),
@@ -111,7 +144,13 @@ class _AccountDetailState extends ConsumerState<AccountDetail>
                 children: [
                   Container(
                     decoration: Decorations.gradientFromHexString(
-                      widget.institution?.primaryColor,
+                      ref
+                          .watch(institutionProvider(account.institutionId))
+                          .when(
+                            data: (institution) => institution?.primaryColor,
+                            error: (error, stackTrace) => '',
+                            loading: () => '',
+                          ),
                     ),
                   ),
                   Align(
@@ -123,12 +162,12 @@ class _AccountDetailState extends ConsumerState<AccountDetail>
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Text(
-                            model.mask,
+                            mask,
                             style: TextStyles.body2White38,
                           ),
                           const SizedBox(height: 8),
                           Text(
-                            model.currentAmount,
+                            currentAmount,
                             style: TextStyles.h4W900,
                           ),
                           const SizedBox(height: 8),
@@ -137,22 +176,27 @@ class _AccountDetailState extends ConsumerState<AccountDetail>
                               Flexible(
                                 child: FittedBox(
                                   child: Text(
-                                    model.name,
+                                    account.officialName ?? account.name,
                                     style: TextStyles.subtitle1BoldWhite70,
                                   ),
                                 ),
                               ),
                               const SizedBox(width: 16),
                               InstitutionCircleAvatar(
-                                account: widget.account,
-                                institution: widget.institution,
+                                account: account,
+                                institution: ref
+                                    .watch(institutionProvider(
+                                        account.institutionId))
+                                    .value,
                                 diameter: 20,
                               ),
                             ],
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            model.lastSyncedDate,
+                            accountLastSyncedTime != null
+                                ? 'Last synced ${accountLastSyncedTime.timeago}'
+                                : 'Last synced time not available',
                             style: TextStyles.overlineWhite54,
                           ),
                         ],
@@ -165,7 +209,9 @@ class _AccountDetailState extends ConsumerState<AccountDetail>
           ),
           SliverToBoxAdapter(
             child: RecentTransactionsCard(
-              transactionsStream: model.transactionsStream,
+              transactionsStream: ref.watch(
+                accountTransactionsStreamProvider(account.accountId).stream,
+              ),
               titleTextStyle: TextStyles.subtitle1Bold,
               bottomPaddingHeight: padding.bottom + 16,
             ),

@@ -1,19 +1,18 @@
-import 'package:cccc/extensions/context_extension.dart';
 import 'package:cccc/providers.dart' show firebaseAuthProvider;
-import 'package:cccc/routes/router.dart';
+import 'package:cccc/routes/go_routes.dart';
 import 'package:cccc/styles/text_styles.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Settings extends ConsumerStatefulWidget {
-  const Settings({super.key});
+class SettingsScreen extends ConsumerStatefulWidget {
+  const SettingsScreen({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SettingsState();
 }
 
-class _SettingsState extends ConsumerState<Settings> {
+class _SettingsState extends ConsumerState<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(firebaseAuthProvider);
@@ -25,11 +24,11 @@ class _SettingsState extends ConsumerState<Settings> {
       body: Column(
         children: [
           ListTile(
-            onTap: () => context.pushRoute(AppRoutes.linkedAccounts),
+            onTap: () => const LinkedAccountsRoute().push(context),
             title: const Text('Linked Accounts'),
           ),
           ListTile(
-            onTap: () => context.pushRoute(AppRoutes.privacyAndSecurity),
+            onTap: () => const PrivacyAndSecurityRoute().push(context),
             title: const Text('Privacy & Security'),
           ),
           ListTile(
@@ -43,7 +42,7 @@ class _SettingsState extends ConsumerState<Settings> {
                   height: 48,
                 ),
                 // TODO(heeyunlee): Update version
-                applicationVersion: '0.0.15',
+                applicationVersion: '0.0.16',
               );
             },
             title: const Text('About'),

@@ -1,17 +1,22 @@
-import 'package:cccc/routes/router.dart';
-import 'package:cccc/services/logger_init.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
+
+import 'package:cccc/providers.dart';
+import 'package:cccc/routes/go_routes.dart';
+import 'package:cccc/services/logger_init.dart';
 
 import 'firebase_options.dart';
 import 'styles/styles.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  usePathUrlStrategy();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -52,12 +57,43 @@ class MyApp extends ConsumerWidget {
       initLogger(Level.debug);
     }
 
-    final goRouter = buildGoRouter(context, ref);
+    final router = GoRouter(
+      routes: $appRoutes,
+      redirect: (context, state) {
+        final location = state.location;
+
+        final user = ref.watch(authStateChangesProvider);
+
+        final redirectedPath = user.when(
+          data: (user) {
+            if (user != null && !location.startsWith('/home')) {
+              final localAuth = ref.watch(localAuthenticationServiceProvider);
+
+              final useLocalAuth = ref.watch(useLocalAuthFutureProvider).when(
+                    data: (value) => value,
+                    error: (error, _) => false,
+                    loading: () => false,
+                  );
+
+              if (useLocalAuth && !localAuth.isAuthenticated) {
+                return '/home/localAuthentication';
+              }
+
+              return '/home';
+            } else if (user == null && !location.startsWith('/sign-in')) {
+              return '/sign-in';
+            }
+          },
+          error: (error, _) => null,
+          loading: () => null,
+        );
+
+        return redirectedPath;
+      },
+    );
 
     return MaterialApp.router(
-      routeInformationProvider: goRouter.routeInformationProvider,
-      routerDelegate: goRouter.routerDelegate,
-      routeInformationParser: goRouter.routeInformationParser,
+      routerConfig: router,
       useInheritedMediaQuery: true,
       title: 'CCCC: Credit Card Calorie Counter',
       theme: ThemeData(

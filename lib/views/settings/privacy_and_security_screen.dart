@@ -2,12 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:cccc/widgets/local_authentication_list_tile.dart';
 
-class PrivacyAndSecuritySettings extends StatelessWidget {
-  const PrivacyAndSecuritySettings({super.key});
-
-  // static void show(BuildContext context) {
-  //   Navigator.of(context).pushNamed(RouteNames.privacyAndSecurity);
-  // }
+class PrivacyAndSecurityScreen extends StatelessWidget {
+  const PrivacyAndSecurityScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

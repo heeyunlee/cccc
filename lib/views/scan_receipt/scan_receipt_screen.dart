@@ -1,8 +1,7 @@
 import 'package:cccc/constants/dummy_data.dart';
-import 'package:cccc/extensions/context_extension.dart';
-import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/providers.dart' show scanReceiptBottomSheetModelProvider;
-import 'package:cccc/routes/router.dart';
+import 'package:cccc/providers.dart'
+    show scanReceiptBottomSheetModelProvider, tranasctionProvider;
+import 'package:cccc/routes/go_routes.dart';
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/widgets/button/button.dart';
 import 'package:cccc/widgets/receipt_widget.dart';
@@ -11,19 +10,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 
-class ScanReceipt extends StatefulWidget {
-  const ScanReceipt({
+class ScanReceiptScreen extends StatefulWidget {
+  const ScanReceiptScreen({
     super.key,
-    required this.transaction,
+    this.transactionId,
   });
 
-  final Transaction? transaction;
+  final String? transactionId;
 
   @override
-  State<ScanReceipt> createState() => _ScanReceiptState();
+  State<ScanReceiptScreen> createState() => _ScanReceiptScreenState();
 }
 
-class _ScanReceiptState extends State<ScanReceipt>
+class _ScanReceiptScreenState extends State<ScanReceiptScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -129,23 +128,28 @@ class _ScanReceiptState extends State<ScanReceipt>
                 width: (size.width - 56) / 2,
                 borderRadius: 16,
                 onPressed: () async {
+                  final transactionFuture = widget.transactionId == null
+                      ? null
+                      : ref.watch(tranasctionProvider(widget.transactionId!));
+                  final transaction = transactionFuture?.value;
                   final updated = await showModalBottomSheet<bool?>(
                     context: context,
                     isScrollControlled: true,
                     builder: (context) => ScanReceiptBottomSheet(
-                      transaction: widget.transaction,
+                      transaction: transaction,
                     ),
                   );
 
                   if (!mounted) return;
 
                   if (updated ?? false) {
-                    context.pushRoute(
-                      AppRoutes.transactionDetails,
-                      extra: ref
-                          .read(scanReceiptBottomSheetModelProvider)
-                          .transaction,
-                    );
+                    TransactionDetailsRoute(
+                            transactionId: ref
+                                    .read(scanReceiptBottomSheetModelProvider)
+                                    .transaction
+                                    ?.transactionId ??
+                                'transcationId')
+                        .push(context);
                   }
                 },
                 child: const FittedBox(child: Text('Upload a Receipt')),

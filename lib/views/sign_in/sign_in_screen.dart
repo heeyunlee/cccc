@@ -6,14 +6,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:cccc/providers.dart' show signInModelProvider;
 import 'package:cccc/styles/text_styles.dart';
 
-class SignIn extends ConsumerStatefulWidget {
-  const SignIn({super.key});
+class SignInScreen extends ConsumerStatefulWidget {
+  const SignInScreen({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SignInState();
 }
 
-class _SignInState extends ConsumerState<SignIn> {
+class _SignInState extends ConsumerState<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     final model = ref.watch(signInModelProvider);
