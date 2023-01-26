@@ -49,6 +49,7 @@ class _HomeState extends ConsumerState<HomeScreen> {
     final model = ref.watch(homeModelProvider);
 
     return Scaffold(
+      key: const ValueKey('HomeScreenScaffold'),
       extendBody: true,
       extendBodyBehindAppBar: true,
       body: CustomStreamBuilder<User?>(
@@ -120,7 +121,7 @@ class _HomeState extends ConsumerState<HomeScreen> {
           ),
           actions: [
             IconButton(
-              onPressed: () => const SettingsRoute().go(context),
+              onPressed: () => const SettingsRoute().push(context),
               icon: const Icon(Icons.settings),
             ),
             const SizedBox(width: 8),

@@ -2,7 +2,6 @@ import 'package:cccc/widgets/button/button.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:plaid_flutter/plaid_flutter.dart';
 
 import 'package:cccc/providers.dart' show connectPlaidModelProvider;
 import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
@@ -18,11 +17,11 @@ class _AddAccountState extends ConsumerState<AddAccountScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final model = ref.watch(connectPlaidModelProvider);
+    // final model = ref.watch(connectPlaidModelProvider);
 
-    PlaidLink.onSuccess(model.onSuccessCallback);
-    PlaidLink.onEvent(model.onEventCallback);
-    PlaidLink.onExit(model.onExitCallback);
+    // PlaidLink.onSuccess(model.onSuccessCallback);
+    // PlaidLink.onEvent(model.onEventCallback);
+    // PlaidLink.onExit(model.onExitCallback);
   }
 
   @override

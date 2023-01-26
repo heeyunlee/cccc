@@ -36,7 +36,6 @@ class _TextButton extends Button {
             text: text,
             textStyle: textStyle,
             padding: padding,
-            key: key,
             child: child,
           ),
         );
@@ -48,7 +47,6 @@ class _TextButtonChild extends StatelessWidget {
     this.text,
     this.textStyle,
     required this.padding,
-    super.key,
   }) : assert(child != null || text != null, 'provide either child or text');
 
   final Widget? child;
@@ -60,7 +58,9 @@ class _TextButtonChild extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: padding,
-      child: child ?? Text(text!, style: textStyle),
+      child: Center(
+        child: child ?? Text(text!, style: textStyle),
+      ),
     );
   }
 }

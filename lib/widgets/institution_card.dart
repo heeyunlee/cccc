@@ -2,7 +2,6 @@ import 'package:cccc/widgets/button/button.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:plaid_flutter/plaid_flutter.dart';
 
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/accounts_institution.dart';
@@ -35,11 +34,11 @@ class _InstitutionCardState extends ConsumerState<InstitutionCard> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    final model = ref.read(institutionCardModelProvider(null));
+    // final model = ref.read(institutionCardModelProvider(null));
 
-    PlaidLink.onSuccess(model.onSuccessCallback);
-    PlaidLink.onEvent(model.onEventCallback);
-    PlaidLink.onExit(model.onExitCallback);
+    // PlaidLink.onSuccess(model.onSuccessCallback);
+    // PlaidLink.onEvent(model.onEventCallback);
+    // PlaidLink.onExit(model.onExitCallback);
   }
 
   @override
