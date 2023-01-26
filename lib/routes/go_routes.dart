@@ -42,7 +42,7 @@ class HomeRoute extends GoRouteData {
   const HomeRoute();
 
   @override
-  Page<void> buildPageWithState(BuildContext context, GoRouterState state) {
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
     return adaptivePage(
       context,
       key: state.pageKey,
@@ -58,7 +58,7 @@ class SignInRoute extends GoRouteData {
   const SignInRoute();
 
   @override
-  Page<void> buildPageWithState(BuildContext context, GoRouterState state) {
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
     return adaptivePage(
       context,
       key: state.pageKey,
@@ -73,7 +73,7 @@ class AddAccountRoute extends GoRouteData {
   const AddAccountRoute();
 
   @override
-  Page<void> buildPageWithState(BuildContext context, GoRouterState state) {
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
     return adaptivePage(
       context,
       key: state.pageKey,
@@ -88,7 +88,7 @@ class LocalAuthenticationRoute extends GoRouteData {
   const LocalAuthenticationRoute();
 
   @override
-  Page<void> buildPageWithState(BuildContext context, GoRouterState state) {
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
     return adaptivePage(
       context,
       key: state.pageKey,
@@ -103,7 +103,7 @@ class SettingsRoute extends GoRouteData {
   const SettingsRoute();
 
   @override
-  Page<void> buildPageWithState(BuildContext context, GoRouterState state) {
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
     return adaptivePage(
       context,
       key: state.pageKey,
@@ -120,7 +120,7 @@ class AccountDetailsRoute extends GoRouteData {
   final String accountId;
 
   @override
-  Page<void> buildPageWithState(BuildContext context, GoRouterState state) {
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
     return adaptivePage(
       context,
       key: state.pageKey,
@@ -141,7 +141,7 @@ class ChooseMerchantRoute extends GoRouteData {
   final int id;
 
   @override
-  Page<void> buildPageWithState(BuildContext context, GoRouterState state) {
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
     return adaptivePage(
       context,
       key: state.pageKey,
@@ -159,7 +159,7 @@ class TransactionsRoute extends GoRouteData {
   const TransactionsRoute();
 
   @override
-  Page<void> buildPageWithState(BuildContext context, GoRouterState state) {
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
     return adaptivePage(
       context,
       key: state.pageKey,
@@ -176,7 +176,7 @@ class TransactionDetailsRoute extends GoRouteData {
   final String transactionId;
 
   @override
-  Page<void> buildPageWithState(BuildContext context, GoRouterState state) {
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
     return adaptivePage(
       context,
       key: state.pageKey,
@@ -193,7 +193,7 @@ class ScanReceiptRoute extends GoRouteData {
   final String? transactionId;
 
   @override
-  Page<void> buildPageWithState(BuildContext context, GoRouterState state) {
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
     return adaptivePage(
       context,
       key: state.pageKey,
@@ -208,7 +208,7 @@ class LinkedAccountsRoute extends GoRouteData {
   const LinkedAccountsRoute();
 
   @override
-  Page<void> buildPageWithState(BuildContext context, GoRouterState state) {
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
     return adaptivePage(
       context,
       key: state.pageKey,
@@ -223,7 +223,7 @@ class PrivacyAndSecurityRoute extends GoRouteData {
   const PrivacyAndSecurityRoute();
 
   @override
-  Page<void> buildPageWithState(BuildContext context, GoRouterState state) {
+  Page<void> buildPage(BuildContext context, GoRouterState state) {
     return adaptivePage(
       context,
       key: state.pageKey,
