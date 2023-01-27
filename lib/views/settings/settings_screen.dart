@@ -42,7 +42,7 @@ class _SettingsState extends ConsumerState<SettingsScreen> {
                   height: 48,
                 ),
                 // TODO(heeyunlee): Update version
-                applicationVersion: '0.0.16',
+                applicationVersion: '0.1.0',
               );
             },
             title: const Text('About'),
