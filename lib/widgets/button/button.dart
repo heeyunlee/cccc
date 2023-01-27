@@ -172,54 +172,67 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      behavior: HitTestBehavior.opaque,
-      onTapDown: (detail) {
-        if (widget.vibrateOnPress) HapticFeedback.mediumImpact();
+    return MouseRegion(
+      cursor: widget.onPressed != null
+          ? SystemMouseCursors.click
+          : SystemMouseCursors.basic,
+      onEnter: (_) {
         _animationController.forward();
         _setIsPressed(true);
       },
-      onTapUp: (detail) {
-        widget.onPressed?.call();
+      onExit: (_) {
         _animationController.reverse();
         _setIsPressed(false);
       },
-      onTapCancel: () {},
-      onLongPressDown: (details) {},
-      onLongPressEnd: (detail) {},
-      onLongPressStart: (detail) {
-        widget.onLongPressed?.call();
-      },
-      onLongPressUp: () {
-        widget.onPressed?.call();
-        _animationController.reverse();
-        _setIsPressed(false);
-      },
-      onLongPressCancel: () {
-        _animationController.reverse();
-      },
-      onForcePressStart: (detail) {},
-      onForcePressEnd: (detail) {},
-      onForcePressPeak: (detail) {},
-      onForcePressUpdate: (detail) {},
-      onTertiaryLongPress: () {},
-      child: AnimatedBuilder(
-        animation: _animationController,
-        builder: (context, child) {
-          return Transform.scale(
-            scale: _scaleAnimation.value,
-            child: Opacity(
-              opacity: _opacityAnimation.value,
-              child: child!,
-            ),
-          );
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTapDown: (detail) {
+          if (widget.vibrateOnPress) HapticFeedback.mediumImpact();
+          _animationController.forward();
+          _setIsPressed(true);
         },
-        child: Padding(
-          padding: widget.margin,
-          child: SizedBox(
-            width: widget.width,
-            height: widget.height,
-            child: widget.child,
+        onTapUp: (detail) {
+          widget.onPressed?.call();
+          _animationController.reverse();
+          _setIsPressed(false);
+        },
+        onTapCancel: () {},
+        onLongPressDown: (details) {},
+        onLongPressEnd: (detail) {},
+        onLongPressStart: (detail) {
+          widget.onLongPressed?.call();
+        },
+        onLongPressUp: () {
+          widget.onPressed?.call();
+          _animationController.reverse();
+          _setIsPressed(false);
+        },
+        onLongPressCancel: () {
+          _animationController.reverse();
+        },
+        onForcePressStart: (detail) {},
+        onForcePressEnd: (detail) {},
+        onForcePressPeak: (detail) {},
+        onForcePressUpdate: (detail) {},
+        onTertiaryLongPress: () {},
+        child: AnimatedBuilder(
+          animation: _animationController,
+          builder: (context, child) {
+            return Transform.scale(
+              scale: _scaleAnimation.value,
+              child: Opacity(
+                opacity: _opacityAnimation.value,
+                child: child!,
+              ),
+            );
+          },
+          child: Padding(
+            padding: widget.margin,
+            child: SizedBox(
+              width: widget.width,
+              height: widget.height,
+              child: widget.child,
+            ),
           ),
         ),
       ),
