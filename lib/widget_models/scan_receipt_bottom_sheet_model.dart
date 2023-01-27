@@ -1,4 +1,9 @@
+import 'dart:io' as io show File;
+
+import 'package:cccc/extensions/text_element_extension.dart';
+import 'package:cccc/models/receipt_response.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:cccc/extensions/list_extension.dart';
@@ -41,35 +46,34 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
     notifyListeners();
   }
 
-  // TODO(heeyunlee): uncomment this
-  // List<Map<String, dynamic>> _getTextsWithOffsets(RecognizedText texts) {
-  //   logger.d('`_getTextsWithOffsets` function called');
+  List<Map<String, dynamic>> _getTextsWithOffsets(RecognizedText texts) {
+    logger.d('`_getTextsWithOffsets` function called');
 
-  //   final nestedLines = texts.blocks.map((e) => e.lines).toList();
-  //   final textLines = nestedLines.expand((e) => e).toList();
-  //   final textElements = textLines.expand((e) => e.elements).toList();
-  //   final textElementsMap = textElements.map((e) => e.toMap).toList();
+    final nestedLines = texts.blocks.map((e) => e.lines).toList();
+    final textLines = nestedLines.expand((e) => e).toList();
+    final textElements = textLines.expand((e) => e.elements).toList();
+    final textElementsMap = textElements.map((e) => e.toMap).toList();
 
-  //   logger.d('Text Elements = ${textElementsMap.toString()}');
+    logger.d('Text Elements = ${textElementsMap.toString()}');
 
-  //   return textElementsMap;
-  // }
+    return textElementsMap;
+  }
 
-  // Future<ReceiptResponse?> _extractTexts(File imageFile) async {
-  //   logger.d('File exists. Start using [GoogleMlKit]');
+  Future<ReceiptResponse?> _extractTexts(io.File imageFile) async {
+    logger.d('File exists. Start using [GoogleMlKit]');
 
-  //   final textDetector = TextRecognizer(script: TextRecognitionScript.latin);
-  //   final inputImage = InputImage.fromFile(imageFile);
-  //   final recognisedText = await textDetector.processImage(inputImage);
-  //   final textsWithOffsets = _getTextsWithOffsets(recognisedText);
-  //   final response = await functions.processReceiptTexts(
-  //     rawTexts: recognisedText.text.replaceAll('\n', ', '),
-  //     textsWithOffsets: textsWithOffsets,
-  //   );
-  //   textDetector.close();
+    final textDetector = TextRecognizer(script: TextRecognitionScript.latin);
+    final inputImage = InputImage.fromFile(imageFile);
+    final recognisedText = await textDetector.processImage(inputImage);
+    final textsWithOffsets = _getTextsWithOffsets(recognisedText);
+    final response = await functions.processReceiptTexts(
+      rawTexts: recognisedText.text.replaceAll('\n', ', '),
+      textsWithOffsets: textsWithOffsets,
+    );
+    textDetector.close();
 
-  //   return response;
-  // }
+    return response;
+  }
 
   void onItemNameChanged(String value, int index) {
     final itemToUpdate = _transactionItems![index];
@@ -94,29 +98,29 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
     required ImageSource source,
   }) async {
     try {
-      // toggleState(ScanReceiptState.loading);
+      toggleState(ScanReceiptState.loading);
 
-      // final file = await imagePicker.pickImage(source);
+      final file = await imagePicker.pickImage(source);
 
-      // if (file != null) {
-      //   final receiptResponse = await _extractTexts(file);
+      if (file != null) {
+        final receiptResponse = await _extractTexts(file);
 
-      //   if (receiptResponse != null) {
-      //     _subtotalItem = receiptResponse.transactionItems?.last;
+        if (receiptResponse != null) {
+          _subtotalItem = receiptResponse.transactionItems?.last;
 
-      //     receiptResponse.transactionItems!.removeLast();
-      //     _transactionItems = receiptResponse.transactionItems;
-      //     _dates = receiptResponse.dates;
+          receiptResponse.transactionItems!.removeLast();
+          _transactionItems = receiptResponse.transactionItems;
+          _dates = receiptResponse.dates;
 
-      //     logger.d('Dates $_dates');
+          logger.d('Dates $_dates');
 
-      //     toggleState(ScanReceiptState.editItems);
-      //   } else {
-      //     toggleState(ScanReceiptState.error);
-      //   }
-      // } else {
-      //   toggleState(ScanReceiptState.start);
-      // }
+          toggleState(ScanReceiptState.editItems);
+        } else {
+          toggleState(ScanReceiptState.error);
+        }
+      } else {
+        toggleState(ScanReceiptState.start);
+      }
     } catch (e) {
       logger.e('Error Occurred: ${e.toString()}');
 

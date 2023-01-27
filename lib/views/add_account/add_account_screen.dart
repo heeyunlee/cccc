@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:cccc/providers.dart' show connectPlaidModelProvider;
 import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
+import 'package:plaid_flutter/plaid_flutter.dart';
 
 class AddAccountScreen extends ConsumerStatefulWidget {
   const AddAccountScreen({super.key});
@@ -17,11 +18,11 @@ class _AddAccountState extends ConsumerState<AddAccountScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    // final model = ref.watch(connectPlaidModelProvider);
+    final model = ref.watch(connectPlaidModelProvider);
 
-    // PlaidLink.onSuccess(model.onSuccessCallback);
-    // PlaidLink.onEvent(model.onEventCallback);
-    // PlaidLink.onExit(model.onExitCallback);
+    PlaidLink.onSuccess.listen(model.onSuccessCallback);
+    PlaidLink.onEvent.listen((model.onEventCallback));
+    PlaidLink.onExit.listen(model.onExitCallback);
   }
 
   @override
