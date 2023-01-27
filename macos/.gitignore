@@ -1,0 +1,11 @@
+# Flutter-related
+**/Flutter/ephemeral/
+**/Pods/
+
+# Xcode-related
+**/dgph
+**/xcuserdata/
+
+# Firebase
+**/Runner/GoogleService-Info.plist
+firebase_app_id_file.json

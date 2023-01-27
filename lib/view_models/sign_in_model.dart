@@ -105,7 +105,9 @@ class SignInModel with ChangeNotifier {
     BuildContext context, {
     required fire_auth.FirebaseException exception,
   }) {
-    logger.e(exception);
+    logger.e(
+      'code: ${exception.code}, message: ${exception.message}, stacktrace: ${exception.stackTrace}',
+    );
 
     showAdaptiveDialog(
       context,
