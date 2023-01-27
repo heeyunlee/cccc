@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cccc/styles/styles.dart';
 import 'package:cccc/widgets/button/button.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 Future<bool?> showAdaptiveDialog(
@@ -14,6 +15,34 @@ Future<bool?> showAdaptiveDialog(
   String? cancelAcitionText,
   bool isCancelDestructiveAction = false,
 }) {
+  if (kIsWeb) {
+    return showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(title),
+        content: Text(content),
+        actions: <Widget>[
+          if (cancelAcitionText != null)
+            Button.text(
+              onPressed: () => Navigator.of(context).pop(false),
+              text: cancelAcitionText,
+              textStyle: isCancelDestructiveAction
+                  ? TextStyles.button1Red
+                  : TextStyles.button1,
+            ),
+          const SizedBox(width: 8),
+          Button.text(
+            onPressed: () => Navigator.of(context).pop(true),
+            text: defaultActionText,
+            textStyle: isDefaultDestructiveAction
+                ? TextStyles.button1Red
+                : TextStyles.button1,
+          ),
+        ],
+      ),
+    );
+  }
+
   if (!Platform.isIOS) {
     return showDialog<bool>(
       context: context,

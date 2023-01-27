@@ -6,43 +6,37 @@ import 'package:flutter_svg/svg.dart';
 import 'package:cccc/providers.dart' show signInModelProvider;
 import 'package:cccc/styles/text_styles.dart';
 
-class SignIn extends ConsumerStatefulWidget {
-  const SignIn({super.key});
+class SignInScreen extends ConsumerStatefulWidget {
+  const SignInScreen({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _SignInState();
 }
 
-class _SignInState extends ConsumerState<SignIn> {
+class _SignInState extends ConsumerState<SignInScreen> {
   @override
   Widget build(BuildContext context) {
     final model = ref.watch(signInModelProvider);
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      body: SizedBox(
-        width: size.width,
-        height: size.height,
+      key: const ValueKey('SingInScreenScaffold'),
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(
-              width: size.width,
-              height: size.width,
-              child: Center(
-                child: model.isLoading
-                    ? const CircularProgressIndicator.adaptive()
-                    : Image.asset(
-                        'assets/pictures/cccc_logo.png',
-                        width: size.width / 3,
-                      ),
-              ),
-            ),
+            const Spacer(),
+            model.isLoading
+                ? const CircularProgressIndicator.adaptive()
+                : Image.asset(
+                    'assets/pictures/cccc_logo.png',
+                    width: size.width / 3,
+                  ),
             const Spacer(),
             Button.outlined(
               key: const ValueKey('GoogleSignInButton'),
-              width: size.width - 64,
+              width: 280,
               height: 48,
               borderRadius: 16,
               onPressed: model.isLoading
@@ -65,12 +59,16 @@ class _SignInState extends ConsumerState<SignIn> {
             const SizedBox(height: 16),
             const Text('or', style: TextStyles.overlineGrey),
             Button.text(
+              key: const ValueKey('SignInAnonymously'),
               height: 48,
+              width: 240,
               textStyle: TextStyles.button2,
               text: 'Sign in Anonymously',
               onPressed: model.isLoading
                   ? null
-                  : () => model.signInAnonymously(context, ref),
+                  : () async {
+                      await model.signInAnonymously(context, ref);
+                    },
             ),
             SizedBox(
               height: MediaQuery.of(context).padding.bottom + 48,

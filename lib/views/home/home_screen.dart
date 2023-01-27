@@ -1,7 +1,6 @@
 import 'dart:io';
 
-import 'package:cccc/extensions/context_extension.dart';
-import 'package:cccc/routes/router.dart';
+import 'package:cccc/routes/go_routes.dart';
 import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/cupertino.dart';
@@ -19,14 +18,14 @@ import '../../widgets/accounts_card.dart';
 import '../../widgets/custom_stream_builder.dart';
 import '../../widgets/home_flexible_space_bar.dart';
 
-class Home extends ConsumerStatefulWidget {
-  const Home({super.key});
+class HomeScreen extends ConsumerStatefulWidget {
+  const HomeScreen({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() => _HomeState();
 }
 
-class _HomeState extends ConsumerState<Home> {
+class _HomeState extends ConsumerState<HomeScreen> {
   Future<void> onRefresh(BuildContext context, User user) async {
     final status = await ref.read(homeModelProvider).transactionsRefresh(user);
 
@@ -50,6 +49,7 @@ class _HomeState extends ConsumerState<Home> {
     final model = ref.watch(homeModelProvider);
 
     return Scaffold(
+      key: const ValueKey('HomeScreenScaffold'),
       extendBody: true,
       extendBodyBehindAppBar: true,
       body: CustomStreamBuilder<User?>(
@@ -117,11 +117,11 @@ class _HomeState extends ConsumerState<Home> {
           title: Text(model.today),
           leading: IconButton(
             icon: const Icon(Icons.photo_camera),
-            onPressed: () => context.pushRoute(AppRoutes.scanReceipts),
+            onPressed: () => const ScanReceiptRoute().push(context),
           ),
           actions: [
             IconButton(
-              onPressed: () => context.pushRoute(AppRoutes.settings),
+              onPressed: () => const SettingsRoute().push(context),
               icon: const Icon(Icons.settings),
             ),
             const SizedBox(width: 8),

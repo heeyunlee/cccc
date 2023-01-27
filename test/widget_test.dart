@@ -5,26 +5,62 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:flutter/material.dart';
+import 'package:cccc/services/firebase_auth_service.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:cccc/main.dart';
+import 'package:mockito/mockito.dart';
+import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
+
+import 'mock.dart';
 
 void main() {
+  setupFirebaseAuthMocks();
+
+  // used to generate a unique application name for each test
+  var testCount = 0;
+
+  void mockSignInAnonymously() {
+    final mockAuthService = FirebaseAuthService();
+    when(mockAuthService.signInAnonymously()).thenAnswer((_) async {
+      final auth = MockFirebaseAuth();
+
+      final userCredential = await auth.signInAnonymously();
+      return userCredential.user;
+    });
+  }
+
+  void mockAuthStateChanged() {
+    final mockAuthService = FirebaseAuthService();
+
+    when(mockAuthService.authStateChanges).thenAnswer((_) {
+      final auth = MockFirebaseAuth();
+
+      return auth.onAuthStateChanged;
+    });
+  }
+
+  setUpAll(() async {
+    await Firebase.initializeApp(
+      name: '$testCount',
+      options: const FirebaseOptions(
+        apiKey: '',
+        appId: '',
+        messagingSenderId: '',
+        projectId: '',
+      ),
+    );
+  });
+
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+    mockSignInAnonymously();
+    mockAuthStateChanged();
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.pumpWidget(const MyAppWithProviderScope());
+    await tester.pumpAndSettle();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('Sign in Anonymously'), findsOneWidget);
+    await tester.tap(find.text('Sign in Anonymously'));
   });
 }

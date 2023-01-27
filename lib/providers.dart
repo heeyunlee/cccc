@@ -1,8 +1,8 @@
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/accounts_institution.dart';
+import 'package:cccc/models/plaid/institution/institution.dart';
 import 'package:cccc/models/plaid/transaction.dart';
 import 'package:cccc/services/widget_visibility.dart';
-import 'package:cccc/view_models/account_detail_bottom_sheet_model.dart';
 import 'package:cccc/view_models/account_detail_model.dart';
 import 'package:cccc/view_models/choose_merchant_for_transaction_model.dart';
 import 'package:cccc/view_models/connect_plaid_model.dart';
@@ -78,15 +78,6 @@ final sharedPreferenceServiceProvider = Provider((ref) {
   return SharedPreferencesService();
 });
 
-/// Creates [AccountDetailBottomSheetModel]
-final accountDetailBottomSheetModelProvider = ChangeNotifierProvider.autoDispose
-    .family<AccountDetailBottomSheetModel, Account>(
-  (ref, account) => AccountDetailBottomSheetModel(
-    functions: ref.watch(cloudFunctionsProvider),
-    account: account,
-  ),
-);
-
 /// Creates [AccountDetailModel] provider that manages the state of the
 /// `AccountDetail` screen.
 final accountDetailModelProvider =
@@ -95,6 +86,50 @@ final accountDetailModelProvider =
     final database = ref.watch(databaseProvider);
 
     return AccountDetailModel(account: account, database: database);
+  },
+);
+
+final accountProvider = StreamProvider.family.autoDispose<Account?, String>(
+  (ref, accountId) {
+    final database = ref.watch(databaseProvider);
+
+    return database.accountStream(accountId);
+  },
+);
+
+final institutionProvider =
+    StreamProvider.family.autoDispose<Institution?, String>(
+  (ref, institutionId) {
+    final database = ref.watch(databaseProvider);
+
+    return database.institutionStream(institutionId);
+  },
+);
+
+final accountTransactionsStreamProvider =
+    StreamProvider.family.autoDispose<List<Transaction?>, String>(
+  (ref, accountId) {
+    final database = ref.watch(databaseProvider);
+
+    return database.transactionsStreamForSpecificAccount(accountId, 12);
+  },
+);
+
+final transactionStreamProvider =
+    StreamProvider.family.autoDispose<Transaction?, String>(
+  (ref, transactionId) {
+    final database = ref.watch(databaseProvider);
+
+    return database.transactionStream(transactionId);
+  },
+);
+
+final tranasctionProvider =
+    FutureProvider.family.autoDispose<Transaction?, String>(
+  (ref, transactionId) {
+    final database = ref.watch(databaseProvider);
+
+    return database.transactionStream(transactionId).last;
   },
 );
 

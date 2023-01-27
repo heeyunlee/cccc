@@ -72,35 +72,28 @@ class InstitutionCardModel with ChangeNotifier {
     }
   }
 
-  Future<void> onSuccessCallback(
-    String publicToken,
-    LinkSuccessMetadata metadata,
-  ) async {
-    logger.d('''
-        Successful Callback. 
-        public_token: $publicToken,
-        institution: ${metadata.institution.id}, 
-        metadata: ${metadata.description()},
-        ''');
-    final institutionId = metadata.institution.id;
+  Future<void> onSuccessCallback(LinkSuccess success) async {
+    final institutionId = success.metadata.institution.id;
 
     final response = await functions.linkAndConnectUpdateMode(
-      publicToken,
+      success.publicToken,
       institutionId,
     );
 
     logger.d('Response: $response');
   }
 
-  void onEventCallback(String event, LinkEventMetadata metadata) {
-    logger.d("onEvent: $event, metadata: ${metadata.description()}");
+  void onEventCallback(LinkEvent event) {
+    logger.d(
+      "onEvent: ${event.name}, metadata: ${event.metadata.description()}",
+    );
   }
 
-  void onExitCallback(LinkError? error, LinkExitMetadata metadata) {
-    logger.e("onExit metadata: ${metadata.description()}");
+  void onExitCallback(LinkExit exit) {
+    logger.e("onExit metadata: ${exit.metadata.description()}");
 
-    if (error != null) {
-      logger.e("onExit error: ${error.description()}");
+    if (exit.error != null) {
+      logger.e("onExit error: ${exit.error!.code}");
     }
   }
 

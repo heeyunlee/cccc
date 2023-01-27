@@ -1,14 +1,14 @@
-import 'dart:io';
+import 'dart:io' as io show File;
 
+import 'package:cccc/extensions/text_element_extension.dart';
+import 'package:cccc/models/receipt_response.dart';
 import 'package:flutter/material.dart';
-import 'package:google_ml_kit/google_ml_kit.dart';
+import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:cccc/extensions/list_extension.dart';
-import 'package:cccc/extensions/text_element_extension.dart';
 import 'package:cccc/enum/scan_receipt_state.dart';
 import 'package:cccc/models/plaid/transaction.dart';
-import 'package:cccc/models/receipt_response.dart';
 import 'package:cccc/models/transaction_item.dart';
 import 'package:cccc/services/cloud_functions.dart';
 import 'package:cccc/services/database.dart';
@@ -59,10 +59,10 @@ class ScanReceiptBottomSheetModel with ChangeNotifier {
     return textElementsMap;
   }
 
-  Future<ReceiptResponse?> _extractTexts(File imageFile) async {
+  Future<ReceiptResponse?> _extractTexts(io.File imageFile) async {
     logger.d('File exists. Start using [GoogleMlKit]');
 
-    final textDetector = GoogleMlKit.vision.textRecognizer();
+    final textDetector = TextRecognizer(script: TextRecognitionScript.latin);
     final inputImage = InputImage.fromFile(imageFile);
     final recognisedText = await textDetector.processImage(inputImage);
     final textsWithOffsets = _getTextsWithOffsets(recognisedText);

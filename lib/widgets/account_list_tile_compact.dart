@@ -1,8 +1,6 @@
-import 'package:cccc/extensions/context_extension.dart';
 import 'package:cccc/models/plaid/account.dart';
 import 'package:cccc/models/plaid/institution/institution.dart';
-import 'package:cccc/routes/extra.dart';
-import 'package:cccc/routes/router.dart';
+import 'package:cccc/routes/go_routes.dart';
 import 'package:cccc/styles/styles.dart';
 import 'package:flutter/material.dart';
 
@@ -27,16 +25,7 @@ class AccountListTileCompact extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       visualDensity: VisualDensity.compact,
-      onTap: () => context.pushRoute(
-        AppRoutes.accountDetails,
-        extra: AccountDetailsScreenExtra(
-          account: account,
-          institution: institution,
-        ),
-        params: {
-          'accountId': account.accountId,
-        },
-      ),
+      onTap: () => AccountDetailsRoute(account.accountId).push(context),
       title: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
       subtitle: Text(mask, style: TextStyles.overlineGrey),
       trailing: Text(currentAccount, style: TextStyles.subtitle1BoldWhite70),

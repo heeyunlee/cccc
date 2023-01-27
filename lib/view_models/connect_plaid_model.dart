@@ -65,20 +65,11 @@ class ConnectPlaidModel with ChangeNotifier {
     }
   }
 
-  Future<void> onSuccessCallback(
-    String publicToken,
-    LinkSuccessMetadata metadata,
-  ) async {
-    logger.d('''
-        Successful Callback. 
-        public_token: $publicToken,
-        institution: ${metadata.institution.id}, 
-        metadata: ${metadata.description()},
-        ''');
-    final institutionId = metadata.institution.id;
+  Future<void> onSuccessCallback(LinkSuccess success) async {
+    final institutionId = success.metadata.institution.id;
 
     final response = await functions.linkAndConnect(
-      publicToken,
+      success.publicToken,
       institutionId,
     );
     toggleLoading();
@@ -86,15 +77,17 @@ class ConnectPlaidModel with ChangeNotifier {
     logger.d('function response: \n$response');
   }
 
-  void onEventCallback(String event, LinkEventMetadata metadata) {
-    logger.d("onEvent: $event, metadata: ${metadata.description()}");
+  void onEventCallback(LinkEvent event) {
+    logger.d(
+      "eventName: ${event.name}, metadata: ${event.metadata.description()}",
+    );
   }
 
-  void onExitCallback(LinkError? error, LinkExitMetadata metadata) {
-    logger.e("onExit metadata: ${metadata.description()}");
+  void onExitCallback(LinkExit exitEvent) {
+    logger.e("onExit metadata: ${exitEvent.metadata}");
 
-    if (error != null) {
-      logger.e("onExit error: ${error.description()}");
+    if (exitEvent.error != null) {
+      logger.e("onExit error: ${exitEvent.error?.displayMessage}");
     }
 
     toggleLoading();

@@ -1,6 +1,4 @@
-import 'package:cccc/extensions/context_extension.dart';
-import 'package:cccc/routes/extra.dart';
-import 'package:cccc/routes/router.dart';
+import 'package:cccc/routes/go_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,16 +32,7 @@ class AccountListTile extends ConsumerWidget {
       ),
       loadingWidget: const CircularProgressIndicator.adaptive(),
       builder: (context, institution) => ListTile(
-        onTap: () => context.pushRoute(
-          AppRoutes.accountDetails,
-          extra: AccountDetailsScreenExtra(
-            account: account,
-            institution: institution,
-          ),
-          params: {
-            'accountId': account.accountId,
-          },
-        ),
+        onTap: () => AccountDetailsRoute(account.accountId).push(context),
         leading: InstitutionCircleAvatar(
           institution: institution,
           account: account,

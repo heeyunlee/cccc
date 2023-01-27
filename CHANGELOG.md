@@ -1,5 +1,12 @@
 # Change Log
 
+## [0.1.0]
+- Upgrade to Flutter 3.7.0 and Dart 2.19.0
+- Upgrade dependencies
+- Use go_router_builder packange
+- Add `~screen` to scaffold-level UI names
+- Configure macos
+
 ## [0.0.15]
 - Upgrade to Flutter 3.3.0 and Dart 2.18.0
 - Use GoRouter for navigations

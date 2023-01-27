@@ -1,10 +1,9 @@
-import 'package:cccc/extensions/context_extension.dart';
-import 'package:cccc/routes/router.dart';
+import 'package:cccc/enum/account_connection_state.dart';
+import 'package:cccc/routes/go_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:cccc/models/plaid/account.dart';
-import 'package:cccc/providers.dart' show accountDetailBottomSheetModelProvider;
+import 'package:cccc/providers.dart' show accountProvider;
 import 'package:cccc/styles/styles.dart';
 
 import 'bottom_sheet_card.dart';
@@ -12,10 +11,10 @@ import 'bottom_sheet_card.dart';
 class AccountDetailBottomSheet extends ConsumerStatefulWidget {
   const AccountDetailBottomSheet({
     super.key,
-    required this.account,
+    required this.accountId,
   });
 
-  final Account account;
+  final String accountId;
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -26,9 +25,12 @@ class _AccountDetailBottomSheetState
     extends ConsumerState<AccountDetailBottomSheet> {
   @override
   Widget build(BuildContext context) {
-    final model = ref.watch(
-      accountDetailBottomSheetModelProvider(widget.account),
-    );
+    final asyncAccount = ref.watch(accountProvider(widget.accountId));
+
+    final accountName = asyncAccount.value?.name ?? '';
+    final accountConnectionIsError =
+        asyncAccount.value?.accountConnectionState ==
+            AccountConnectionState.error;
 
     return BottomSheetCard(
       child: Column(
@@ -44,11 +46,11 @@ class _AccountDetailBottomSheetState
                 children: [
                   const SizedBox(height: 24),
                   Text(
-                    model.name,
+                    accountName,
                     style: TextStyles.subtitle2,
                   ),
                   const SizedBox(height: 8),
-                  if (model.connectionIsError)
+                  if (accountConnectionIsError)
                     const Text(
                       'There is an error with connecting the account. Please reauthenticate to fix the issue',
                       style: TextStyles.captionWhite54,
@@ -58,12 +60,12 @@ class _AccountDetailBottomSheetState
             ),
           ),
           const SizedBox(height: 16),
-          if (model.connectionIsError)
+          if (accountConnectionIsError)
             ListTile(
               visualDensity: VisualDensity.compact,
               leading: const Icon(Icons.build, size: 20),
               title: const Text('Fix the account connectivity issue'),
-              onTap: () => context.pushRoute(AppRoutes.linkedAccounts),
+              onTap: () => const LinkedAccountsRoute().push(context),
             ),
           ListTile(
             visualDensity: VisualDensity.compact,
@@ -82,7 +84,7 @@ class _AccountDetailBottomSheetState
               'Unlink',
               style: TextStyles.body2Red,
             ),
-            onTap: () => context.pushRoute(AppRoutes.linkedAccounts),
+            onTap: () => const LinkedAccountsRoute().push(context),
           ),
         ],
       ),

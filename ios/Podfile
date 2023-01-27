@@ -28,9 +28,11 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
-  pod 'FirebaseFirestore', :git => 'https://github.com/invertase/firestore-ios-sdk-frameworks.git', :tag => '9.4.0'
-  pod 'GoogleMLKit/TextRecognition','3.1.0'
-
+  # Temporary fix for fixing version compatibility with google_mlkit_text_recognition and firebase_auth 
+  # from https://github.com/bharat-biradar/Google-Ml-Kit-plugin/issues/396
+  pod 'MLKitVision', :podspec => 'MLKitVision.podspec.json'
+  pod 'MLKitCommon', :podspec => 'MLKitCommon.podspec.json'
+  
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 

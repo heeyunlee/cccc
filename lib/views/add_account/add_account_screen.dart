@@ -2,27 +2,27 @@ import 'package:cccc/widgets/button/button.dart';
 import 'package:cccc/widgets/show_adaptive_alert_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:plaid_flutter/plaid_flutter.dart';
 
 import 'package:cccc/providers.dart' show connectPlaidModelProvider;
 import 'package:cccc/widgets/custom_adaptive_progress_indicator.dart';
+import 'package:plaid_flutter/plaid_flutter.dart';
 
-class AddAccount extends ConsumerStatefulWidget {
-  const AddAccount({super.key});
+class AddAccountScreen extends ConsumerStatefulWidget {
+  const AddAccountScreen({super.key});
 
   @override
-  ConsumerState<AddAccount> createState() => _AddAccountState();
+  ConsumerState<AddAccountScreen> createState() => _AddAccountState();
 }
 
-class _AddAccountState extends ConsumerState<AddAccount> {
+class _AddAccountState extends ConsumerState<AddAccountScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final model = ref.watch(connectPlaidModelProvider);
 
-    PlaidLink.onSuccess(model.onSuccessCallback);
-    PlaidLink.onEvent(model.onEventCallback);
-    PlaidLink.onExit(model.onExitCallback);
+    PlaidLink.onSuccess.listen(model.onSuccessCallback);
+    PlaidLink.onEvent.listen((model.onEventCallback));
+    PlaidLink.onExit.listen(model.onExitCallback);
   }
 
   @override

@@ -5,14 +5,14 @@ class Decorations {
   static BoxDecoration gradientFromHexString(String? hex) {
     final hexCode = hex?.substring(1) ?? '000000';
     final fullHexCode = 'FF$hexCode';
-    final hexCodeInt = int.parse(fullHexCode, radix: 16);
+    final hexCodeInt = int.tryParse(fullHexCode, radix: 16);
 
     return BoxDecoration(
       gradient: LinearGradient(
         begin: Alignment.topCenter,
         end: Alignment.bottomCenter,
         colors: [
-          Color(hexCodeInt),
+          if (hexCodeInt != null) Color(hexCodeInt) else Colors.white,
           Colors.black,
         ],
       ),
