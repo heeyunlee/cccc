@@ -3,9 +3,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 import 'package:cccc/services/logger_init.dart';
 import 'package:cccc/services/shared_preference_service.dart';
-import 'package:mockito/mockito.dart';
-
-class MockFirebaseAuthService extends Mock implements FirebaseAuthService {}
 
 /// A class that interacts with [FirebaseAuth] to handle signing in and out
 class FirebaseAuthService {

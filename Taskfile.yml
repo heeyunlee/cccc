@@ -1,0 +1,6 @@
+version: '3'
+
+tasks:
+  gen:
+    cmds:
+      - flutter pub run build_runner build --delete-conflicting-outputs
