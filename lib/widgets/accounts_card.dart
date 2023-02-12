@@ -25,7 +25,6 @@ class AccountsCard extends ConsumerWidget {
           child: Text('Accounts', style: TextStyles.h6),
         ),
         Card(
-          clipBehavior: Clip.antiAliasWithSaveLayer,
           margin: const EdgeInsets.symmetric(horizontal: 16),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),

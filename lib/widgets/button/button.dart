@@ -130,13 +130,17 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
   late Animation<double> _scaleAnimation;
   late Animation<double> _opacityAnimation;
 
-  bool get isPressed => _isPressed;
-
   bool _isPressed = false;
 
-  void _setIsPressed(bool value) {
-    setState(() => _isPressed = value);
-  }
+  bool get isPressed => _isPressed;
+
+  set isPressed(bool value) => setState(() => _isPressed = value);
+
+  bool _isCanceled = false;
+
+  bool get isCanceled => _isCanceled;
+
+  set isCanceled(bool value) => setState(() => _isCanceled = value);
 
   @override
   void initState() {
@@ -178,43 +182,47 @@ class _ButtonState extends State<Button> with SingleTickerProviderStateMixin {
           : SystemMouseCursors.basic,
       onEnter: (_) {
         _animationController.forward();
-        _setIsPressed(true);
+        isPressed = true;
       },
       onExit: (_) {
         _animationController.reverse();
-        _setIsPressed(false);
+        isPressed = false;
       },
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTapDown: (detail) {
           if (widget.vibrateOnPress) HapticFeedback.mediumImpact();
           _animationController.forward();
-          _setIsPressed(true);
+          isPressed = true;
         },
         onTapUp: (detail) {
           widget.onPressed?.call();
           _animationController.reverse();
-          _setIsPressed(false);
+          isPressed = false;
         },
         onTapCancel: () {},
-        onLongPressDown: (details) {},
-        onLongPressEnd: (detail) {},
+        onLongPressDown: (details) {
+          isCanceled = false;
+        },
+        onLongPressEnd: (detail) {
+          final localY = detail.localPosition.dy;
+
+          if (localY < 0 ||
+              (widget.height != null && localY > widget.height!)) {
+            isCanceled = true;
+          }
+        },
         onLongPressStart: (detail) {
           widget.onLongPressed?.call();
         },
         onLongPressUp: () {
-          widget.onPressed?.call();
+          if (!isCanceled) widget.onPressed?.call();
           _animationController.reverse();
-          _setIsPressed(false);
+          isPressed = false;
         },
         onLongPressCancel: () {
           _animationController.reverse();
         },
-        onForcePressStart: (detail) {},
-        onForcePressEnd: (detail) {},
-        onForcePressPeak: (detail) {},
-        onForcePressUpdate: (detail) {},
-        onTertiaryLongPress: () {},
         child: AnimatedBuilder(
           animation: _animationController,
           builder: (context, child) {
