@@ -1,3 +1,5 @@
+> I AM ARCHIVING THIS REPO! USE AI INSTEAD, THEY'RE SOOOO MUCH BETTER AT IT
+
 <img src="readme_assets/cccc_logo_v1.svg" width="100"/>
 
 # **CCCC: Credit Card Calorie Counter**
